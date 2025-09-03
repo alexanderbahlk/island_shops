@@ -36,7 +36,7 @@ class ShopItemBuilder
                           last_update.stock_status != @shop_item_update_params[:stock_status]
 
     if should_create_update
-      @shop_item_update = @shop_item.shop_item_updates.build(@shop_item_update_params)
+      build_shop_item_update
       
       unless @shop_item_update.save
         @errors.concat(@shop_item_update.errors.full_messages)
@@ -50,7 +50,7 @@ class ShopItemBuilder
     @shop_item = ShopItem.new(@shop_item_params)
     
     if @shop_item.save
-      @shop_item_update = @shop_item.shop_item_updates.build(@shop_item_update_params)
+      build_shop_item_update
       
       unless @shop_item_update.save
         @errors.concat(@shop_item_update.errors.full_messages)
@@ -58,5 +58,10 @@ class ShopItemBuilder
     else
       @errors.concat(@shop_item.errors.full_messages)
     end
+  end
+
+  def build_shop_item_update
+    
+    @shop_item_update = @shop_item.shop_item_updates.build(@shop_item_update_params)
   end
 end
