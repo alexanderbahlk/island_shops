@@ -10,20 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_02_182253) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_02_191759) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "shop_item_updates", force: :cascade do |t|
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.decimal "price_per_unit", precision: 10, scale: 2
+    t.string "stock_status"
+    t.bigint "shop_item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_item_id"], name: "index_shop_item_updates_on_shop_item_id"
+  end
+
   create_table "shop_items", force: :cascade do |t|
-    t.string "url"
-    t.string "title"
+    t.string "shop", null: false
+    t.string "url", null: false
+    t.string "title", null: false
+    t.string "display_title"
     t.string "image_url"
     t.string "size"
     t.string "location"
     t.string "product_id"
+    t.boolean "approved", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["url"], name: "index_shop_items_on_url", unique: true
   end
 
+  add_foreign_key "shop_item_updates", "shop_items"
 end
