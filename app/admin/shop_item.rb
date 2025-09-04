@@ -88,7 +88,7 @@ ActiveAdmin.register ShopItem do
       f.input :shop_item_sub_category, as: :select, collection: f.object.shop_item_category.present? ? f.object.shop_item_category.shop_item_sub_categories.pluck(:title, :id) : [], include_blank: true, input_html: { id: "shop_item_sub_category_select" }, wrapper_html: { id: "shop_item_sub_category_wrapper", style: f.object.shop_item_category.present? ? "" : "display: none;" }
       f.input :image_url, placeholder: "https://example.com/image.jpg"
       f.input :size
-      f.input :unit
+      f.input :unit, as: :select, collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] }, include_blank: false
       f.input :location
       f.input :product_id
       f.input :approved, as: :boolean, hint: "Check to approve this item for public listing"
@@ -131,6 +131,7 @@ ActiveAdmin.register ShopItem do
         end
       end
       row :size
+      row :unit
       row :latest_price do |shop_item|
         latest_update = shop_item.shop_item_updates.order(created_at: :desc).first
         if latest_update&.price
@@ -141,8 +142,20 @@ ActiveAdmin.register ShopItem do
       end
       row :location
       row :product_id
-      row :approved
-      row :needs_another_review
+      row :approved do |shop_item|
+        best_in_place shop_item, :approved,
+                      as: :checkbox,
+                      url: admin_shop_item_path(shop_item),
+                      html_attrs: { style: "cursor: pointer;" },
+                      classes: "bip-checkbox-approved"
+      end
+      row :needs_another_review do |shop_item|
+        best_in_place shop_item, :needs_another_review,
+                      as: :checkbox,
+                      url: admin_shop_item_path(shop_item),
+                      html_attrs: { style: "cursor: pointer;" },
+                      classes: "bip-checkbox-review"
+      end
       row :created_at
       row :updated_at
     end
@@ -151,9 +164,29 @@ ActiveAdmin.register ShopItem do
     panel "Price & Stock History" do
       table_for shop_item.shop_item_updates.order(created_at: :desc) do
         column :price do |update|
-          number_to_currency(update.price) if update.price
+          best_in_place update, :price,
+                        as: :input,
+                        url: admin_shop_item_update_path(update),
+                        placeholder: "Enter price",
+                        html_attrs: { style: "width: 100px" },
+                        display_with: lambda { |value| value.present? ? number_to_currency(value) : "N/A" }
         end
-        column :stock_status
+        column :stock_status do |update|
+          best_in_place update, :stock_status,
+                        as: :input,
+                        url: admin_shop_item_update_path(update),
+                        placeholder: "Select status",
+                        html_attrs: { style: "width: 100px" },
+                        display_with: lambda { |value| value.present? ? value : "N/A" }
+        end
+        column :price_per_unit do |update|
+          best_in_place update, :price_per_unit,
+                        as: :input,
+                        url: admin_shop_item_update_path(update),
+                        placeholder: "Price per unit",
+                        html_attrs: { style: "width: 100px" },
+                        display_with: lambda { |value| value.present? ? number_to_currency(value) : "N/A" }
+        end
         column :created_at
       end
     end

@@ -40,7 +40,7 @@ class ShopItemBuilder
     Rails.logger.debug "Should create update: #{should_create_update}"
 
     if should_create_update
-      build_shop_item_update(@shop_item.size)
+      build_shop_item_update()
 
       unless @shop_item_update.save
         @errors.concat(@shop_item_update.errors.full_messages)
@@ -53,13 +53,11 @@ class ShopItemBuilder
   def create_new_item_with_update
     @shop_item = ShopItem.new(@shop_item_params)
 
-    # set size from title if size is missing
-    if @shop_item.size.blank? && @shop_item.title.present?
-      set_shop_item_size_from_title()
-    end
+    # set size and/or unit from title
+    set_shop_item_size_and_unit_from_title()
 
     if @shop_item.save
-      build_shop_item_update(@shop_item.size)
+      build_shop_item_update()
 
       unless @shop_item_update.save
         @errors.concat(@shop_item_update.errors.full_messages)
@@ -69,45 +67,18 @@ class ShopItemBuilder
     end
   end
 
-  def set_shop_item_size_from_title
+  def set_shop_item_size_and_unit_from_title
     return if @shop_item.title.blank?
 
-    #check if last elements of title is a number or decimel
-    # e.g. "Badia Garlic Powder 16"
+    parsed_data = UnitParser.parse_from_title(@shop_item.title)
 
-    #check if last elements of title has Ct
-
-    #check if last elements of title has pack
-
-    #check if last elements of title has pcs
-
-    #check if last elements of title has EACH or [EACH]
-
-    #check if last elements of title has g
-
-    #check if last elements of title has Gr
-
-    #check if last elements of title has Kg
-
-    #check if last elements of title has kg
-
-    #check if last elements of title has L
-
-    #check if last elements of title has ml
-
-    #check if last elements of title has Ml
-
-    #check if last elements of title has Oz
-
-    #check if last elements of title has oz
-
-    #check if last elements of title has Fl
-
-    #check if last elements of title has fl
-
+    @shop_item.size = parsed_data[:size] if @shop_item.size.blank? && parsed_data[:size].present?
+    @shop_item.unit = parsed_data[:unit] if @shop_item.unit.blank? && parsed_data[:unit].present?
   end
 
-  def build_shop_item_update(size)
+  def build_shop_item_update()
+    #will use @shop_ietm.size
+    #weill use @shop_ietm.unit
     @shop_item_update = @shop_item.shop_item_updates.build(@shop_item_update_params)
   end
 end

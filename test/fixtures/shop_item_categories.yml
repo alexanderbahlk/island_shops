@@ -1,0 +1,3 @@
+shop_item_category_one:
+  title: "Beverages"
+  created_at: <%= 3.days.ago %>

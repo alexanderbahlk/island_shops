@@ -2,6 +2,8 @@
 
 shop_item_one:
   url: "https://example.com/existing-item"
+  shop_item_category: shop_item_category_one
+  shop_item_sub_category: shop_item_sub_category_one
   shop: "Massy"
   title: "Existing Item"
   size: "500"
@@ -11,6 +13,8 @@ shop_item_one:
 
 shop_item_two:
   url: "https://example.com/another-item"
+  shop_item_category: shop_item_category_one
+  shop_item_sub_category: shop_item_sub_category_one
   shop: "Massy"
   title: "Another Item"
   size: "3"
