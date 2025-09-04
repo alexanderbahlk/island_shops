@@ -16,6 +16,21 @@
 //
 //   .status_tag { background: #6090DB; }
 
+
+.bip-select-unit {
+    cursor: pointer !important;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    min-width: 30px;
+    text-align: left;
+    border: 1px solid #007bff;
+    background-color: #e7f1ff;
+    color: #004085;
+}
+
 // Enhanced styling for best_in_place checkboxes
 .bip-checkbox-approved,
 .bip-checkbox-review {

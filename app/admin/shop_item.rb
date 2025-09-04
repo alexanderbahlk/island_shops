@@ -7,7 +7,9 @@ ActiveAdmin.register ShopItem do
     selectable_column
     id_column
     column :shop
-    column :title
+    column :title do |shop_item|
+      link_to shop_item.title, shop_item.url, target: "_blank"
+    end
     column :display_title do |shop_item|
       best_in_place shop_item, :display_title,
                     as: :input,
@@ -29,7 +31,14 @@ ActiveAdmin.register ShopItem do
       end
     end
     column :size
-    column :unit
+    column :unit do |shop_item|
+      best_in_place shop_item, :unit,
+                    as: :select,
+                    url: admin_shop_item_path(shop_item),
+                    collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
+                    html_attrs: { style: "cursor: pointer; min-width: 30px;" },
+                    classes: "bip-select-unit"
+    end
     column :shop_item_category do |shop_item|
       #do a link into the category
       if shop_item.shop_item_category.present?
@@ -131,7 +140,14 @@ ActiveAdmin.register ShopItem do
         end
       end
       row :size
-      row :unit
+      row :unit do |shop_item|
+        best_in_place shop_item, :unit,
+                      as: :select,
+                      url: admin_shop_item_path(shop_item),
+                      collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
+                      html_attrs: { style: "cursor: pointer; min-width: 30px;" },
+                      classes: "bip-select-unit"
+      end
       row :latest_price do |shop_item|
         latest_update = shop_item.shop_item_updates.order(created_at: :desc).first
         if latest_update&.price
