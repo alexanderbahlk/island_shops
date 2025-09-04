@@ -47,22 +47,38 @@ ActiveAdmin.register ShopItem do
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
     end
-    column :shop_item_category do |shop_item|
-      #do a link into the category
-      if shop_item.shop_item_category.present?
-        link_to shop_item.shop_item_category.title, admin_shop_item_category_path(shop_item.shop_item_category)
-      else
-        "None"
-      end
+    column :category do |shop_item|
+      best_in_place shop_item, :shop_item_category_id,
+                    as: :select,
+                    url: admin_shop_item_path(shop_item),
+                    collection: [[nil]] + ShopItemCategory.all.pluck(:title, :id).map { |title, id| [id, title] }, html_attrs: { style: "cursor: pointer; min-width: 30px;" },
+                    class: "bip-select-unit"
     end
-    column :shop_item_sub_category do |shop_item|
-      #do a link into the category
-      # Check if the association exists to avoid errors
-      if shop_item.shop_item_sub_category.present?
-        link_to shop_item.shop_item_sub_category.title, admin_shop_item_sub_category_path(shop_item.shop_item_sub_category)
-      else
-        "None"
-      end
+    column :sub_category do |shop_item|
+      best_in_place shop_item, :shop_item_sub_category_id,
+                    as: :select,
+                    url: admin_shop_item_path(shop_item),
+                    collection: if shop_item.shop_item_category_id.present?
+                      [["None", nil]] + ShopItemSubCategory.joins(:shop_item_category)
+                        .where(shop_item_category_id: shop_item.shop_item_category_id)
+                        .pluck(Arel.sql("shop_item_sub_categories.id"), Arel.sql("CONCAT(shop_item_sub_categories.title)"))
+                    else
+                      []
+                    end,
+                    html_attrs: { style: "cursor: pointer; min-width: 150px;" },
+                    class: "bip-select-unit",
+                    display_with: lambda { |value|
+                      if value.present?
+                        sub_category = ShopItemSubCategory.find(value) rescue nil
+                        if sub_category&.shop_item_category
+                          "#{sub_category.shop_item_category.title} > #{sub_category.title}"
+                        else
+                          "Unknown"
+                        end
+                      else
+                        "None"
+                      end
+                    }
     end
     column :approved do |shop_item|
       best_in_place shop_item, :approved,
