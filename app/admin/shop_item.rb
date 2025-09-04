@@ -8,7 +8,13 @@ ActiveAdmin.register ShopItem do
     id_column
     column :shop
     column :title
-    column :display_title
+    column :display_title do |shop_item|
+      best_in_place shop_item, :display_title,
+                    as: :input,
+                    url: admin_shop_item_path(shop_item),
+                    placeholder: "Click to edit display title",
+                    html_attrs: { style: "width: 200px" }
+    end
     column :image_url do |shop_item|
       if shop_item.image_url.present?
         image_tag shop_item.image_url, size: "50x50", style: "object-fit: cover;"
@@ -41,8 +47,20 @@ ActiveAdmin.register ShopItem do
         "None"
       end
     end
-    column :approved
-    column :needs_another_review
+    column :approved do |shop_item|
+      best_in_place shop_item, :approved,
+                    as: :checkbox,
+                    url: admin_shop_item_path(shop_item),
+                    html_attrs: { style: "cursor: pointer;" },
+                    classes: "bip-checkbox-approved"
+    end
+    column :needs_another_review do |shop_item|
+      best_in_place shop_item, :needs_another_review,
+                    as: :checkbox,
+                    url: admin_shop_item_path(shop_item),
+                    html_attrs: { style: "cursor: pointer;" },
+                    classes: "bip-checkbox-review"
+    end
     column :created_at
     actions
   end
@@ -152,6 +170,8 @@ ActiveAdmin.register ShopItem do
   #scope :amazon, -> { where(shop: 'Amazon') }
   #scope :ebay, -> { where(shop: 'eBay') }
   #scope :etsy, -> { where(shop: 'Etsy') }
+  #
+  #
 
   # Add batch actions
   batch_action :approve do |ids|
@@ -236,7 +256,10 @@ ActiveAdmin.register ShopItem do
     # Skip if category has no sub-categories
     next if category.shop_item_sub_categories.empty?
 
-    batch_action "assign_*#{category.title.downcase.gsub(/[^a-z0-9]/, "_")}*_subcategory".to_sym,
+    # Clean up the category name for the action name
+    clean_category_name = category.title.downcase.gsub(/[^a-z0-9]/, "_").gsub(/_+/, "_").gsub(/^_|_$/, "")
+
+    batch_action "assign_#{clean_category_name}_subcategory".to_sym,
                  form: {
                    sub_category_id: category.shop_item_sub_categories.collect { |sc| [sc.title, sc.id] },
                  } do |ids|

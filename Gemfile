@@ -30,7 +30,8 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 gem "activeadmin"
-gem "best_in_place"
+gem "best_in_place", "~> 4.0"
+gem "jquery-rails"
 
 # Plus integrations with:
 gem "devise"

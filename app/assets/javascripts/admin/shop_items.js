@@ -1,11 +1,17 @@
-$(document).ready(function () {
+function initializeBestInPlace() {
+    jQuery(".best_in_place").best_in_place();
+
+    
+}
+
+function createCategoryDropdowns() {
     var categorySelect = $('#shop_item_category_select');
     var subCategorySelect = $('#shop_item_sub_category_select');
     var subCategoryWrapper = $('#shop_item_sub_category_wrapper');
 
     // Get sub-category data from form data attribute
     var subCategories = $('form').data('sub-categories') || {};
-    
+
     // Store the initially selected sub-category value
     var initialSubCategoryValue = subCategorySelect.val();
 
@@ -30,8 +36,15 @@ $(document).ready(function () {
     updateSubCategories();
 
     // Update when category changes (but don't preserve value on manual changes)
-    categorySelect.change(function() {
+    categorySelect.change(function () {
         initialSubCategoryValue = null; // Clear initial value after first change
         updateSubCategories();
     });
+}
+
+
+$(document).ready(function () {
+
+    initializeBestInPlace();
+    createCategoryDropdowns();
 });
