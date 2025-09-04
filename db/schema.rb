@@ -47,6 +47,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_04_145859) do
     t.index ["title"], name: "index_shop_item_categories_on_title"
   end
 
+  create_table "shop_item_sub_categories", force: :cascade do |t|
+    t.string "title", null: false
+    t.bigint "shop_item_category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_item_category_id", "title"], name: "idx_on_shop_item_category_id_title_46d450a20d", unique: true
+    t.index ["shop_item_category_id"], name: "index_shop_item_sub_categories_on_shop_item_category_id"
+    t.index ["title"], name: "index_shop_item_sub_categories_on_title"
+  end
+
   create_table "shop_item_updates", force: :cascade do |t|
     t.decimal "price", precision: 10, scale: 2, null: false
     t.decimal "price_per_unit", precision: 10, scale: 2
@@ -62,21 +72,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_04_145859) do
     t.string "url", null: false
     t.string "title", null: false
     t.string "display_title"
-    t.string "shop_item_type"
-    t.string "shop_item_subtype"
     t.string "image_url"
     t.decimal "size", precision: 10, scale: 2
     t.string "unit"
     t.string "location"
     t.string "product_id"
     t.boolean "approved", default: false
+    t.boolean "needs_another_review", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "shop_item_category_id"
+    t.bigint "shop_item_sub_category_id"
     t.index ["shop_item_category_id"], name: "index_shop_items_on_shop_item_category_id"
+    t.index ["shop_item_sub_category_id"], name: "index_shop_items_on_shop_item_sub_category_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
   end
 
+  add_foreign_key "shop_item_sub_categories", "shop_item_categories"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "shop_item_categories"
+  add_foreign_key "shop_items", "shop_item_sub_categories"
 end

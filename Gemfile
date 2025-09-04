@@ -29,15 +29,16 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-gem 'activeadmin'
+gem "activeadmin"
+gem "best_in_place"
 
 # Plus integrations with:
-gem 'devise'
-gem 'cancancan'
-gem 'draper'
-gem 'pundit'
+gem "devise"
+gem "cancancan"
+gem "draper"
+gem "pundit"
 
-gem 'lograge'
+gem "lograge"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -71,7 +72,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-  gem 'annotate'
+  gem "annotate"
 end
 
 group :test do

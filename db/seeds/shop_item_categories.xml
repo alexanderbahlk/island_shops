@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<categories>
+    <category>
+        <title>Food &amp; Beverages</title>
+        <subcategories>
+            <subcategory>Fresh Produce</subcategory>
+            <subcategory>Dairy Products</subcategory>
+            <subcategory>Meat &amp; Poultry</subcategory>
+            <subcategory>Seafood</subcategory>
+            <subcategory>Bakery</subcategory>
+            <subcategory>Beverages</subcategory>
+            <subcategory>Snacks</subcategory>
+            <subcategory>Frozen Foods</subcategory>
+            <subcategory>Pantry Staples</subcategory>
+            <subcategory>Condiments &amp; Sauces</subcategory>
+            <subcategory>Grains &amp; Pasta</subcategory>
+            <subcategory>Canned Goods</subcategory>
+            <subcategory>Spices &amp; Herbs</subcategory>
+            <subcategory>Oils &amp; Vinegars</subcategory>
+            <subcategory>International Foods</subcategory>
+        </subcategories>
+    </category>
+
+    <category>
+        <title>Health &amp; Beauty</title>
+        <subcategories>
+            <subcategory>Skincare</subcategory>
+            <subcategory>Haircare</subcategory>
+            <subcategory>Makeup</subcategory>
+            <subcategory>Personal Hygiene</subcategory>
+            <subcategory>Vitamins &amp; Supplements</subcategory>
+            <subcategory>First Aid</subcategory>
+            <subcategory>Oral Care</subcategory>
+            <subcategory>Fragrances</subcategory>
+        </subcategories>
+    </category>
+
+    <category>
+        <title>Household</title>
+        <subcategories>
+            <subcategory>Cleaning Supplies</subcategory>
+            <subcategory>Paper Products</subcategory>
+            <subcategory>Kitchen Utensils</subcategory>
+            <subcategory>Storage</subcategory>
+            <subcategory>Laundry</subcategory>
+            <subcategory>Home Decor</subcategory>
+            <subcategory>Furniture</subcategory>
+            <subcategory>Tools &amp; Hardware</subcategory>
+            <subcategory>Gardening</subcategory>
+            <subcategory>Pet Supplies</subcategory>
+        </subcategories>
+    </category>
+
+    <category>
+        <title>Electronics</title>
+        <subcategories>
+            <subcategory>Mobile Phones</subcategory>
+            <subcategory>Computers</subcategory>
+            <subcategory>Audio</subcategory>
+            <subcategory>Accessories</subcategory>
+            <subcategory>Home Appliances</subcategory>
+            <subcategory>Wearables</subcategory>
+            <subcategory>Gaming</subcategory>
+            <subcategory>TV &amp; Video</subcategory>
+            <subcategory>Cameras</subcategory>
+            <subcategory>Smart Home</subcategory>
+        </subcategories>
+    </category>
+
+    <category>
+        <title>Clothing &amp; Accessories</title>
+        <subcategories>
+            <subcategory>Men's Clothing</subcategory>
+            <subcategory>Women's Clothing</subcategory>
+            <subcategory>Children's Clothing</subcategory>
+            <subcategory>Footwear</subcategory>
+            <subcategory>Bags</subcategory>
+            <subcategory>Jewelry</subcategory>
+            <subcategory>Watches</subcategory>
+            <subcategory>Hats &amp; Caps</subcategory>
+            <subcategory>Scarves &amp; Gloves</subcategory>
+            <subcategory>Sunglasses</subcategory>
+        </subcategories>
+    </category>
+
+    <category>
+        <title>Sports &amp; Recreation</title>
+        <subcategories>
+            <subcategory>Fitness Equipment</subcategory>
+            <subcategory>Outdoor Gear</subcategory>
+            <subcategory>Water Sports</subcategory>
+            <subcategory>Team Sports</subcategory>
+            <subcategory>Cycling</subcategory>
+            <subcategory>Camping</subcategory>
+            <subcategory>Hiking</subcategory>
+            <subcategory>Winter Sports</subcategory>
+            <subcategory>Yoga &amp; Pilates</subcategory>
+            <subcategory>Sportswear</subcategory>
+        </subcategories>
+    </category>
+</categories>
