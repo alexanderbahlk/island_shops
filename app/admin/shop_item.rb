@@ -198,6 +198,16 @@ ActiveAdmin.register ShopItem do
       row :updated_at
     end
 
+    # Add button to create new update with price calculation
+    div style: "margin: 20px 0;" do
+      link_to "Calculate & Update Shop Item Update",
+              user_update_shop_item_update_admin_shop_item_path(shop_item),
+              method: :post,
+              class: "btn btn-primary",
+              style: "background-color: #007cba; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px;",
+              confirm: "This will create a new shop item update with calculated price per unit. Continue?"
+    end
+
     # Display associated shop item updates
     panel "Price & Stock History" do
       table_for shop_item.shop_item_updates.order(created_at: :desc) do
@@ -220,14 +230,13 @@ ActiveAdmin.register ShopItem do
                         display_with: lambda { |value| value.present? ? value : "N/A" }
         end
         column :price_per_unit do |update|
-          best_in_place update, :price_per_unit,
-                        as: :input,
-                        url: admin_shop_item_update_path(update),
-                        placeholder: "Price per unit",
-                        class: "bip-input-unit",
-                        html_attrs: { style: "width: 100px" },
-                        display_with: lambda { |value| value.present? ? number_to_currency(value) : "N/A" }
+          if update&.price_per_unit
+            number_to_currency(update.price_per_unit)
+          else
+            "N/A"
+          end
         end
+        column :normalized_unit
         column :created_at
       end
     end
@@ -354,6 +363,49 @@ ActiveAdmin.register ShopItem do
       else
         redirect_to collection_path, alert: "Please select a sub-category."
       end
+    end
+  end
+
+  # Add custom member action for price calculation
+  member_action :user_update_shop_item_update, method: :post do
+    latest_update = resource.shop_item_updates.order(created_at: :desc).first
+
+    if latest_update&.price.present? && resource.size.present? && resource.unit.present?
+      # Check if calculation is possible
+      if PricePerUnitCalculator.should_calculate?(latest_update.price, resource.size, resource.unit)
+        calculation_result = PricePerUnitCalculator.calculate_value_only(
+          latest_update.price,
+          resource.size,
+          resource.unit
+        )
+
+        if calculation_result
+          # Create new update with calculated values
+          new_update = resource.shop_item_updates.build(
+            price: latest_update.price,
+            stock_status: latest_update.stock_status || "N/A",
+            price_per_unit: calculation_result[:price_per_unit],
+            normalized_unit: calculation_result[:normalized_unit],
+          )
+
+          if new_update.save
+            redirect_to admin_shop_item_path(resource),
+                        notice: "New update created"
+          else
+            redirect_to admin_shop_item_path(resource),
+                        alert: "Failed to create update: #{new_update.errors.full_messages.join(", ")}"
+          end
+        else
+          redirect_to admin_shop_item_path(resource),
+                      alert: "Price calculation failed"
+        end
+      else
+        redirect_to admin_shop_item_path(resource),
+                    alert: "Cannot calculate price per unit. Check if price, size, and unit are valid."
+      end
+    else
+      redirect_to admin_shop_item_path(resource),
+                  alert: "Missing required data: latest price, size, or unit"
     end
   end
 end
