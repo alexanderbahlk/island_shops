@@ -1,17 +1,19 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  url: MyString
-  title: MyString
-  image_url: MyString
-  size: MyString
-  location: MyString
-  product_id: MyString
+shop_item_one:
+  url: "https://example.com/existing-item"
+  shop: "Massy"
+  title: "Existing Item"
+  size: "500"
+  unit: "g"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
 
-two:
-  url: MyString
-  title: MyString
-  image_url: MyString
-  size: MyString
-  location: MyString
-  product_id: MyString
+shop_item_two:
+  url: "https://example.com/another-item"
+  shop: "Massy"
+  title: "Another Item"
+  size: "3"
+  unit: "kg"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

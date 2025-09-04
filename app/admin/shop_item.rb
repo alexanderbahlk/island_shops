@@ -1,6 +1,6 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
-  permit_params :shop, :url, :title, :display_title, :image_url, :size, :location, :product_id, :approved
+  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved
 
   # Configure the index page
   index do
@@ -14,7 +14,6 @@ ActiveAdmin.register ShopItem do
         image_tag shop_item.image_url, size: "50x50", style: "object-fit: cover;"
       end
     end
-    column :size
     column :latest_price do |shop_item|
       latest_update = shop_item.shop_item_updates.order(created_at: :desc).first
       if latest_update&.price
@@ -23,6 +22,8 @@ ActiveAdmin.register ShopItem do
         "N/A"
       end
     end
+    column :size
+    column :unit
     column :approved
     column :created_at
     actions
@@ -45,6 +46,7 @@ ActiveAdmin.register ShopItem do
       f.input :display_title, hint: "Optional: Custom display name for the item"
       f.input :image_url, placeholder: "https://example.com/image.jpg"
       f.input :size
+      f.input :unit
       f.input :location
       f.input :product_id
       f.input :approved, as: :boolean

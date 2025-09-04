@@ -8,6 +8,11 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.enable_reloading = true
 
+  config.log_level = :debug
+
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
+
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -25,7 +30,7 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "public, max-age=#{2.days.to_i}",
     }
   else
     config.action_controller.perform_caching = false
