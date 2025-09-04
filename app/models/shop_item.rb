@@ -18,7 +18,7 @@ class ShopItem < ApplicationRecord
   scope :by_sub_category, ->(sub_category_id) { where(shop_item_sub_category_id: sub_category_id) if sub_category_id.present? }
   scope :missing_shop_item_category, -> { where(shop_item_category_id: nil) }
   scope :missing_shop_item_sub_category, -> { where(shop_item_sub_category_id: nil) }
-
+  scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(shop_item_category_id: nil).where.not(shop_item_sub_category_id: nil) }
   # For Ransack search
 
   def self.ransackable_attributes(auth_object = nil)

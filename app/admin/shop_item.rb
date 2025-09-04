@@ -148,6 +148,7 @@ ActiveAdmin.register ShopItem do
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :missing_shop_item_category, -> { where(shop_item_category_id: nil) }
   scope :missing_shop_item_sub_category, -> { where(shop_item_sub_category_id: nil) }
+  scope :was_manually_updated, -> { where(was_manually_updated: true) }
   #scope :amazon, -> { where(shop: 'Amazon') }
   #scope :ebay, -> { where(shop: 'eBay') }
   #scope :etsy, -> { where(shop: 'Etsy') }
@@ -193,5 +194,69 @@ ActiveAdmin.register ShopItem do
   batch_action :remove_category do |ids|
     ShopItem.where(id: ids).update_all(shop_item_category_id: nil, shop_item_sub_category_id: nil)
     redirect_to collection_path, notice: "Category and sub-category have been removed from #{ids.count} shop items."
+  end
+
+  # Alternative: Single batch action that shows sub-categories based on selected items' categories
+  batch_action :assign_subcategory_smart, form: proc {
+                               # Get all sub-categories grouped by category for the form
+                               subcategories_by_category = {}
+                               ShopItemCategory.includes(:shop_item_sub_categories).each do |category|
+                                 next if category.shop_item_sub_categories.empty?
+                                 subcategories_by_category["#{category.title}"] = category.shop_item_sub_categories.collect { |sc| ["#{category.title} > #{sc.title}", sc.id] }
+                               end
+
+                               # Flatten all sub-categories into one list
+                               all_subcategories = subcategories_by_category.values.flatten(1)
+
+                               {
+                                 sub_category_id: all_subcategories,
+                               }
+                             } do |ids|
+    batch_inputs = JSON.parse(params[:batch_action_inputs])
+    sub_category_id = batch_inputs["sub_category_id"]
+
+    if sub_category_id.present?
+      sub_category = ShopItemSubCategory.find(sub_category_id)
+
+      # Update items to have both the category and sub-category
+      ShopItem.where(id: ids).update_all(
+        shop_item_category_id: sub_category.shop_item_category_id,
+        shop_item_sub_category_id: sub_category_id,
+      )
+
+      redirect_to collection_path,
+                  notice: "#{ids.count} shop items have been assigned to '#{sub_category.shop_item_category.title}' > '#{sub_category.title}'."
+    else
+      redirect_to collection_path, alert: "Please select a sub-category."
+    end
+  end
+
+  # Dynamically create batch actions for each category's sub-categories
+  ShopItemCategory.all.each do |category|
+    # Skip if category has no sub-categories
+    next if category.shop_item_sub_categories.empty?
+
+    batch_action "assign_*#{category.title.downcase.gsub(/[^a-z0-9]/, "_")}*_subcategory".to_sym,
+                 form: {
+                   sub_category_id: category.shop_item_sub_categories.collect { |sc| [sc.title, sc.id] },
+                 } do |ids|
+      batch_inputs = JSON.parse(params[:batch_action_inputs])
+      sub_category_id = batch_inputs["sub_category_id"]
+
+      if sub_category_id.present?
+        sub_category = ShopItemSubCategory.find(sub_category_id)
+
+        # Update items to have both the category and sub-category
+        ShopItem.where(id: ids).update_all(
+          shop_item_category_id: sub_category.shop_item_category_id,
+          shop_item_sub_category_id: sub_category_id,
+        )
+
+        redirect_to collection_path,
+                    notice: "#{ids.count} shop items have been assigned to '#{category.title}' > '#{sub_category.title}'."
+      else
+        redirect_to collection_path, alert: "Please select a sub-category."
+      end
+    end
   end
 end
