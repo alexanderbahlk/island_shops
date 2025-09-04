@@ -5,6 +5,7 @@ module UnitParser
     each
     g
     kg
+    lbs
     l
     ml
     oz
@@ -14,6 +15,8 @@ module UnitParser
 
   UNIT_PATTERNS = {
     "ct" => /(\d+(?:\.\d+)?)\s*ct\s*$/i,
+    "lbs" => /(\d+(?:\.\d+)?)\s*lbs\s*$/i,
+    "lb" => /(\d+(?:\.\d+)?)\s*lb\s*$/i,
     "packs" => /(\d+(?:\.\d+)?)\s*packs\s*$/i,
     "pack" => /(\d+(?:\.\d+)?)\s*pack\s*$/i,
     "pcs" => /(\d+(?:\.\d+)?)\s*pcs\s*$/i,
@@ -29,6 +32,8 @@ module UnitParser
 
   # Extended aliases for fuzzy matching
   UNIT_ALIASES = {
+    "pounds" => "lbs",
+    "lb" => "lbs",
     "gr" => "g",
     "gram" => "g",
     "grams" => "g",

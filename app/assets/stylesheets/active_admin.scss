@@ -19,7 +19,7 @@
 
 .bip-select-unit {
     cursor: pointer !important;
-    font-size: 10px;
+    font-size: 11px;
     padding: 2px 4px;
     border-radius: 4px;
     transition: all 0.3s ease;
@@ -29,6 +29,19 @@
     border: 1px solid #007bff;
     background-color: #e7f1ff;
     color: #004085;
+}
+
+.bip-input-unit {
+    font-size: 11px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    min-width: 30px;
+    text-align: left;
+    border: 1px solid #ced4da;
+    background-color: #ffffff;
+    color: #495057;
 }
 
 // Enhanced styling for best_in_place checkboxes

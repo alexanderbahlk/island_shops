@@ -77,8 +77,21 @@ class ShopItemBuilder
   end
 
   def build_shop_item_update()
-    #will use @shop_ietm.size
-    #weill use @shop_ietm.unit
     @shop_item_update = @shop_item.shop_item_updates.build(@shop_item_update_params)
+
+    # Calculate price_per_unit using the smart calculator
+    if PricePerUnitCalculator.should_calculate?(@shop_item_update.price, @shop_item.size, @shop_item.unit)
+      calculation_result = PricePerUnitCalculator.calculate_value_only(
+        @shop_item_update.price,
+        @shop_item.size,
+        @shop_item.unit
+      )
+
+      if calculation_result
+        @shop_item_update.price_per_unit = calculation_result[:price_per_unit]
+        #Also store the normalized_unit if you have a field for it
+        @shop_item_update.normalized_unit = calculation_result[:normalized_unit]
+      end
+    end
   end
 end

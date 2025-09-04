@@ -15,6 +15,7 @@ ActiveAdmin.register ShopItem do
                     as: :input,
                     url: admin_shop_item_path(shop_item),
                     placeholder: "Click to edit display title",
+                    class: "bip-input-unit",
                     html_attrs: { style: "width: 200px" }
     end
     column :image_url do |shop_item|
@@ -30,14 +31,21 @@ ActiveAdmin.register ShopItem do
         "N/A"
       end
     end
-    column :size
+    column :size do |shop_item|
+      best_in_place shop_item, :size,
+                    as: :input,
+                    url: admin_shop_item_path(shop_item),
+                    placeholder: "Click to edit size",
+                    class: "bip-input-unit",
+                    html_attrs: { style: "width: 100px" }
+    end
     column :unit do |shop_item|
       best_in_place shop_item, :unit,
                     as: :select,
                     url: admin_shop_item_path(shop_item),
                     collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
-                    classes: "bip-select-unit"
+                    class: "bip-select-unit"
     end
     column :shop_item_category do |shop_item|
       #do a link into the category
@@ -61,14 +69,14 @@ ActiveAdmin.register ShopItem do
                     as: :checkbox,
                     url: admin_shop_item_path(shop_item),
                     html_attrs: { style: "cursor: pointer;" },
-                    classes: "bip-checkbox-approved"
+                    class: "bip-checkbox-approved"
     end
     column :needs_another_review do |shop_item|
       best_in_place shop_item, :needs_another_review,
                     as: :checkbox,
                     url: admin_shop_item_path(shop_item),
                     html_attrs: { style: "cursor: pointer;" },
-                    classes: "bip-checkbox-review"
+                    class: "bip-checkbox-review"
     end
     column :created_at
     actions
@@ -112,7 +120,14 @@ ActiveAdmin.register ShopItem do
       row :id
       row :shop
       row :title
-      row :display_title
+      row :display_title do |shop_item|
+        best_in_place shop_item, :display_title,
+                      as: :input,
+                      url: admin_shop_item_path(shop_item),
+                      placeholder: "Click to edit display_title",
+                      class: "bip-input-unit",
+                      html_attrs: { style: "width: 200px" }
+      end
       row :shop_item_category do |shop_item|
         #do a link into the category
         if shop_item.shop_item_category.present?
@@ -139,14 +154,21 @@ ActiveAdmin.register ShopItem do
           end
         end
       end
-      row :size
+      row :size do |shop_item|
+        best_in_place shop_item, :size,
+                      as: :input,
+                      url: admin_shop_item_path(shop_item),
+                      placeholder: "Click to edit size",
+                      class: "bip-input-unit",
+                      html_attrs: { style: "width: 100px" }
+      end
       row :unit do |shop_item|
         best_in_place shop_item, :unit,
                       as: :select,
                       url: admin_shop_item_path(shop_item),
                       collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
                       html_attrs: { style: "cursor: pointer; min-width: 30px;" },
-                      classes: "bip-select-unit"
+                      class: "bip-select-unit"
       end
       row :latest_price do |shop_item|
         latest_update = shop_item.shop_item_updates.order(created_at: :desc).first
@@ -163,14 +185,14 @@ ActiveAdmin.register ShopItem do
                       as: :checkbox,
                       url: admin_shop_item_path(shop_item),
                       html_attrs: { style: "cursor: pointer;" },
-                      classes: "bip-checkbox-approved"
+                      class: "bip-checkbox-approved"
       end
       row :needs_another_review do |shop_item|
         best_in_place shop_item, :needs_another_review,
                       as: :checkbox,
                       url: admin_shop_item_path(shop_item),
                       html_attrs: { style: "cursor: pointer;" },
-                      classes: "bip-checkbox-review"
+                      class: "bip-checkbox-review"
       end
       row :created_at
       row :updated_at
@@ -184,6 +206,7 @@ ActiveAdmin.register ShopItem do
                         as: :input,
                         url: admin_shop_item_update_path(update),
                         placeholder: "Enter price",
+                        class: "bip-input-unit",
                         html_attrs: { style: "width: 100px" },
                         display_with: lambda { |value| value.present? ? number_to_currency(value) : "N/A" }
         end
@@ -192,6 +215,7 @@ ActiveAdmin.register ShopItem do
                         as: :input,
                         url: admin_shop_item_update_path(update),
                         placeholder: "Select status",
+                        class: "bip-input-unit",
                         html_attrs: { style: "width: 100px" },
                         display_with: lambda { |value| value.present? ? value : "N/A" }
         end
@@ -200,6 +224,7 @@ ActiveAdmin.register ShopItem do
                         as: :input,
                         url: admin_shop_item_update_path(update),
                         placeholder: "Price per unit",
+                        class: "bip-input-unit",
                         html_attrs: { style: "width: 100px" },
                         display_with: lambda { |value| value.present? ? number_to_currency(value) : "N/A" }
         end

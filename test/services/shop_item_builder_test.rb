@@ -130,6 +130,28 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "ct", builder.shop_item.unit
   end
 
+  test "extracts size and unit from title with lbs - without space" do
+    @shop_item_params[:title] = "Badia Garlic Powder 2lbs"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 2.0, builder.shop_item.size
+    assert_equal "lbs", builder.shop_item.unit
+  end
+
+  test "extracts size and unit from title with lb - with space" do
+    @shop_item_params[:title] = "Badia Garlic Powder 2 lb"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 2.0, builder.shop_item.size
+    assert_equal "lbs", builder.shop_item.unit
+  end
+
   test "extracts size and unit from title with grams - with space" do
     @shop_item_params[:title] = "Badia Garlic Powder 200 g"
     @shop_item_params[:size] = nil
