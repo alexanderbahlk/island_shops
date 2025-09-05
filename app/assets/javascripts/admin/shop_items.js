@@ -4,6 +4,7 @@ function initializeBestInPlace() {
     
 }
 
+//Removed in commit "Use ShopItemType" 5th of September 2025
 function createCategoryDropdowns() {
     var categorySelect = $('#shop_item_category_select');
     var subCategorySelect = $('#shop_item_sub_category_select');
