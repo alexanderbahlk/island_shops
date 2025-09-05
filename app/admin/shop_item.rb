@@ -1,6 +1,6 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
-  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :shop_item_category_id, :shop_item_sub_category_id
+  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :shop_item_type_id
 
   # Configure the index page
   index do
@@ -54,38 +54,12 @@ ActiveAdmin.register ShopItem do
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
     end
-    column :category do |shop_item|
-      best_in_place shop_item, :shop_item_category_id,
+    column :type do |shop_item|
+      best_in_place shop_item, :shop_item_type_id,
                     as: :select,
                     url: admin_shop_item_path(shop_item),
-                    collection: [[nil]] + ShopItemCategory.all.pluck(:title, :id).map { |title, id| [id, title] }, html_attrs: { style: "cursor: pointer; min-width: 30px;" },
+                    collection: [[nil]] + ShopItemType.all.pluck(:title, :id).map { |title, id| [id, title] }, html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
-    end
-    column :sub_category do |shop_item|
-      best_in_place shop_item, :shop_item_sub_category_id,
-                    as: :select,
-                    url: admin_shop_item_path(shop_item),
-                    collection: if shop_item.shop_item_category_id.present?
-                      [["None", nil]] + ShopItemSubCategory.joins(:shop_item_category)
-                        .where(shop_item_category_id: shop_item.shop_item_category_id)
-                        .pluck(Arel.sql("shop_item_sub_categories.id"), Arel.sql("CONCAT(shop_item_sub_categories.title)"))
-                    else
-                      []
-                    end,
-                    html_attrs: { style: "cursor: pointer; min-width: 150px;" },
-                    class: "bip-select-unit",
-                    display_with: lambda { |value|
-                      if value.present?
-                        sub_category = ShopItemSubCategory.find(value) rescue nil
-                        if sub_category&.shop_item_category
-                          "#{sub_category.shop_item_category.title} > #{sub_category.title}"
-                        else
-                          "Unknown"
-                        end
-                      else
-                        "None"
-                      end
-                    }
     end
     column :approved do |shop_item|
       best_in_place shop_item, :approved,
@@ -119,8 +93,7 @@ ActiveAdmin.register ShopItem do
   filter :approved
   filter :needs_another_review
   #include null option for category and subcategory filters
-  filter :shop_item_category, as: :select, collection: proc { ShopItemCategory.all.pluck(:title, :id) }, include_blank: "None"
-  filter :shop_item_sub_category, as: :select, collection: proc { ShopItemSubCategory.all.pluck(:title, :id) }, include_blank: "None"
+  filter :shop_item_type, as: :select, collection: proc { ShopItemType.all.pluck(:title, :id) }, include_blank: "None"
   filter :created_at
 
   # Configure the form for create/edit
@@ -157,18 +130,10 @@ ActiveAdmin.register ShopItem do
                       class: "bip-input-unit",
                       html_attrs: { style: "width: 200px" }
       end
-      row :shop_item_category do |shop_item|
+      row :shop_item_type do |shop_item|
         #do a link into the category
-        if shop_item.shop_item_category.present?
-          link_to shop_item.shop_item_category.title, admin_shop_item_category_path(shop_item.shop_item_category)
-        else
-          "None"
-        end
-      end
-      row :shop_item_sub_category do |shop_item|
-        #do a link into the category
-        if shop_item.shop_item_sub_category.present?
-          link_to shop_item.shop_item_sub_category.title, admin_shop_item_sub_category_path(shop_item.shop_item_sub_category)
+        if shop_item.shop_item_type.present?
+          link_to shop_item.shop_item_type.title, admin_shop_item_type_path(shop_item.shop_item_type)
         else
           "None"
         end
@@ -279,8 +244,7 @@ ActiveAdmin.register ShopItem do
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :needs_review, -> { where(needs_another_review: true) }
-  scope :missing_shop_item_category, -> { where(shop_item_category_id: nil) }
-  scope :missing_shop_item_sub_category, -> { where(shop_item_sub_category_id: nil) }
+  scope :missing_shop_item_type, -> { where(shop_item_type_id: nil) }
   scope :was_manually_updated, -> { where(was_manually_updated: true) }
   #scope :amazon, -> { where(shop: 'Amazon') }
   #scope :ebay, -> { where(shop: 'eBay') }
@@ -308,94 +272,28 @@ ActiveAdmin.register ShopItem do
     redirect_to collection_path, alert: "#{ids.count} shop items have been unmarked as needing another review."
   end
 
-  batch_action :assign_category, form: {
-                                   category_id: ShopItemCategory.all.collect { |c| [c.title, c.id] },
-                                 } do |ids|
+  batch_action :assign_type, form: {
+                               type_id: [nil] + ShopItemType.all.collect { |c| [c.title, c.id] },
+                             } do |ids|
     #log the params to see what is being passed
     Rails.logger.info "Batch action params: #{params.inspect}"
     batch_inputs = JSON.parse(params[:batch_action_inputs])
 
-    category_id = batch_inputs["category_id"]
+    type_id = batch_inputs["type_id"]
 
-    if category_id.present?
-      ShopItem.where(id: ids).update_all(shop_item_category_id: category_id, shop_item_sub_category_id: nil)
-      category_name = ShopItemCategory.find(category_id).title
-      redirect_to collection_path, notice: "#{ids.count} shop items have been assigned to category '#{category_name}'."
+    if type_id.present?
+      ShopItem.where(id: ids).update_all(shop_item_type_id: type_id)
+      type_title = ShopItemType.find(type_id).title
+      redirect_to collection_path, notice: "#{ids.count} shop items have been assigned to category '#{type_title}'."
     else
-      redirect_to collection_path, alert: "Please select a category."
+      ShopItem.where(id: ids).update_all(shop_item_type_id: nil)
+      redirect_to collection_path, notice: "Type has been removed from #{ids.count} shop items."
     end
   end
 
-  batch_action :remove_category do |ids|
-    ShopItem.where(id: ids).update_all(shop_item_category_id: nil, shop_item_sub_category_id: nil)
-    redirect_to collection_path, notice: "Category and sub-category have been removed from #{ids.count} shop items."
-  end
-
-  # Alternative: Single batch action that shows sub-categories based on selected items' categories
-  batch_action :assign_subcategory_smart, form: proc {
-                               # Get all sub-categories grouped by category for the form
-                               subcategories_by_category = {}
-                               ShopItemCategory.includes(:shop_item_sub_categories).each do |category|
-                                 next if category.shop_item_sub_categories.empty?
-                                 subcategories_by_category["#{category.title}"] = category.shop_item_sub_categories.collect { |sc| ["#{category.title} > #{sc.title}", sc.id] }
-                               end
-
-                               # Flatten all sub-categories into one list
-                               all_subcategories = subcategories_by_category.values.flatten(1)
-
-                               {
-                                 sub_category_id: all_subcategories,
-                               }
-                             } do |ids|
-    batch_inputs = JSON.parse(params[:batch_action_inputs])
-    sub_category_id = batch_inputs["sub_category_id"]
-
-    if sub_category_id.present?
-      sub_category = ShopItemSubCategory.find(sub_category_id)
-
-      # Update items to have both the category and sub-category
-      ShopItem.where(id: ids).update_all(
-        shop_item_category_id: sub_category.shop_item_category_id,
-        shop_item_sub_category_id: sub_category_id,
-      )
-
-      redirect_to collection_path,
-                  notice: "#{ids.count} shop items have been assigned to '#{sub_category.shop_item_category.title}' > '#{sub_category.title}'."
-    else
-      redirect_to collection_path, alert: "Please select a sub-category."
-    end
-  end
-
-  # Dynamically create batch actions for each category's sub-categories
-  ShopItemCategory.all.each do |category|
-    # Skip if category has no sub-categories
-    next if category.shop_item_sub_categories.empty?
-
-    # Clean up the category name for the action name
-    clean_category_name = category.title.downcase.gsub(/[^a-z0-9]/, "_").gsub(/_+/, "_").gsub(/^_|_$/, "")
-
-    batch_action "assign_#{clean_category_name}_subcategory".to_sym,
-                 form: {
-                   sub_category_id: category.shop_item_sub_categories.collect { |sc| [sc.title, sc.id] },
-                 } do |ids|
-      batch_inputs = JSON.parse(params[:batch_action_inputs])
-      sub_category_id = batch_inputs["sub_category_id"]
-
-      if sub_category_id.present?
-        sub_category = ShopItemSubCategory.find(sub_category_id)
-
-        # Update items to have both the category and sub-category
-        ShopItem.where(id: ids).update_all(
-          shop_item_category_id: sub_category.shop_item_category_id,
-          shop_item_sub_category_id: sub_category_id,
-        )
-
-        redirect_to collection_path,
-                    notice: "#{ids.count} shop items have been assigned to '#{category.title}' > '#{sub_category.title}'."
-      else
-        redirect_to collection_path, alert: "Please select a sub-category."
-      end
-    end
+  batch_action :remove_type do |ids|
+    ShopItem.where(id: ids).update_all(shop_item_type_id: nil)
+    redirect_to collection_path, notice: "Type has been removed from #{ids.count} shop items."
   end
 
   # Add custom member action for price calculation

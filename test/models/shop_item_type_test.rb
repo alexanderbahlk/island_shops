@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: shop_item_categories
+# Table name: shop_item_types
 #
 #  id         :bigint           not null, primary key
 #  title      :string           not null
@@ -9,8 +9,12 @@
 #
 # Indexes
 #
-#  index_shop_item_categories_on_title  (title)
+#  index_shop_item_types_on_title  (title)
 #
-shop_item_category_one:
-  title: "Beverages"
-  created_at: <%= 3.days.ago %>
+require "test_helper"
+
+class ShopItemTypeTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end

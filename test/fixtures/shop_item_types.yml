@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: shop_item_types
+#
+#  id         :bigint           not null, primary key
+#  title      :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_shop_item_types_on_title  (title)
+#
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+shop_item_type_one:
+  title: "Coke"
+  shop_item_sub_category: shop_item_sub_category_one
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>

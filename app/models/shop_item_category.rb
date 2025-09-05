@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: shop_item_categories
+#
+#  id         :bigint           not null, primary key
+#  title      :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_shop_item_categories_on_title  (title)
+#
 class ShopItemCategory < ApplicationRecord
   has_many :shop_item_sub_categories, dependent: :destroy
   has_many :shop_items, dependent: :nullify

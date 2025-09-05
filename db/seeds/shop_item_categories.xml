@@ -3,99 +3,674 @@
     <category>
         <title>Food &amp; Beverages</title>
         <subcategories>
-            <subcategory>Fresh Produce</subcategory>
-            <subcategory>Dairy Products</subcategory>
-            <subcategory>Meat &amp; Poultry</subcategory>
-            <subcategory>Seafood</subcategory>
-            <subcategory>Bakery</subcategory>
-            <subcategory>Beverages</subcategory>
-            <subcategory>Snacks</subcategory>
-            <subcategory>Frozen Foods</subcategory>
-            <subcategory>Pantry Staples</subcategory>
-            <subcategory>Condiments &amp; Sauces</subcategory>
-            <subcategory>Grains &amp; Pasta</subcategory>
-            <subcategory>Canned Goods</subcategory>
-            <subcategory>Spices &amp; Herbs</subcategory>
-            <subcategory>Oils &amp; Vinegars</subcategory>
-            <subcategory>International Foods</subcategory>
+            <subcategory>
+                <title>Fresh Produce</title>
+                <types>
+                    <type>Fruits</type>
+                    <type>Vegetables</type>
+                    <type>Herbs</type>
+                    <type>Salads</type>
+                    <type>Mushrooms</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Dairy Products</title>
+                <types>
+                    <type>Milk</type>
+                    <type>Cheese</type>
+                    <type>Yogurt</type>
+                    <type>Butter</type>
+                    <type>Cream</type>
+                    <type>Eggs</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Meat &amp; Poultry</title>
+                <types>
+                    <type>Beef</type>
+                    <type>Pork</type>
+                    <type>Chicken</type>
+                    <type>Turkey</type>
+                    <type>Lamb</type>
+                    <type>Sausages</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Seafood</title>
+                <types>
+                    <type>Fish</type>
+                    <type>Shellfish</type>
+                    <type>Canned Seafood</type>
+                    <type>Frozen Seafood</type>
+                    <type>Smoked Fish</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Bakery</title>
+                <types>
+                    <type>Bread</type>
+                    <type>Pastries</type>
+                    <type>Cakes</type>
+                    <type>Cookies</type>
+                    <type>Muffins</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Beverages</title>
+                <types>
+                    <type>Wine</type>
+                    <type>Beer</type>
+                    <type>Spirits</type>
+                    <type>Soft Drinks</type>
+                    <type>Juices</type>
+                    <type>Coffee</type>
+                    <type>Tea</type>
+                    <type>Water</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Snacks</title>
+                <types>
+                    <type>Chips</type>
+                    <type>Nuts</type>
+                    <type>Crackers</type>
+                    <type>Chocolate</type>
+                    <type>Candy</type>
+                    <type>Dried Fruits</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Frozen Foods</title>
+                <types>
+                    <type>Frozen Meals</type>
+                    <type>Ice Cream</type>
+                    <type>Frozen Vegetables</type>
+                    <type>Frozen Fruits</type>
+                    <type>Pizza</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Pantry Staples</title>
+                <types>
+                    <type>Rice</type>
+                    <type>Flour</type>
+                    <type>Sugar</type>
+                    <type>Salt</type>
+                    <type>Baking Supplies</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Condiments &amp; Sauces</title>
+                <types>
+                    <type>Ketchup</type>
+                    <type>Mustard</type>
+                    <type>Mayo</type>
+                    <type>Hot Sauce</type>
+                    <type>Salad Dressing</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Grains &amp; Pasta</title>
+                <types>
+                    <type>Pasta</type>
+                    <type>Quinoa</type>
+                    <type>Oats</type>
+                    <type>Barley</type>
+                    <type>Couscous</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Canned Goods</title>
+                <types>
+                    <type>Canned Vegetables</type>
+                    <type>Canned Fruits</type>
+                    <type>Soups</type>
+                    <type>Beans</type>
+                    <type>Tomatoes</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Spices &amp; Herbs</title>
+                <types>
+                    <type>Dried Spices</type>
+                    <type>Fresh Herbs</type>
+                    <type>Spice Blends</type>
+                    <type>Pepper</type>
+                    <type>Garlic</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Oils &amp; Vinegars</title>
+                <types>
+                    <type>Olive Oil</type>
+                    <type>Cooking Oil</type>
+                    <type>Balsamic Vinegar</type>
+                    <type>Apple Cider Vinegar</type>
+                    <type>Specialty Oils</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>International Foods</title>
+                <types>
+                    <type>Asian</type>
+                    <type>Mexican</type>
+                    <type>Italian</type>
+                    <type>Indian</type>
+                    <type>Mediterranean</type>
+                </types>
+            </subcategory>
         </subcategories>
     </category>
 
     <category>
         <title>Health &amp; Beauty</title>
         <subcategories>
-            <subcategory>Skincare</subcategory>
-            <subcategory>Haircare</subcategory>
-            <subcategory>Makeup</subcategory>
-            <subcategory>Personal Hygiene</subcategory>
-            <subcategory>Vitamins &amp; Supplements</subcategory>
-            <subcategory>First Aid</subcategory>
-            <subcategory>Oral Care</subcategory>
-            <subcategory>Fragrances</subcategory>
+            <subcategory>
+                <title>Skincare</title>
+                <types>
+                    <type>Moisturizer</type>
+                    <type>Cleanser</type>
+                    <type>Sunscreen</type>
+                    <type>Serum</type>
+                    <type>Face Masks</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Haircare</title>
+                <types>
+                    <type>Shampoo</type>
+                    <type>Conditioner</type>
+                    <type>Hair Oil</type>
+                    <type>Styling Products</type>
+                    <type>Hair Color</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Makeup</title>
+                <types>
+                    <type>Foundation</type>
+                    <type>Lipstick</type>
+                    <type>Mascara</type>
+                    <type>Eyeshadow</type>
+                    <type>Concealer</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Personal Hygiene</title>
+                <types>
+                    <type>Deodorant</type>
+                    <type>Body Wash</type>
+                    <type>Soap</type>
+                    <type>Hand Sanitizer</type>
+                    <type>Feminine Care</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Vitamins &amp; Supplements</title>
+                <types>
+                    <type>Multivitamins</type>
+                    <type>Vitamin C</type>
+                    <type>Protein Powder</type>
+                    <type>Probiotics</type>
+                    <type>Omega-3</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>First Aid</title>
+                <types>
+                    <type>Bandages</type>
+                    <type>Antiseptic</type>
+                    <type>Pain Relief</type>
+                    <type>Thermometer</type>
+                    <type>Cold Medicine</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Oral Care</title>
+                <types>
+                    <type>Toothpaste</type>
+                    <type>Toothbrush</type>
+                    <type>Mouthwash</type>
+                    <type>Dental Floss</type>
+                    <type>Whitening</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Fragrances</title>
+                <types>
+                    <type>Perfume</type>
+                    <type>Cologne</type>
+                    <type>Body Spray</type>
+                    <type>Essential Oils</type>
+                    <type>Candles</type>
+                </types>
+            </subcategory>
         </subcategories>
     </category>
 
     <category>
         <title>Household</title>
         <subcategories>
-            <subcategory>Cleaning Supplies</subcategory>
-            <subcategory>Paper Products</subcategory>
-            <subcategory>Kitchen Utensils</subcategory>
-            <subcategory>Storage</subcategory>
-            <subcategory>Laundry</subcategory>
-            <subcategory>Home Decor</subcategory>
-            <subcategory>Furniture</subcategory>
-            <subcategory>Tools &amp; Hardware</subcategory>
-            <subcategory>Gardening</subcategory>
-            <subcategory>Pet Supplies</subcategory>
+            <subcategory>
+                <title>Cleaning Supplies</title>
+                <types>
+                    <type>All-Purpose Cleaner</type>
+                    <type>Dishwashing Liquid</type>
+                    <type>Bleach</type>
+                    <type>Glass Cleaner</type>
+                    <type>Disinfectant</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Paper Products</title>
+                <types>
+                    <type>Toilet Paper</type>
+                    <type>Paper Towels</type>
+                    <type>Napkins</type>
+                    <type>Tissues</type>
+                    <type>Paper Plates</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Kitchen Utensils</title>
+                <types>
+                    <type>Knives</type>
+                    <type>Cutting Boards</type>
+                    <type>Pots &amp; Pans</type>
+                    <type>Mixing Bowls</type>
+                    <type>Measuring Cups</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Storage</title>
+                <types>
+                    <type>Food Containers</type>
+                    <type>Bags</type>
+                    <type>Boxes</type>
+                    <type>Baskets</type>
+                    <type>Organizers</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Laundry</title>
+                <types>
+                    <type>Detergent</type>
+                    <type>Fabric Softener</type>
+                    <type>Stain Remover</type>
+                    <type>Bleach</type>
+                    <type>Dryer Sheets</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Home Decor</title>
+                <types>
+                    <type>Candles</type>
+                    <type>Picture Frames</type>
+                    <type>Vases</type>
+                    <type>Curtains</type>
+                    <type>Pillows</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Furniture</title>
+                <types>
+                    <type>Chairs</type>
+                    <type>Tables</type>
+                    <type>Storage Furniture</type>
+                    <type>Lighting</type>
+                    <type>Outdoor Furniture</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Tools &amp; Hardware</title>
+                <types>
+                    <type>Hand Tools</type>
+                    <type>Power Tools</type>
+                    <type>Screws &amp; Nails</type>
+                    <type>Batteries</type>
+                    <type>Extension Cords</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Gardening</title>
+                <types>
+                    <type>Seeds</type>
+                    <type>Fertilizer</type>
+                    <type>Garden Tools</type>
+                    <type>Pots &amp; Planters</type>
+                    <type>Hoses</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Pet Supplies</title>
+                <types>
+                    <type>Pet Food</type>
+                    <type>Toys</type>
+                    <type>Treats</type>
+                    <type>Beds</type>
+                    <type>Grooming</type>
+                </types>
+            </subcategory>
         </subcategories>
     </category>
 
     <category>
         <title>Electronics</title>
         <subcategories>
-            <subcategory>Mobile Phones</subcategory>
-            <subcategory>Computers</subcategory>
-            <subcategory>Audio</subcategory>
-            <subcategory>Accessories</subcategory>
-            <subcategory>Home Appliances</subcategory>
-            <subcategory>Wearables</subcategory>
-            <subcategory>Gaming</subcategory>
-            <subcategory>TV &amp; Video</subcategory>
-            <subcategory>Cameras</subcategory>
-            <subcategory>Smart Home</subcategory>
+            <subcategory>
+                <title>Mobile Phones</title>
+                <types>
+                    <type>Smartphones</type>
+                    <type>Feature Phones</type>
+                    <type>Phone Cases</type>
+                    <type>Screen Protectors</type>
+                    <type>Chargers</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Computers</title>
+                <types>
+                    <type>Laptops</type>
+                    <type>Desktops</type>
+                    <type>Tablets</type>
+                    <type>Keyboards</type>
+                    <type>Mice</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Audio</title>
+                <types>
+                    <type>Headphones</type>
+                    <type>Speakers</type>
+                    <type>Earbuds</type>
+                    <type>Sound Systems</type>
+                    <type>Microphones</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Accessories</title>
+                <types>
+                    <type>Cables</type>
+                    <type>Power Banks</type>
+                    <type>Memory Cards</type>
+                    <type>USB Drives</type>
+                    <type>Adapters</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Home Appliances</title>
+                <types>
+                    <type>Refrigerators</type>
+                    <type>Washing Machines</type>
+                    <type>Microwaves</type>
+                    <type>Air Conditioners</type>
+                    <type>Vacuum Cleaners</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Wearables</title>
+                <types>
+                    <type>Smart Watches</type>
+                    <type>Fitness Trackers</type>
+                    <type>Smart Glasses</type>
+                    <type>Health Monitors</type>
+                    <type>Smart Rings</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Gaming</title>
+                <types>
+                    <type>Consoles</type>
+                    <type>Games</type>
+                    <type>Controllers</type>
+                    <type>Gaming Chairs</type>
+                    <type>VR Headsets</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>TV &amp; Video</title>
+                <types>
+                    <type>Televisions</type>
+                    <type>Streaming Devices</type>
+                    <type>DVD Players</type>
+                    <type>Projectors</type>
+                    <type>Remote Controls</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Cameras</title>
+                <types>
+                    <type>Digital Cameras</type>
+                    <type>Action Cameras</type>
+                    <type>Lenses</type>
+                    <type>Tripods</type>
+                    <type>Memory Cards</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Smart Home</title>
+                <types>
+                    <type>Smart Lights</type>
+                    <type>Smart Thermostats</type>
+                    <type>Security Cameras</type>
+                    <type>Smart Speakers</type>
+                    <type>Smart Locks</type>
+                </types>
+            </subcategory>
         </subcategories>
     </category>
 
     <category>
         <title>Clothing &amp; Accessories</title>
         <subcategories>
-            <subcategory>Men's Clothing</subcategory>
-            <subcategory>Women's Clothing</subcategory>
-            <subcategory>Children's Clothing</subcategory>
-            <subcategory>Footwear</subcategory>
-            <subcategory>Bags</subcategory>
-            <subcategory>Jewelry</subcategory>
-            <subcategory>Watches</subcategory>
-            <subcategory>Hats &amp; Caps</subcategory>
-            <subcategory>Scarves &amp; Gloves</subcategory>
-            <subcategory>Sunglasses</subcategory>
+            <subcategory>
+                <title>Men's Clothing</title>
+                <types>
+                    <type>Shirts</type>
+                    <type>T-Shirts</type>
+                    <type>Pants</type>
+                    <type>Jeans</type>
+                    <type>Suits</type>
+                    <type>Jackets</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Women's Clothing</title>
+                <types>
+                    <type>Dresses</type>
+                    <type>Blouses</type>
+                    <type>Skirts</type>
+                    <type>Pants</type>
+                    <type>Jeans</type>
+                    <type>Jackets</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Children's Clothing</title>
+                <types>
+                    <type>Baby Clothes</type>
+                    <type>Kids T-Shirts</type>
+                    <type>Kids Pants</type>
+                    <type>School Uniforms</type>
+                    <type>Pajamas</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Footwear</title>
+                <types>
+                    <type>Sneakers</type>
+                    <type>Dress Shoes</type>
+                    <type>Boots</type>
+                    <type>Sandals</type>
+                    <type>Athletic Shoes</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Bags</title>
+                <types>
+                    <type>Handbags</type>
+                    <type>Backpacks</type>
+                    <type>Travel Bags</type>
+                    <type>Laptop Bags</type>
+                    <type>Wallets</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Jewelry</title>
+                <types>
+                    <type>Necklaces</type>
+                    <type>Rings</type>
+                    <type>Earrings</type>
+                    <type>Bracelets</type>
+                    <type>Brooches</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Watches</title>
+                <types>
+                    <type>Analog Watches</type>
+                    <type>Digital Watches</type>
+                    <type>Sports Watches</type>
+                    <type>Luxury Watches</type>
+                    <type>Pocket Watches</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Hats &amp; Caps</title>
+                <types>
+                    <type>Baseball Caps</type>
+                    <type>Beanies</type>
+                    <type>Sun Hats</type>
+                    <type>Fedoras</type>
+                    <type>Winter Hats</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Scarves &amp; Gloves</title>
+                <types>
+                    <type>Scarves</type>
+                    <type>Winter Gloves</type>
+                    <type>Work Gloves</type>
+                    <type>Fashion Gloves</type>
+                    <type>Mittens</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Sunglasses</title>
+                <types>
+                    <type>Aviator</type>
+                    <type>Wayfarer</type>
+                    <type>Sports Sunglasses</type>
+                    <type>Designer Sunglasses</type>
+                    <type>Reading Glasses</type>
+                </types>
+            </subcategory>
         </subcategories>
     </category>
 
     <category>
         <title>Sports &amp; Recreation</title>
         <subcategories>
-            <subcategory>Fitness Equipment</subcategory>
-            <subcategory>Outdoor Gear</subcategory>
-            <subcategory>Water Sports</subcategory>
-            <subcategory>Team Sports</subcategory>
-            <subcategory>Cycling</subcategory>
-            <subcategory>Camping</subcategory>
-            <subcategory>Hiking</subcategory>
-            <subcategory>Winter Sports</subcategory>
-            <subcategory>Yoga &amp; Pilates</subcategory>
-            <subcategory>Sportswear</subcategory>
+            <subcategory>
+                <title>Fitness Equipment</title>
+                <types>
+                    <type>Weights</type>
+                    <type>Treadmills</type>
+                    <type>Exercise Bikes</type>
+                    <type>Resistance Bands</type>
+                    <type>Yoga Mats</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Outdoor Gear</title>
+                <types>
+                    <type>Tents</type>
+                    <type>Sleeping Bags</type>
+                    <type>Backpacks</type>
+                    <type>Camping Chairs</type>
+                    <type>Coolers</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Water Sports</title>
+                <types>
+                    <type>Swimwear</type>
+                    <type>Surfboards</type>
+                    <type>Life Jackets</type>
+                    <type>Goggles</type>
+                    <type>Pool Equipment</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Team Sports</title>
+                <types>
+                    <type>Footballs</type>
+                    <type>Basketballs</type>
+                    <type>Soccer Balls</type>
+                    <type>Baseball Equipment</type>
+                    <type>Uniforms</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Cycling</title>
+                <types>
+                    <type>Bicycles</type>
+                    <type>Helmets</type>
+                    <type>Bike Accessories</type>
+                    <type>Repair Kits</type>
+                    <type>Cycling Clothes</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Camping</title>
+                <types>
+                    <type>Tents</type>
+                    <type>Sleeping Equipment</type>
+                    <type>Camping Stoves</type>
+                    <type>Lanterns</type>
+                    <type>Camping Furniture</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Hiking</title>
+                <types>
+                    <type>Hiking Boots</type>
+                    <type>Hiking Poles</type>
+                    <type>Hydration Packs</type>
+                    <type>Trail Maps</type>
+                    <type>First Aid Kits</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Winter Sports</title>
+                <types>
+                    <type>Skis</type>
+                    <type>Snowboards</type>
+                    <type>Ice Skates</type>
+                    <type>Winter Clothing</type>
+                    <type>Snow Accessories</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Yoga &amp; Pilates</title>
+                <types>
+                    <type>Yoga Mats</type>
+                    <type>Yoga Blocks</type>
+                    <type>Pilates Equipment</type>
+                    <type>Meditation Cushions</type>
+                    <type>Yoga Clothing</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Sportswear</title>
+                <types>
+                    <type>Athletic Shoes</type>
+                    <type>Sports Bras</type>
+                    <type>Running Shorts</type>
+                    <type>Workout Shirts</type>
+                    <type>Track Suits</type>
+                </types>
+            </subcategory>
         </subcategories>
     </category>
 </categories>

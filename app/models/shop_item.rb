@@ -1,7 +1,6 @@
 class ShopItem < ApplicationRecord
   has_many :shop_item_updates, dependent: :destroy
-  belongs_to :shop_item_category, optional: true
-  belongs_to :shop_item_sub_category, optional: true
+  belongs_to :shop_item_type, optional: true
 
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
@@ -16,24 +15,21 @@ class ShopItem < ApplicationRecord
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
 
   # Scopes
-
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :by_shop, ->(shop_name) { where(shop: shop_name) if shop_name.present? }
-  scope :by_category, ->(category_id) { where(shop_item_category_id: category_id) if category_id.present? }
-  scope :by_sub_category, ->(sub_category_id) { where(shop_item_sub_category_id: sub_category_id) if sub_category_id.present? }
-  scope :missing_shop_item_category, -> { where(shop_item_category_id: nil) }
-  scope :missing_shop_item_sub_category, -> { where(shop_item_sub_category_id: nil) }
-  scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(shop_item_category_id: nil).where.not(shop_item_sub_category_id: nil) }
-  # For Ransack search
+  scope :by_type, ->(type_id) { where(shop_item_type_id: type_id) if type_id.present? }
+  scope :missing_shop_item_type, -> { where(shop_item_type_id: nil) }
+  scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(shop_item_type_id: nil) }
 
+  # For Ransack search
   def self.ransackable_attributes(auth_object = nil)
-    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "shop_item_type", "shop_item_subtype", "shop_item_category_id", "shop_item_sub_category_id", "needs_another_review"]
+    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "shop_item_type_id", "needs_another_review"]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["shop_item_updates"]
+    ["shop_item_updates", "shop_item_type"]
   end
 
   def latest_price_per_unit
@@ -43,6 +39,15 @@ class ShopItem < ApplicationRecord
     else
       "N/A"
     end
+  end
+
+  # Helper methods to get category and subcategory through type
+  def shop_item_category
+    shop_item_type&.shop_item_sub_categories&.first&.shop_item_category
+  end
+
+  def shop_item_sub_category
+    shop_item_type&.shop_item_sub_categories&.first
   end
 
   private
