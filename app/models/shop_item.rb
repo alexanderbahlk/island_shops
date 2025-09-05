@@ -36,6 +36,15 @@ class ShopItem < ApplicationRecord
     ["shop_item_updates"]
   end
 
+  def latest_price_per_unit
+    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    if latest_update&.price_per_unit
+      "$" + latest_update.price_per_unit.to_s + " per " + latest_update.normalized_unit.to_s
+    else
+      "N/A"
+    end
+  end
+
   private
 
   def force_valid_unit_value

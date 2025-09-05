@@ -27,6 +27,18 @@ class ShopItemBuilder
 
   def create_update_for_existing_item(existing_item)
     @shop_item = existing_item
+    @shop_item.assign_attributes(@shop_item_params.except(:id)) # Avoid changing the ID
+
+    # set size and/or unit from title
+    set_shop_item_size_and_unit_from_title()
+
+    # Only save if there are actual changes
+    if @shop_item.changed?
+      unless @shop_item.save
+        @errors.concat(@shop_item.errors.full_messages)
+        return
+      end
+    end
 
     # Check if we need to create an update based on changes
     last_update = @shop_item.shop_item_updates.order(:created_at).last

@@ -119,6 +119,30 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "ct", builder.shop_item.unit
   end
 
+  test "extracts size and unit from title and params with lt" do
+    @shop_item_params[:title] = "Sungold Evaporated Milk"
+    @shop_item_params[:size] = 1 # Ensure size is blank to trigger extraction
+    @shop_item_params[:unit] = "lt" # Ensure size is blank to trigger extraction
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 1.0, builder.shop_item.size
+    assert_equal "l", builder.shop_item.unit
+  end
+
+  test "extracts size and unit from title and params with pk" do
+    @shop_item_params[:title] = "Good Time Mix Tray Nuts 12 Pk"
+    @shop_item_params[:size] = 12 # Ensure size is blank to trigger extraction
+    @shop_item_params[:unit] = "pk" # Ensure size is blank to trigger extraction
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 12.0, builder.shop_item.size
+    assert_equal "pc", builder.shop_item.unit
+  end
+
   test "extracts size and unit from title with ct (count) - without space" do
     @shop_item_params[:title] = "Toufayan Bagels Blueberry 16Ct"
     @shop_item_params[:size] = nil

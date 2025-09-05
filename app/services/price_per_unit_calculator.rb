@@ -44,6 +44,7 @@ class PricePerUnitCalculator
   }.freeze
 
   def self.calculate(price, size, unit)
+    Rails.logger.info "Calculating price per unit for price: #{price}, size: #{size}, unit: #{unit}"
     return nil unless valid_inputs?(price, size, unit)
 
     base_quantity = BASE_QUANTITIES[unit]

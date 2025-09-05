@@ -31,6 +31,13 @@ ActiveAdmin.register ShopItem do
         "N/A"
       end
     end
+    column :latest_price_per_unit do |shop_item|
+      if shop_item.latest_price_per_unit != "N/A"
+        shop_item.latest_price_per_unit
+      else
+        content_tag(:span, "N/A", style: "color: red; font-size: 11px;")
+      end
+    end
     column :size do |shop_item|
       best_in_place shop_item, :size,
                     as: :input,
@@ -95,7 +102,13 @@ ActiveAdmin.register ShopItem do
                     class: "bip-checkbox-review"
     end
     column :created_at
-    actions
+    actions do |shop_item|
+      # Add the custom action button alongside View, Edit, Delete
+      item "Calculate Price", user_update_shop_item_update_admin_shop_item_path(shop_item),
+           method: :post,
+           class: "member_link",
+           confirm: "This will create a new shop item update with calculated price per unit. Continue?"
+    end
   end
 
   # Configure filters for the index page
@@ -193,6 +206,9 @@ ActiveAdmin.register ShopItem do
         else
           "N/A"
         end
+      end
+      row :latest_price_per_unit do |shop_item|
+        shop_item.latest_price_per_unit
       end
       row :location
       row :product_id
@@ -386,6 +402,21 @@ ActiveAdmin.register ShopItem do
   member_action :user_update_shop_item_update, method: :post do
     latest_update = resource.shop_item_updates.order(created_at: :desc).first
 
+    # Determine redirect path based on parameter or referer
+    redirect_path = case params[:redirect_to]
+      when "show"
+        admin_shop_item_path(resource)
+      when "index"
+        collection_path
+      else
+        # Fallback: check referer to determine where we came from
+        if request.referer&.include?("/admin/shop_items") && !request.referer&.include?("/#{resource.id}")
+          collection_path
+        else
+          admin_shop_item_path(resource)
+        end
+      end
+
     if latest_update&.price.present? && resource.size.present? && resource.unit.present?
       # Check if calculation is possible
       if PricePerUnitCalculator.should_calculate?(latest_update.price, resource.size, resource.unit)
@@ -405,23 +436,30 @@ ActiveAdmin.register ShopItem do
           )
 
           if new_update.save
-            redirect_to admin_shop_item_path(resource),
-                        notice: "New update created"
+            success_message = if redirect_path == collection_path
+                "New update created"
+              else
+                "New update created"
+              end
+
+            redirect_to redirect_path, notice: success_message
           else
-            redirect_to admin_shop_item_path(resource),
-                        alert: "Failed to create update: #{new_update.errors.full_messages.join(", ")}"
+            error_message = if redirect_path == collection_path
+                "Failed to create update for '#{resource.title}': #{new_update.errors.full_messages.join(", ")}"
+              else
+                "Failed to create update: #{new_update.errors.full_messages.join(", ")}"
+              end
+
+            redirect_to redirect_path, alert: error_message
           end
         else
-          redirect_to admin_shop_item_path(resource),
-                      alert: "Price calculation failed"
+          redirect_to redirect_path, alert: "Price calculation failed#{redirect_path == collection_path ? " for '#{resource.title}'" : ""}"
         end
       else
-        redirect_to admin_shop_item_path(resource),
-                    alert: "Cannot calculate price per unit. Check if price, size, and unit are valid."
+        redirect_to redirect_path, alert: "Cannot calculate price per unit#{redirect_path == collection_path ? " for '#{resource.title}'" : ""}. Check if price, size, and unit are valid."
       end
     else
-      redirect_to admin_shop_item_path(resource),
-                  alert: "Missing required data: latest price, size, or unit"
+      redirect_to redirect_path, alert: "Missing required data#{redirect_path == collection_path ? " for '#{resource.title}'" : ""}: latest price, size, or unit"
     end
   end
 end
