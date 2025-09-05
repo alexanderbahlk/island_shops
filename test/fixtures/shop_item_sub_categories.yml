@@ -18,8 +18,14 @@
 #
 #  fk_rails_...  (shop_item_category_id => shop_item_categories.id)
 #
-shop_item_sub_category_one:
-  title: "Soft Drinks"
+shop_item_sub_category_fresh:
+  title: "Fresh Groceries"
+  shop_item_category: shop_item_category_one
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
+
+shop_item_sub_category_canned:
+  title: "Canned Groceries"
   shop_item_category: shop_item_category_one
   created_at: <%= 3.days.ago %>
   updated_at: <%= 3.days.ago %>

@@ -12,5 +12,5 @@
 #  index_shop_item_categories_on_title  (title)
 #
 shop_item_category_one:
-  title: "Beverages"
+  title: "Food"
   created_at: <%= 3.days.ago %>

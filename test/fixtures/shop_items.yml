@@ -30,10 +30,9 @@
 
 shop_item_one:
   url: "https://example.com/existing-item"
-  shop_item_category: shop_item_category_one
-  shop_item_sub_category: shop_item_sub_category_one
+  shop_item_type: shop_item_type_tomato
   shop: "Massy"
-  title: "Existing Item"
+  title: "Tomato organic"
   size: "500"
   unit: "g"
   created_at: <%= 1.day.ago %>
@@ -41,10 +40,9 @@ shop_item_one:
 
 shop_item_two:
   url: "https://example.com/another-item"
-  shop_item_category: shop_item_category_one
-  shop_item_sub_category: shop_item_sub_category_one
+  shop_item_type: shop_item_type_tomato
   shop: "Massy"
-  title: "Another Item"
+  title: "Tomatos"
   size: "3"
   unit: "kg"
   created_at: <%= 2.days.ago %>

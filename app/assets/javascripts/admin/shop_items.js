@@ -1,7 +1,7 @@
 function initializeBestInPlace() {
     jQuery(".best_in_place").best_in_place();
 
-    
+
 }
 
 //Removed in commit "Use ShopItemType" 5th of September 2025
@@ -45,7 +45,6 @@ function createCategoryDropdowns() {
 
 
 $(document).ready(function () {
-
     initializeBestInPlace();
-    createCategoryDropdowns();
+    //createCategoryDropdowns();
 });

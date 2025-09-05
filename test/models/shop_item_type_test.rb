@@ -9,7 +9,7 @@
 #
 # Indexes
 #
-#  index_shop_item_types_on_title  (title)
+#  index_shop_item_types_on_title  (title) USING gin
 #
 require "test_helper"
 

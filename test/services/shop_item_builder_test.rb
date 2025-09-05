@@ -1,5 +1,7 @@
 require "test_helper"
 
+#run 'rails db:test:prepare' for missing migration
+
 class ShopItemBuilderTest < ActiveSupport::TestCase
   def setup
     @shop_item_params = {
@@ -306,6 +308,18 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
     assert_equal 1.0, builder.shop_item.size
     assert_equal "each", builder.shop_item.unit
+  end
+
+  test "created shop_item_type" do
+    @shop_item_params[:title] = "Bag of Tomatos"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_nil builder.shop_item.size
+    assert_nil builder.shop_item.unit
+    assert_equal "Tomato", builder.shop_item.shop_item_type.title
   end
 
   test "extracts decimal size from title" do

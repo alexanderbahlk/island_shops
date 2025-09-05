@@ -604,11 +604,21 @@
             <subcategory>
                 <title>Team Sports</title>
                 <types>
-                    <type>Footballs</type>
-                    <type>Basketballs</type>
-                    <type>Soccer Balls</type>
-                    <type>Baseball Equipment</type>
+                    <type>Football</type>
+                    <type>Basketball</type>
+                    <type>Soccer</type>
+                    <type>Volleyball</type>
+                    <type>Hockey</type>
+                    <type>Baseball</type>
                     <type>Uniforms</type>
+                </types>
+            </subcategory>
+            <subcategory>
+                <title>Sports</title>
+                <types>
+                    <type>Running</type>
+                    <type>Golf</type>
+                    <type>Tennis</type>
                 </types>
             </subcategory>
             <subcategory>
@@ -619,6 +629,7 @@
                     <type>Bike Accessories</type>
                     <type>Repair Kits</type>
                     <type>Cycling Clothes</type>
+                    <type>Bike</type>
                 </types>
             </subcategory>
             <subcategory>

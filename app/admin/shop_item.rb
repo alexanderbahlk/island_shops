@@ -1,7 +1,6 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
-  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :shop_item_type_id
-
+  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :shop_item_type_id, :shop_item_type_title
   # Configure the index page
   index do
     selectable_column
@@ -92,7 +91,6 @@ ActiveAdmin.register ShopItem do
   filter :location
   filter :approved
   filter :needs_another_review
-  #include null option for category and subcategory filters
   filter :shop_item_type, as: :select, collection: proc { ShopItemType.all.pluck(:title, :id) }, include_blank: "None"
   filter :created_at
 
@@ -103,8 +101,7 @@ ActiveAdmin.register ShopItem do
       f.input :url, placeholder: "https://example.com/product"
       f.input :title
       f.input :display_title, hint: "Optional: Custom display name for the item"
-      f.input :shop_item_category, as: :select, collection: ShopItemCategory.all.pluck(:title, :id), include_blank: true, input_html: { id: "shop_item_category_select" }
-      f.input :shop_item_sub_category, as: :select, collection: f.object.shop_item_category.present? ? f.object.shop_item_category.shop_item_sub_categories.pluck(:title, :id) : [], include_blank: true, input_html: { id: "shop_item_sub_category_select" }, wrapper_html: { id: "shop_item_sub_category_wrapper", style: f.object.shop_item_category.present? ? "" : "display: none;" }
+      f.input :shop_item_type, as: :select, collection: ShopItemType.all.pluck(:title, :id), include_blank: true, input_html: { id: "shop_item_type_select" }
       f.input :image_url, placeholder: "https://example.com/image.jpg"
       f.input :size
       f.input :unit, as: :select, collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] }, include_blank: false
@@ -294,6 +291,43 @@ ActiveAdmin.register ShopItem do
   batch_action :remove_type do |ids|
     ShopItem.where(id: ids).update_all(shop_item_type_id: nil)
     redirect_to collection_path, notice: "Type has been removed from #{ids.count} shop items."
+  end
+
+  # Add this batch action to your existing batch actions
+  batch_action :create_and_assign_type, form: {
+                                          type_title: :text,
+                                        } do |ids, inputs|
+    # Parse the inputs from the form
+    batch_inputs = JSON.parse(params[:batch_action_inputs])
+    type_title = batch_inputs["type_title"]
+
+    if type_title.present? && type_title.strip.length > 0
+      begin
+        # Create or find the ShopItemType
+        shop_item_type = ShopItemType.find_or_create_by!(title: type_title.strip)
+
+        # Assign it to all selected ShopItems
+        updated_count = ShopItem.where(id: ids).update_all(shop_item_type_id: shop_item_type.id)
+
+        # Check if this is a newly created type
+        if shop_item_type.created_at > 1.minute.ago
+          redirect_to collection_path,
+                      notice: "Created new type '#{shop_item_type.title}' and assigned it to #{updated_count} shop items."
+        else
+          redirect_to collection_path,
+                      notice: "Assigned existing type '#{shop_item_type.title}' to #{updated_count} shop items."
+        end
+      rescue ActiveRecord::RecordInvalid => e
+        redirect_to collection_path,
+                    alert: "Failed to create type: #{e.record.errors.full_messages.join(", ")}"
+      rescue => e
+        redirect_to collection_path,
+                    alert: "An error occurred: #{e.message}"
+      end
+    else
+      redirect_to collection_path,
+                  alert: "Please enter a valid type name."
+    end
   end
 
   # Add custom member action for price calculation

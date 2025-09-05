@@ -1,3 +1,32 @@
+# == Schema Information
+#
+# Table name: shop_items
+#
+#  id                   :bigint           not null, primary key
+#  approved             :boolean          default(FALSE)
+#  display_title        :string
+#  image_url            :string
+#  location             :string
+#  needs_another_review :boolean          default(FALSE)
+#  shop                 :string           not null
+#  size                 :decimal(10, 2)
+#  title                :string           not null
+#  unit                 :string
+#  url                  :string           not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  product_id           :string
+#  shop_item_type_id    :bigint
+#
+# Indexes
+#
+#  index_shop_items_on_shop_item_type_id  (shop_item_type_id)
+#  index_shop_items_on_url                (url) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (shop_item_type_id => shop_item_types.id)
+#
 class ShopItem < ApplicationRecord
   has_many :shop_item_updates, dependent: :destroy
   belongs_to :shop_item_type, optional: true
@@ -13,6 +42,9 @@ class ShopItem < ApplicationRecord
   before_validation :parse_and_set_unit_from_title, if: :title_changed?
   #Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
+
+  # Virtual attribute for the autocomplete field
+  attr_accessor :shop_item_type_title
 
   # Scopes
   scope :approved, -> { where(approved: true) }
@@ -51,6 +83,25 @@ class ShopItem < ApplicationRecord
   end
 
   private
+
+  def set_shop_item_type_from_title
+    if shop_item_type_title.present?
+      # Try to find existing type or create new one
+      type = ShopItemType.find_or_create_by(title: shop_item_type_title.strip)
+      self.shop_item_type = type
+    elsif shop_item_type_title.blank?
+      self.shop_item_type = nil
+    end
+  end
+
+  def shop_item_type_title_changed?
+    @shop_item_type_title_changed || false
+  end
+
+  def shop_item_type_title=(value)
+    @shop_item_type_title_changed = true
+    @shop_item_type_title = value
+  end
 
   def force_valid_unit_value
     #call UnitParser.normalize_unit to ensure unit is valid
