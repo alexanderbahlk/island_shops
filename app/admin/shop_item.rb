@@ -1,6 +1,19 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
   permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :shop_item_type_id, :shop_item_type_title
+
+  # Add the action at the top level of the resource
+  action_item :assign_missing_types, only: :index do
+    link_to "Auto-assign Missing Shop Item Types",
+            assign_missing_types_admin_shop_items_path,
+            method: :post,
+            data: {
+              confirm: "This will automatically assign ShopItemTypes to all items without a type. Continue?",
+              disable_with: "Processing...",
+            },
+            class: "button"
+  end
+
   # Configure the index page
   index do
     selectable_column
@@ -328,6 +341,22 @@ ActiveAdmin.register ShopItem do
       redirect_to collection_path,
                   alert: "Please enter a valid type name."
     end
+  end
+
+  # Collection action to handle the request
+  collection_action :assign_missing_types, method: :post do
+    missing_count = ShopItem.missing_shop_item_type.count
+
+    if missing_count == 0
+      redirect_to collection_path, notice: "No items found without ShopItemType assignments."
+      return
+    end
+
+    # Enqueue the job
+    AssignShopItemTypesJob.perform_later
+
+    redirect_to collection_path,
+                notice: "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results."
   end
 
   # Add custom member action for price calculation

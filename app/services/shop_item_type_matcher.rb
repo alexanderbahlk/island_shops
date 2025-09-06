@@ -8,16 +8,38 @@ class ShopItemTypeMatcher
     # Clean and normalize the title
     normalized_title = normalize_title(title)
 
-    # Try exact match first
+    # Try exact match on normalized title first
     exact_match = ShopItemType.find_by("LOWER(title) = ?", normalized_title.downcase)
     return exact_match if exact_match
 
-    if !pg_trgm_available?
+    # Try to find if any existing type title is contained within the original title (case insensitive)
+    word_match = find_word_match(title)
+    return word_match if word_match
+
+    # Use fuzzy matching if available
+    if pg_trgm_available?
+      return find_fuzzy_match(normalized_title)
+    else
       Rails.logger.warn "pg_trgm extension is not available in the database. Cannot perform fuzzy matching."
       return nil
     end
+  end
 
-    # Use raw SQL to avoid parameter binding issues
+  private
+
+  def self.find_word_match(title)
+    # Find types whose titles are contained as whole words in the given title
+    title_words = title.downcase.split(/\s+/)
+
+    ShopItemType.all.find do |type|
+      type_words = type.title.downcase.split(/\s+/)
+
+      # Check if all words of the type are contained in the title
+      type_words.all? { |type_word| title_words.any? { |title_word| title_word.include?(type_word) } }
+    end
+  end
+
+  def self.find_fuzzy_match(normalized_title)
     begin
       sanitized_title = ActiveRecord::Base.connection.quote(normalized_title)
 
@@ -39,7 +61,7 @@ class ShopItemTypeMatcher
       type.define_singleton_method(:sim_score) { first_result["sim_score"].to_f }
       type
     rescue => e
-      Rails.logger.error "Error in find_best_match: #{e.message}"
+      Rails.logger.error "Error in find_fuzzy_match: #{e.message}"
       nil
     end
   end
@@ -118,8 +140,8 @@ class ShopItemTypeMatcher
     # Remove size patterns (e.g., "500ml", "2kg", "12 pack")
     normalized.gsub!(/\b\d+\s*(ml|l|g|kg|oz|lb|pack|count|ct|pieces?)\b/i, "")
 
-    # Remove brand indicators
-    normalized.gsub!(/\b(organic|fresh|premium|select|choice|grade a)\b/i, "")
+    # Remove brand indicators and descriptors
+    normalized.gsub!(/\b(organic|fresh|premium|select|choice|grade a|evaporated|condensed|whole|low fat|fat free|skimmed|semi-skimmed)\b/i, "")
 
     # Remove extra whitespace
     normalized.gsub!(/\s+/, " ")

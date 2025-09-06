@@ -3,6 +3,7 @@ require "test_helper"
 class ShopItemTypeMatcherTest < ActiveSupport::TestCase
   def setup
     # Use fixtures instead of creating records
+    @milk_type = shop_item_types(:milk)
     @wine_type = shop_item_types(:wine)
     @beer_type = shop_item_types(:beer)
     @cheese_type = shop_item_types(:cheese)
@@ -17,6 +18,32 @@ class ShopItemTypeMatcherTest < ActiveSupport::TestCase
     assert_nil ShopItemTypeMatcher.find_best_match("")
     assert_nil ShopItemTypeMatcher.find_best_match(nil)
     assert_nil ShopItemTypeMatcher.find_best_match("   ")
+  end
+
+  # Add this temporary test to see what's going on
+  test "debug find_best_match on realistic shop item title" do
+    title = "Sungold Evaporated Milk"
+    normalized = ShopItemTypeMatcher.send(:normalize_title, title)
+    puts "Original: #{title}"
+    puts "Normalized: #{normalized}"
+    puts "Milk type title: #{@milk_type.title}"
+
+    # Test exact match
+    exact_match = ShopItemType.find_by("LOWER(title) = ?", normalized.downcase)
+    puts "Exact match result: #{exact_match&.title || "nil"}"
+
+    # Test if fuzzy matching is available
+    puts "pg_trgm available: #{ShopItemTypeMatcher.send(:pg_trgm_available?)}"
+
+    result = ShopItemTypeMatcher.find_best_match(title)
+    puts "Final result: #{result&.title || "nil"}"
+
+    assert_equal @milk_type, result
+  end
+
+  test "find_best_match on realistic shop item title" do
+    result = ShopItemTypeMatcher.find_best_match("Sungold Evaporated Milks")
+    assert_equal @milk_type, result
   end
 
   test "find_best_match returns exact match case insensitive" do

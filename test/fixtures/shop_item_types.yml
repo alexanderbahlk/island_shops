@@ -21,6 +21,11 @@ shop_item_type_tomato:
   created_at: <%= 3.days.ago %>
   updated_at: <%= 3.days.ago %>
 
+milk:
+  title: "Milk"
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
+
 wine:
   title: "Wine"
   created_at: <%= 3.days.ago %>
