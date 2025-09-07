@@ -3,7 +3,7 @@ require "nokogiri"
 class CategoryImporter
   def self.import_from_xml(file_path)
     puts "🗑️  Clearing existing categories..."
-    Category.delete_all
+    Category.destroy_all
     puts "✅ Cleared all categories"
 
     doc = Nokogiri::XML(File.open(file_path))

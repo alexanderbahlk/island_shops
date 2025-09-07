@@ -11,12 +11,14 @@ class AssignShopItemCategoryJob < ApplicationJob
     ShopItem.missing_category.find_in_batches(batch_size: batch_size) do |batch|
       batch.each do |shop_item|
         begin
-          best_match = ShopItemCategoryMatcher.find_best_match(shop_item.title)
+          # Try to find the best matching category
+          match_title = @shop_item.breadcrumb.presence || shop_item.title
+          best_match = ShopItemCategoryMatcher.find_best_match(match_title)
 
           if best_match
             shop_item.update!(category: best_match)
             matched_count += 1
-            Rails.logger.info "Assigned '#{best_match.title}' to '#{shop_item.title}'"
+            Rails.logger.info "Assigned '#{best_match.title}' to '#{match_title}'"
           end
 
           processed_count += 1

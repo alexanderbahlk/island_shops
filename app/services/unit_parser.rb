@@ -54,6 +54,7 @@ module UnitParser
     "milliliters" => "ml",
     "millilitre" => "ml",
     "millilitres" => "ml",
+    "mL" => "ml",
     "kilogram" => "kg",
     "kilograms" => "kg",
     "ounce" => "oz",

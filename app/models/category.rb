@@ -51,6 +51,9 @@ class Category < ApplicationRecord
   before_validation :generate_slug, :set_category_type, :build_path
   after_save :update_children_paths, if: :saved_change_to_path?
 
+  # Add this callback to handle shop item references before deletion
+  before_destroy :clear_shop_item_references
+
   scope :roots, -> { where(parent_id: nil) }
   scope :products, -> { where(category_type: :product) }
   scope :categories_only, -> { where.not(category_type: :product) }
@@ -96,7 +99,8 @@ class Category < ApplicationRecord
   def breadcrumbs
     return [self] if root?
 
-    ancestors.includes(:parent) + [self]
+    # Get ancestors in correct order (root first)
+    ancestors.reorder(:lft) + [self]
   end
 
   def can_have_children?
@@ -125,6 +129,12 @@ class Category < ApplicationRecord
   end
 
   private
+
+  def clear_shop_item_references
+    # Clear references from shop items that reference this category
+    ShopItem.where(category: self).update_all(category_id: nil)
+    Rails.logger.info "Cleared #{ShopItem.where(category: self).count} shop item references for category: #{title}"
+  end
 
   def generate_slug
     return if slug.present?

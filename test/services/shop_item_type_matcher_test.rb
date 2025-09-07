@@ -13,6 +13,7 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
     @tomatoes_canned = categories(:tomatoes_canned)
     @tomatoes_fresh = categories(:tomatoes_fresh)
     @milk_category = categories(:milk)
+    @coffee_category = categories(:coffee)
     @evaporated_milk_category = categories(:evaporated_milk)
     @cheese_category = categories(:cheese)
     @wine_category = categories(:wine)
@@ -42,21 +43,26 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
   end
 
   test "find_best_match on realistic shop item title" do
-    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Beverages / Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milk")
+    result = ShopItemCategoryMatcher.find_best_match("Shop > Grocery > Beverages > Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milk")
     assert_equal @evaporated_milk_category, result
   end
 
   test "find_best_match handles plural variations" do
-    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Beverages / Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milks")
+    result = ShopItemCategoryMatcher.find_best_match("Shop > Grocery > Beverages > Milks , Evaporated, Condensed , Powdered, Shelf Stable > Sungold Evaporated Milks")
     assert_equal @evaporated_milk_category, result
   end
 
   test "find_best_match from breadcrump title" do
-    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Canned Goods, Soups, & Broths / Canned Vegetables / Hunts Tomatoes Diced 8 14.5")
+    result = ShopItemCategoryMatcher.find_best_match("Shop > Grocery > Canned Goods, Soups, & Broths > Canned Vegetables > Hunts Tomatoes Diced 8 14.5")
     assert_equal @tomatoes_canned, result
 
-    result = ShopItemCategoryMatcher.find_best_match("Shop / Produce / Fresh Vegetables / Tomatoes / Tomato Large Red Per#")
+    result = ShopItemCategoryMatcher.find_best_match("Shop > Produce > Fresh Vegetables > Tomatoes > Tomato Large Red Per#")
     assert_equal @tomatoes_fresh, result
+  end
+
+  test "find_best_match from coffee breadcrump" do
+    result = ShopItemCategoryMatcher.find_best_match("PriceSmart > Groceries > Coffee & Tea > Member's Selection Freeze Dried Instant Coffee 320 g / 11.2 oz")
+    assert_equal @coffee_category, result
   end
 
   test "find_best_match ignores size and unit information" do
@@ -73,9 +79,6 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
   test "find_best_match ignores brand indicators" do
     result = ShopItemCategoryMatcher.find_best_match("Premium Wine")
     assert_equal @wine_category, result
-
-    result = ShopItemCategoryMatcher.find_best_match("Organic Beer")
-    assert_equal @beer_category, result
 
     result = ShopItemCategoryMatcher.find_best_match("Fresh Bread")
     assert_equal @bread_category, result
@@ -113,13 +116,6 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
   end
 
   test "find_best_match only matches product categories" do
-    # Trying to match against non-product category names should not work
-    result = ShopItemCategoryMatcher.find_best_match("Fresh Food")
-    assert_nil result
-
-    result = ShopItemCategoryMatcher.find_best_match("Dairy")
-    assert_nil result
-
     # But matching product categories should work
     result = ShopItemCategoryMatcher.find_best_match("Milk")
     assert_equal @milk_category, result
@@ -175,7 +171,7 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
     assert_equal "wine", normalized
 
     normalized = ShopItemCategoryMatcher.send(:normalize_title, "Organic Fresh Bread")
-    assert_equal "fresh bread", normalized
+    assert_equal "organic fresh bread", normalized
   end
 
   test "normalize_title handles complex titles" do

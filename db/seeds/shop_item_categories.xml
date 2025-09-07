@@ -501,6 +501,65 @@
                     </category>
                 </categories>
             </category>
+            <category>
+                <title>Cooking &amp; Baking Needs</title>
+                <categories>
+                    <category>
+                        <title>Oils &amp; Vinegars</title>
+                        <types>
+                            <type>Olive Oil</type>
+                            <type>Vegetable Oil</type>
+                            <type>Coconut Oil</type>
+                            <type>Balsamic Vinegar</type>
+                            <type>Apple Cider Vinegar</type>
+                            <type>White Vinegar</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Spices &amp; Seasonings</title>
+                        <types>
+                            <type>Salt</type>
+                            <type>Pepper</type>
+                            <type>Garlic Powder</type>
+                            <type>Onion Powder</type>
+                            <type>Cumin</type>
+                            <type>Cinnamon</type>
+                            <type>Chili Powder</type>
+                            <type>Oregano</type>
+                            <type>Basil</type>
+                            <type>Thyme</type>
+                            <type>Rosemary</type>
+                            <type>Paprika</type>
+                            <type>Curry Powder</type>
+                            <type>Turmeric</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Baking Supplies</title>
+                        <types>
+                            <type>Flour</type>
+                            <type>Sugar</type>
+                            <type>Baking Powder</type>
+                            <type>Baking Soda</type>
+                            <type>Yeast</type>
+                            <type>Cocoa Powder</type>
+                            <type>Chocolate Chips</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Condiments &amp; Sauces</title>
+                        <types>
+                            <type>Ketchup</type>
+                            <type>Mustard</type>
+                            <type>Mayonnaise</type>
+                            <type>Soy Sauce</type>
+                            <type>Hot Sauce</type>
+                            <type>Salad Dressing</type>
+                            <type>Barbecue Sauce</type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
         </categories>
     </category>
 

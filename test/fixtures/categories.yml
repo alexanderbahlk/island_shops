@@ -1,35 +1,4 @@
-# == Schema Information
-#
-# Table name: categories
-#
-#  id            :bigint           not null, primary key
-#  category_type :integer          default("root"), not null
-#  depth         :integer          default(0)
-#  lft           :integer          not null
-#  path          :string
-#  rgt           :integer          not null
-#  slug          :string           not null
-#  sort_order    :integer          default(0)
-#  title         :string           not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  parent_id     :bigint
-#
-# Indexes
-#
-#  index_categories_on_category_type             (category_type)
-#  index_categories_on_lft_and_rgt               (lft,rgt)
-#  index_categories_on_parent_id                 (parent_id)
-#  index_categories_on_parent_id_and_slug        (parent_id,slug) UNIQUE
-#  index_categories_on_parent_id_and_sort_order  (parent_id,sort_order)
-#  index_categories_on_path                      (path)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (parent_id => categories.id)
-#
-
-# Root categories
+# Root categories - these look correct
 food_root:
   title: "Food"
   category_type: 0  # root
@@ -38,19 +7,9 @@ food_root:
   path: "food"
   sort_order: 1
   lft: 1
-  rgt: 50
+  rgt: 100  # Increased to accommodate more children
 
-health_beauty_root:
-  title: "Health & Beauty"
-  category_type: 0  # root
-  depth: 0
-  slug: "health-beauty"
-  path: "health-beauty"
-  sort_order: 2
-  lft: 51
-  rgt: 60
-
-# Level 1 categories
+# Level 1 categories - fix lft/rgt values
 fresh_food:
   title: "Fresh Food"
   parent: food_root
@@ -60,7 +19,18 @@ fresh_food:
   path: "food/fresh-food"
   sort_order: 1
   lft: 2
-  rgt: 25
+  rgt: 35
+
+beverages:
+  title: "Beverages"
+  parent: food_root
+  category_type: 1  # category
+  depth: 1
+  slug: "beverages"
+  path: "food/beverages"
+  sort_order: 2
+  lft: 36
+  rgt: 70
 
 canned_food:
   title: "Canned Food"
@@ -69,11 +39,11 @@ canned_food:
   depth: 1
   slug: "canned-food"
   path: "food/canned-food"
-  sort_order: 2
-  lft: 26
-  rgt: 35
+  sort_order: 3
+  lft: 71
+  rgt: 85
 
-# Level 2 subcategories
+# Level 2 subcategories - fix parent relationships and lft/rgt
 dairy:
   title: "Dairy"
   parent: fresh_food
@@ -83,18 +53,18 @@ dairy:
   path: "food/fresh-food/dairy"
   sort_order: 1
   lft: 3
-  rgt: 10
+  rgt: 12
 
-beverages:
-  title: "Beverages"
+fresh_vegetables:
+  title: "Fresh Vegetables"
   parent: fresh_food
   category_type: 2  # subcategory
   depth: 2
-  slug: "beverages"
-  path: "food/fresh-food/beverages"
+  slug: "fresh-vegetables"
+  path: "food/fresh-food/fresh-vegetables"
   sort_order: 2
-  lft: 11
-  rgt: 20
+  lft: 13
+  rgt: 18
 
 bakery:
   title: "Bakery"
@@ -104,8 +74,42 @@ bakery:
   slug: "bakery"
   path: "food/fresh-food/bakery"
   sort_order: 3
-  lft: 21
+  lft: 19
   rgt: 24
+
+# Fix beverages subcategories
+hot_beverages:
+  title: "Hot Beverages"
+  parent: beverages
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "hot-beverages"
+  path: "food/beverages/hot-beverages"
+  sort_order: 1
+  lft: 37
+  rgt: 42
+
+alcoholic:
+  title: "Alcoholic"
+  parent: beverages
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "alcoholic"
+  path: "food/beverages/alcoholic"
+  sort_order: 2
+  lft: 43
+  rgt: 58
+
+non_alcoholic:
+  title: "Non-Alcoholic"
+  parent: beverages
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "non-alcoholic"
+  path: "food/beverages/non-alcoholic"
+  sort_order: 3
+  lft: 59
+  rgt: 64
 
 canned_vegetables:
   title: "Canned Vegetables"
@@ -115,21 +119,10 @@ canned_vegetables:
   slug: "canned-vegetables"
   path: "food/canned-food/canned-vegetables"
   sort_order: 1
-  lft: 27
-  rgt: 30
+  lft: 72
+  rgt: 77
 
-fresh_vegetables:
-  title: "Fresh Vegetables"
-  parent: fresh_food
-  category_type: 2  # subcategory
-  depth: 2
-  slug: "fresh-vegetables"
-  path: "food/fresh-food/fresh-vegetables"
-  sort_order: 1
-  lft: 27
-  rgt: 30
-
-# Level 3 products (the ones we match against)
+# Level 3 products - fix parents and lft/rgt values
 milk:
   title: "Milk"
   parent: dairy
@@ -148,20 +141,9 @@ organic_milk:
   depth: 3
   slug: "organic-milk"
   path: "food/fresh-food/dairy/organic-milk"
-  sort_order: 1
-  lft: 4
-  rgt: 5
-
-evaporated_milk:
-  title: "Evaporated Milk"
-  parent: beverages
-  category_type: 3  # product
-  depth: 3
-  slug: "organic-milk"
-  path: "food/fresh-food/beverages/evaporated-milk"
-  sort_order: 1
-  lft: 4
-  rgt: 5
+  sort_order: 2
+  lft: 6
+  rgt: 7
 
 cheese:
   title: "Cheese"
@@ -170,9 +152,9 @@ cheese:
   depth: 3
   slug: "cheese"
   path: "food/fresh-food/dairy/cheese"
-  sort_order: 2
-  lft: 6
-  rgt: 7
+  sort_order: 3
+  lft: 8
+  rgt: 9
 
 yogurt:
   title: "Yogurt"
@@ -181,54 +163,92 @@ yogurt:
   depth: 3
   slug: "yogurt"
   path: "food/fresh-food/dairy/yogurt"
-  sort_order: 3
-  lft: 8
-  rgt: 9
+  sort_order: 4
+  lft: 10
+  rgt: 11
 
+# Coffee - CORRECTED
+coffee:
+  title: "Coffee"
+  parent: hot_beverages  # This is correct
+  category_type: 3  # product
+  depth: 3
+  slug: "coffee"
+  path: "food/beverages/hot-beverages/coffee"
+  sort_order: 1
+  lft: 38  # Fixed: unique lft/rgt values
+  rgt: 39
+
+# Fix alcoholic beverages - they should have alcoholic as parent, not beverages
 wine:
   title: "Wine"
-  parent: beverages
+  parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
   depth: 3
   slug: "wine"
-  path: "food/fresh-food/beverages/wine"
+  path: "food/beverages/alcoholic/wine"
   sort_order: 1
-  lft: 12
-  rgt: 13
+  lft: 44
+  rgt: 45
 
 beer:
   title: "Beer"
-  parent: beverages
+  parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
   depth: 3
   slug: "beer"
-  path: "food/fresh-food/beverages/beer"
+  path: "food/beverages/alcoholic/beer"
   sort_order: 2
-  lft: 14
-  rgt: 15
+  lft: 46
+  rgt: 47
 
 red_wine:
   title: "Red Wine"
-  parent: beverages
+  parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
   depth: 3
   slug: "red-wine"
-  path: "food/fresh-food/beverages/red-wine"
+  path: "food/beverages/alcoholic/red-wine"
   sort_order: 3
-  lft: 16
-  rgt: 17
+  lft: 48
+  rgt: 49
 
 organic_wine:
   title: "Organic Wine"
-  parent: beverages
+  parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
   depth: 3
   slug: "organic-wine"
-  path: "food/fresh-food/beverages/organic-wine"
+  path: "food/beverages/alcoholic/organic-wine"
   sort_order: 4
-  lft: 18
-  rgt: 19
+  lft: 50
+  rgt: 51
 
+# Non-alcoholic beverages
+evaporated_milk:
+  title: "Evaporated Milk"
+  parent: non_alcoholic
+  category_type: 3  # product
+  depth: 3
+  slug: "evaporated-milk"
+  path: "food/beverages/non-alcoholic/evaporated-milk"
+  sort_order: 1
+  lft: 60
+  rgt: 61
+
+# Fresh vegetables
+tomatoes_fresh:
+  title: "Tomatoes"
+  parent: fresh_vegetables
+  category_type: 3  # product
+  depth: 3
+  slug: "tomatoes-fresh"  # Made unique
+  path: "food/fresh-food/fresh-vegetables/tomatoes"
+  sort_order: 1
+  lft: 14
+  rgt: 15
+
+# Bakery
 bread:
   title: "Bread"
   parent: bakery
@@ -237,27 +257,17 @@ bread:
   slug: "bread"
   path: "food/fresh-food/bakery/bread"
   sort_order: 1
-  lft: 22
-  rgt: 23
+  lft: 20
+  rgt: 21
 
+# Canned vegetables
 tomatoes_canned:
   title: "Tomatoes"
   parent: canned_vegetables
   category_type: 3  # product
   depth: 3
-  slug: "tomatoes"
+  slug: "tomatoes-canned"  # Made unique
   path: "food/canned-food/canned-vegetables/tomatoes"
   sort_order: 1
-  lft: 28
-  rgt: 29
-
-tomatoes_fresh:
-  title: "Tomatoes"
-  parent: fresh_vegetables
-  category_type: 3  # product
-  depth: 3
-  slug: "tomatoes"
-  path: "food/fresh-food/fresh-vegetables/tomatoes"
-  sort_order: 1
-  lft: 28
-  rgt: 29
+  lft: 73
+  rgt: 74

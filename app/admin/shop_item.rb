@@ -67,20 +67,12 @@ ActiveAdmin.register ShopItem do
                     class: "bip-select-unit"
     end
     column :category do |shop_item|
-      if shop_item.category
-        best_in_place shop_item, :category_id,
-                      as: :select,
-                      url: admin_shop_item_path(shop_item),
-                      collection: [[nil]] + Category.products.pluck(:title, :id).map { |title, id| [id, title] },
-                      class: "bip-select-unit"
-      else
-        best_in_place shop_item, :category_id,
-                      as: :select,
-                      url: admin_shop_item_path(shop_item),
-                      collection: [[nil, "None"]] + Category.products.pluck(:title, :id).map { |title, id| [id, title] },
-                      html_attrs: { style: "cursor: pointer; min-width: 150px;" },
-                      class: "bip-select-unit"
-      end
+      best_in_place shop_item, :category_id,
+                    as: :select,
+                    url: admin_shop_item_path(shop_item),
+                    collection: [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] },
+                    html_attrs: { style: "cursor: pointer; min-width: 150px;" },
+                    class: "bip-select-unit"
     end
     column :approved do |shop_item|
       best_in_place shop_item, :approved,
@@ -144,6 +136,7 @@ ActiveAdmin.register ShopItem do
       row :id
       row :shop
       row :title
+      row :breadcrumb
       row :display_title do |shop_item|
         best_in_place shop_item, :display_title,
                       as: :input,

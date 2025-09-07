@@ -1,5 +1,5 @@
 class ShopItemCategoryMatcher
-  SIMILARITY_THRESHOLD = 0.3 # Adjust this value between 0.0 and 1.0
+  SIMILARITY_THRESHOLD = 0.1 # Adjust this value between 0.0 and 1.0
   MAX_SUGGESTIONS = 5
 
   def self.find_best_match(title)
@@ -200,11 +200,12 @@ class ShopItemCategoryMatcher
     normalized = title.dup
 
     # Split by "/" and take relevant parts
-    parts = normalized.split(/\s*\/\s+/)
+    parts = normalized.split(/\s*\>\s+/)
 
     if parts.length > 1
       # Skip "Shop" and "Grocery" if they exist at the beginning
-      relevant_parts = parts.drop_while { |part| part.downcase.match?(/^(home|shop|grocery)$/) }
+      # Skip Brand names like "Member's Selection"
+      relevant_parts = parts.drop_while { |part| part.downcase.match?(/^(pricesmart|home|shop|grocery)$/) }
 
       # Take the last 2-3 parts which are most likely to contain category and product info
       if relevant_parts.length > 2
@@ -212,12 +213,12 @@ class ShopItemCategoryMatcher
       end
 
       # Join back with "/" to match the path format
-      normalized = relevant_parts.join("/")
+      normalized = relevant_parts.join(">")
     end
 
     # Remove brand names and size information from the last part (product name)
-    if normalized.include?("/")
-      path_parts = normalized.split("/")
+    if normalized.include?(">")
+      path_parts = normalized.split(">")
       product_part = path_parts.last
 
       # Clean the product part
@@ -225,7 +226,7 @@ class ShopItemCategoryMatcher
 
       # Reconstruct
       path_parts[-1] = product_part
-      normalized = path_parts.join("/")
+      normalized = path_parts.join(" ")
     else
       # If no path structure, just clean the whole string
       normalized = clean_product_name(normalized)
@@ -240,16 +241,11 @@ class ShopItemCategoryMatcher
 
     # Remove size patterns (e.g., "500ml", "2kg", "12 pack", "8 14.5")
     cleaned.gsub!(/\b\d+\.?\d*\s*(ml|l|g|kg|oz|lb|pack|count|ct|pieces?)\b/i, "")
+    cleaned.gsub!(/\b(member's\s+selection|great\s+value|kirkland|store\s+brand?)\b/i, "")
+    cleaned.gsub!(/\b(luxury|premium?)\b/i, "")
     cleaned.gsub!(/\b\d+\s+\d+\.?\d*\b/, "") # Remove patterns like "8 14.5"
-
-    # Remove common brand name patterns (capitalize words that might be brands)
-    # This is tricky - you might want to maintain a list of known brands
-    words = cleaned.split
-    # Remove likely brand names (first capitalized word often)
-    if words.length > 1 && words.first.match?(/^[A-Z][a-z]+$/)
-      words = words.drop(1)
-    end
-    cleaned = words.join(" ")
+    #remove / and - which are common in titles
+    cleaned.gsub!(/[\/\-]/, " ")
 
     # Remove extra whitespace and punctuation
     cleaned.gsub!(/[,&]/, " ")
