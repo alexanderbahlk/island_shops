@@ -1,14 +1,14 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
-  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :shop_item_type_id, :shop_item_type_title
+  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :category_id
 
   # Add the action at the top level of the resource
-  action_item :assign_missing_types, only: :index do
-    link_to "Auto-assign Missing Shop Item Types",
-            assign_missing_types_admin_shop_items_path,
+  action_item :assign_missing_categories, only: :index do
+    link_to "Auto-assign Missing Categories",
+            assign_missing_categories_admin_shop_items_path,
             method: :post,
             data: {
-              confirm: "This will automatically assign ShopItemTypes to all items without a type. Continue?",
+              confirm: "This will automatically assign Categories to all items without a category. Continue?",
               disable_with: "Processing...",
             },
             class: "button"
@@ -66,12 +66,21 @@ ActiveAdmin.register ShopItem do
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
     end
-    column :type do |shop_item|
-      best_in_place shop_item, :shop_item_type_id,
-                    as: :select,
-                    url: admin_shop_item_path(shop_item),
-                    collection: [[nil]] + ShopItemType.all.pluck(:title, :id).map { |title, id| [id, title] }, html_attrs: { style: "cursor: pointer; min-width: 30px;" },
-                    class: "bip-select-unit"
+    column :category do |shop_item|
+      if shop_item.category
+        best_in_place shop_item, :category_id,
+                      as: :select,
+                      url: admin_shop_item_path(shop_item),
+                      collection: [[nil]] + Category.products.pluck(:title, :id).map { |title, id| [id, title] },
+                      class: "bip-select-unit"
+      else
+        best_in_place shop_item, :category_id,
+                      as: :select,
+                      url: admin_shop_item_path(shop_item),
+                      collection: [[nil, "None"]] + Category.products.pluck(:title, :id).map { |title, id| [id, title] },
+                      html_attrs: { style: "cursor: pointer; min-width: 150px;" },
+                      class: "bip-select-unit"
+      end
     end
     column :approved do |shop_item|
       best_in_place shop_item, :approved,
@@ -89,7 +98,6 @@ ActiveAdmin.register ShopItem do
     end
     column :created_at
     actions do |shop_item|
-      # Add the custom action button alongside View, Edit, Delete
       item "Calculate Price", user_update_shop_item_update_admin_shop_item_path(shop_item),
            method: :post,
            class: "member_link",
@@ -104,17 +112,21 @@ ActiveAdmin.register ShopItem do
   filter :location
   filter :approved
   filter :needs_another_review
-  filter :shop_item_type, as: :select, collection: proc { ShopItemType.all.pluck(:title, :id) }, include_blank: "None"
+  filter :category, as: :select, collection: proc {
+               Category.products.includes(:parent).map do |cat|
+                 [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
+               end
+             }, include_blank: "Any"
   filter :created_at
 
   # Configure the form for create/edit
-  form html: { data: { sub_categories: ShopItemSubCategory.joins(:shop_item_category).pluck("shop_item_categories.id", "shop_item_sub_categories.id", "shop_item_sub_categories.title").group_by(&:first).transform_values { |v| v.map { |item| [item[2], item[1]] } }.to_json } } do |f|
+  form do |f|
     f.inputs "Shop Item Details" do
       f.input :shop, as: :select, collection: Shop::ALLOWED, include_blank: false
       f.input :url, placeholder: "https://example.com/product"
       f.input :title
       f.input :display_title, hint: "Optional: Custom display name for the item"
-      f.input :shop_item_type, as: :select, collection: ShopItemType.all.pluck(:title, :id), include_blank: true, input_html: { id: "shop_item_type_select" }
+      f.input :category, :label => "Product", as: :select, collection: Category.only_products, include_blank: true, input_html: { id: "category_select" }
       f.input :image_url, placeholder: "https://example.com/image.jpg"
       f.input :size
       f.input :unit, as: :select, collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] }, include_blank: false
@@ -140,10 +152,10 @@ ActiveAdmin.register ShopItem do
                       class: "bip-input-unit",
                       html_attrs: { style: "width: 200px" }
       end
-      row :shop_item_type do |shop_item|
-        #do a link into the category
-        if shop_item.shop_item_type.present?
-          link_to shop_item.shop_item_type.title, admin_shop_item_type_path(shop_item.shop_item_type)
+      row :category do |shop_item|
+        if shop_item.category.present?
+          breadcrumb = shop_item.category.breadcrumbs.map(&:title).join(" > ")
+          link_to breadcrumb, admin_category_path(shop_item.category)
         else
           "None"
         end
@@ -254,15 +266,10 @@ ActiveAdmin.register ShopItem do
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :needs_review, -> { where(needs_another_review: true) }
-  scope :missing_shop_item_type, -> { where(shop_item_type_id: nil) }
+  scope :missing_category, -> { where(category_id: nil) }
   scope :was_manually_updated, -> { where(was_manually_updated: true) }
-  #scope :amazon, -> { where(shop: 'Amazon') }
-  #scope :ebay, -> { where(shop: 'eBay') }
-  #scope :etsy, -> { where(shop: 'Etsy') }
-  #
-  #
 
-  # Add batch actions
+  # Update batch actions for categories
   batch_action :approve do |ids|
     ShopItem.where(id: ids).update_all(approved: true)
     redirect_to collection_path, alert: "#{ids.count} shop items have been approved."
@@ -282,85 +289,132 @@ ActiveAdmin.register ShopItem do
     redirect_to collection_path, alert: "#{ids.count} shop items have been unmarked as needing another review."
   end
 
-  batch_action :assign_type, form: {
-                               type_id: [nil] + ShopItemType.all.collect { |c| [c.title, c.id] },
-                             } do |ids|
-    #log the params to see what is being passed
-    Rails.logger.info "Batch action params: #{params.inspect}"
+  batch_action :assign_category, form: {
+                                   category_id: Category.products.includes(:parent).map do |cat|
+                                     [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
+                                   end.unshift(["Remove Category", nil]),
+                                 } do |ids, inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
+    category_id = batch_inputs["category_id"].presence
 
-    type_id = batch_inputs["type_id"]
-
-    if type_id.present?
-      ShopItem.where(id: ids).update_all(shop_item_type_id: type_id)
-      type_title = ShopItemType.find(type_id).title
-      redirect_to collection_path, notice: "#{ids.count} shop items have been assigned to category '#{type_title}'."
+    if category_id
+      category = Category.find(category_id)
+      ShopItem.where(id: ids).update_all(category_id: category_id)
+      category_name = category.breadcrumbs.map(&:title).join(" > ")
+      redirect_to collection_path, notice: "#{ids.count} shop items assigned to '#{category_name}'."
     else
-      ShopItem.where(id: ids).update_all(shop_item_type_id: nil)
-      redirect_to collection_path, notice: "Type has been removed from #{ids.count} shop items."
+      ShopItem.where(id: ids).update_all(category_id: nil)
+      redirect_to collection_path, notice: "Category removed from #{ids.count} shop items."
     end
   end
 
-  batch_action :remove_type do |ids|
-    ShopItem.where(id: ids).update_all(shop_item_type_id: nil)
-    redirect_to collection_path, notice: "Type has been removed from #{ids.count} shop items."
-  end
+  # Add this batch action after the existing batch actions (around line 290):
 
-  # Add this batch action to your existing batch actions
-  batch_action :create_and_assign_type, form: {
-                                          type_title: :text,
-                                        } do |ids, inputs|
-    # Parse the inputs from the form
+  batch_action :create_and_assign_category, form: {
+                                              category_title: :text,
+                                              parent_category_id: Category.where.not(category_type: :product)
+                                                                          .includes(:parent)
+                                                                          .map do |cat|
+                                                # Build breadcrumb manually
+                                                parts = []
+                                                current = cat
+                                                while current
+                                                  parts.unshift(current.title)
+                                                  current = current.parent
+                                                end
+                                                breadcrumb = parts.join(" > ")
+                                                [breadcrumb, cat.id]
+                                              end
+                                                                          .unshift(["No Parent (Root Category)", nil]),
+                                            } do |ids, inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
-    type_title = batch_inputs["type_title"]
+    category_title = batch_inputs["category_title"].strip
+    parent_category_id = batch_inputs["parent_category_id"].presence
 
-    if type_title.present? && type_title.strip.length > 0
-      begin
-        # Create or find the ShopItemType
-        shop_item_type = ShopItemType.find_or_create_by!(title: type_title.strip)
-
-        # Assign it to all selected ShopItems
-        updated_count = ShopItem.where(id: ids).update_all(shop_item_type_id: shop_item_type.id)
-
-        # Check if this is a newly created type
-        if shop_item_type.created_at > 1.minute.ago
-          redirect_to collection_path,
-                      notice: "Created new type '#{shop_item_type.title}' and assigned it to #{updated_count} shop items."
-        else
-          redirect_to collection_path,
-                      notice: "Assigned existing type '#{shop_item_type.title}' to #{updated_count} shop items."
-        end
-      rescue ActiveRecord::RecordInvalid => e
-        redirect_to collection_path,
-                    alert: "Failed to create type: #{e.record.errors.full_messages.join(", ")}"
-      rescue => e
-        redirect_to collection_path,
-                    alert: "An error occurred: #{e.message}"
-      end
-    else
-      redirect_to collection_path,
-                  alert: "Please enter a valid type name."
-    end
-  end
-
-  # Collection action to handle the request
-  collection_action :assign_missing_types, method: :post do
-    missing_count = ShopItem.missing_shop_item_type.count
-
-    if missing_count == 0
-      redirect_to collection_path, notice: "No items found without ShopItemType assignments."
+    # Validate inputs
+    if category_title.blank?
+      redirect_to collection_path, alert: "Category title cannot be blank."
       return
     end
 
-    # Enqueue the job
-    AssignShopItemTypesJob.perform_later
+    begin
+      # Find parent category if specified
+      parent_category = parent_category_id ? Category.find(parent_category_id) : nil
 
-    redirect_to collection_path,
-                notice: "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results."
+      # Validate parent category depth (can't exceed 3 levels for products)
+      if parent_category && parent_category.depth >= 3
+        redirect_to collection_path,
+                    alert: "Cannot create product category under '#{parent_category.title}' - maximum hierarchy depth exceeded."
+        return
+      end
+
+      # Check if category with this title already exists under the same parent
+      existing_category = Category.find_by(title: category_title, parent: parent_category)
+
+      if existing_category
+        # Use existing category
+        new_category = existing_category
+        action_message = "Used existing category"
+      else
+        # Create new category
+        new_category = Category.create!(
+          title: category_title,
+          parent: parent_category,
+          sort_order: (parent_category&.children&.maximum(:sort_order) || 0) + 1,
+        )
+        action_message = "Created new category"
+      end
+
+      # Ensure the category is a product type (depth 3)
+      unless new_category.product?
+        redirect_to collection_path,
+                    alert: "Category '#{category_title}' is not a product category (must be at depth 3). Current depth: #{new_category.depth}"
+        return
+      end
+
+      # Assign the category to all selected shop items
+      ShopItem.where(id: ids).update_all(category_id: new_category.id)
+
+      # Build breadcrumb for display
+      breadcrumb_parts = []
+      current = new_category
+      while current
+        breadcrumb_parts.unshift(current.title)
+        current = current.parent
+      end
+      category_breadcrumb = breadcrumb_parts.join(" > ")
+
+      redirect_to collection_path,
+                  notice: "#{action_message} '#{category_breadcrumb}' and assigned it to #{ids.count} shop items."
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to collection_path,
+                  alert: "Failed to create category: #{e.record.errors.full_messages.join(", ")}"
+    rescue ActiveRecord::RecordNotFound
+      redirect_to collection_path,
+                  alert: "Selected parent category not found."
+    rescue => e
+      redirect_to collection_path,
+                  alert: "An error occurred: #{e.message}"
+    end
   end
 
-  # Add custom member action for price calculation
+  # Collection action for auto-assigning categories
+  collection_action :assign_missing_categories, method: :post do
+    missing_count = ShopItem.missing_category.count
+
+    if missing_count == 0
+      redirect_to collection_path, notice: "No items found without category assignments."
+      return
+    end
+
+    # You can implement auto-assignment logic here or create a job
+    redirect_to collection_path,
+                notice: "Found #{missing_count} items without categories. Auto-assignment feature needs to be implemented."
+  end
+
+  # Keep the existing member action
   member_action :user_update_shop_item_update, method: :post do
+    # ... existing implementation stays the same ...
     latest_update = resource.shop_item_updates.order(created_at: :desc).first
 
     # Determine redirect path based on parameter or referer

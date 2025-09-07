@@ -15,25 +15,27 @@
 #  url                  :string           not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  category_id          :bigint
 #  product_id           :string
-#  shop_item_type_id    :bigint
 #
 # Indexes
 #
-#  index_shop_items_on_shop_item_type_id  (shop_item_type_id)
-#  index_shop_items_on_url                (url) UNIQUE
+#  index_shop_items_on_category_id  (category_id)
+#  index_shop_items_on_url          (url) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_...  (shop_item_type_id => shop_item_types.id)
+#  fk_rails_...  (category_id => categories.id)
 #
 class ShopItem < ApplicationRecord
   has_many :shop_item_updates, dependent: :destroy
-  belongs_to :shop_item_type, optional: true
+  belongs_to :category, optional: true
 
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
   validates :shop, presence: true, inclusion: { in: Shop::ALLOWED }
+  validates :category, presence: true, if: -> { category_id.present? }
+  validate :category_must_be_product, if: -> { category.present? }
 
   # Optional validations
   validates :image_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }, allow_blank: true
@@ -43,25 +45,26 @@ class ShopItem < ApplicationRecord
   #Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
 
-  # Virtual attribute for the autocomplete field
-  attr_accessor :shop_item_type_title
-
   # Scopes
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :by_shop, ->(shop_name) { where(shop: shop_name) if shop_name.present? }
-  scope :by_type, ->(type_id) { where(shop_item_type_id: type_id) if type_id.present? }
-  scope :missing_shop_item_type, -> { where(shop_item_type_id: nil) }
-  scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(shop_item_type_id: nil) }
+  scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
+  scope :in_category, ->(category) { where(category: category) }
+  scope :missing_category, -> { where(category_id: nil) }
+  scope :under_category_path, ->(path) {
+          joins(:category).where("categories.path LIKE ?", "#{path}%")
+        }
+  scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(category_id: nil) }
 
   # For Ransack search
   def self.ransackable_attributes(auth_object = nil)
-    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "shop_item_type_id", "needs_another_review"]
+    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review"]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["shop_item_updates", "shop_item_type"]
+    ["shop_item_updates", "category"]
   end
 
   def latest_price_per_unit
@@ -73,34 +76,38 @@ class ShopItem < ApplicationRecord
     end
   end
 
-  # Helper methods to get category and subcategory through type
-  def shop_item_category
-    shop_item_type&.shop_item_sub_categories&.first&.shop_item_category
+  def category_hierarchy
+    return {} unless category
+
+    breadcrumbs = category.breadcrumbs
+    {
+      root: breadcrumbs[0]&.title,
+      category: breadcrumbs[1]&.title,
+      subcategory: breadcrumbs[2]&.title,
+      product: breadcrumbs[3]&.title,
+    }
   end
 
-  def shop_item_sub_category
-    shop_item_type&.shop_item_sub_categories&.first
+  def category_path
+    category&.full_path
+  end
+
+  def set_shop_product_from_text(text)
+    if text.present?
+      # Try to find existing Category or create new one
+      category = Category.find_or_create_by(title: text.strip)
+      self.category = category
+    elsif text.blank?
+      self.category = nil
+    end
   end
 
   private
 
-  def set_shop_item_type_from_title
-    if shop_item_type_title.present?
-      # Try to find existing type or create new one
-      type = ShopItemType.find_or_create_by(title: shop_item_type_title.strip)
-      self.shop_item_type = type
-    elsif shop_item_type_title.blank?
-      self.shop_item_type = nil
+  def category_must_be_product
+    unless category.product?
+      errors.add(:category, "must be a product category (level 4)")
     end
-  end
-
-  def shop_item_type_title_changed?
-    @shop_item_type_title_changed || false
-  end
-
-  def shop_item_type_title=(value)
-    @shop_item_type_title_changed = true
-    @shop_item_type_title = value
   end
 
   def force_valid_unit_value

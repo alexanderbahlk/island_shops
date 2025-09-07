@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_05_153505) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_07_003657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -39,6 +39,26 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_05_153505) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "slug", null: false
+    t.integer "category_type", default: 0, null: false
+    t.bigint "parent_id"
+    t.integer "sort_order", default: 0
+    t.string "path"
+    t.integer "depth", default: 0
+    t.integer "lft", null: false
+    t.integer "rgt", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_type"], name: "index_categories_on_category_type"
+    t.index ["lft", "rgt"], name: "index_categories_on_lft_and_rgt"
+    t.index ["parent_id", "slug"], name: "index_categories_on_parent_id_and_slug", unique: true
+    t.index ["parent_id", "sort_order"], name: "index_categories_on_parent_id_and_sort_order"
+    t.index ["parent_id"], name: "index_categories_on_parent_id"
+    t.index ["path"], name: "index_categories_on_path"
   end
 
   create_table "shop_item_categories", force: :cascade do |t|
@@ -100,14 +120,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_05_153505) do
     t.boolean "needs_another_review", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "shop_item_type_id"
-    t.index ["shop_item_type_id"], name: "index_shop_items_on_shop_item_type_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_shop_items_on_category_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
   end
 
+  add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "shop_item_sub_categories", "shop_item_categories"
   add_foreign_key "shop_item_sub_category_types", "shop_item_sub_categories"
   add_foreign_key "shop_item_sub_category_types", "shop_item_types"
   add_foreign_key "shop_item_updates", "shop_items"
-  add_foreign_key "shop_items", "shop_item_types"
+  add_foreign_key "shop_items", "categories"
 end

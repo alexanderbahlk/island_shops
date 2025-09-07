@@ -100,6 +100,8 @@ GEM
     arbre (1.7.0)
       activesupport (>= 3.0.0)
       ruby2_keywords (>= 0.0.2)
+    awesome_nested_set (3.8.0)
+      activerecord (>= 4.0.0, < 8.1)
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
@@ -383,6 +385,7 @@ PLATFORMS
 DEPENDENCIES
   activeadmin
   annotate
+  awesome_nested_set
   best_in_place (~> 4.0)
   bootsnap
   cancancan

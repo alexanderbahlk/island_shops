@@ -15,17 +15,17 @@
 #  url                  :string           not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  category_id          :bigint
 #  product_id           :string
-#  shop_item_type_id    :bigint
 #
 # Indexes
 #
-#  index_shop_items_on_shop_item_type_id  (shop_item_type_id)
-#  index_shop_items_on_url                (url) UNIQUE
+#  index_shop_items_on_category_id  (category_id)
+#  index_shop_items_on_url          (url) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_...  (shop_item_type_id => shop_item_types.id)
+#  fk_rails_...  (category_id => categories.id)
 #
 
 shop_item_one:

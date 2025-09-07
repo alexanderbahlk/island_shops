@@ -29,6 +29,8 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "awesome_nested_set"
+
 gem "activeadmin"
 gem "best_in_place", "~> 4.0"
 gem "jquery-rails"
