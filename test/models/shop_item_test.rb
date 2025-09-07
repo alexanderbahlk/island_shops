@@ -4,6 +4,7 @@
 #
 #  id                   :bigint           not null, primary key
 #  approved             :boolean          default(FALSE)
+#  breadcrumb           :string
 #  display_title        :string
 #  image_url            :string
 #  location             :string
@@ -20,6 +21,7 @@
 #
 # Indexes
 #
+#  index_shop_items_on_breadcrumb   (breadcrumb)
 #  index_shop_items_on_category_id  (category_id)
 #  index_shop_items_on_url          (url) UNIQUE
 #

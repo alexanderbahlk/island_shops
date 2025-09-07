@@ -42,12 +42,12 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
   end
 
   test "find_best_match on realistic shop item title" do
-    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Beverages / Milks , Evaporated, Condensed ,Powdered, Shelf Stable / Sungold Evaporated Milk")
+    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Beverages / Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milk")
     assert_equal @evaporated_milk_category, result
   end
 
   test "find_best_match handles plural variations" do
-    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Beverages / Milks , Evaporated, Condensed ,Powdered, Shelf Stable / Sungold Evaporated Milks")
+    result = ShopItemCategoryMatcher.find_best_match("Shop / Grocery / Beverages / Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milks")
     assert_equal @evaporated_milk_category, result
   end
 

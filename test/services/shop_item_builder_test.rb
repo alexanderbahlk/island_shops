@@ -410,4 +410,29 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal 500.0, builder.shop_item.size
     assert_equal "g", builder.shop_item.unit
   end
+
+  test "create correct category from breadcrumb params" do
+    @shop_item_params[:title] = "Sungold Evaporated Milk"
+    @shop_item_params[:breadcrumb] = "Shop / Grocery / Beverages / Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milk"
+    @shop_item_params[:size] = 1 # Ensure size is blank to trigger extraction
+    @shop_item_params[:unit] = "lt" # Ensure size is blank to trigger extraction
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    @evaporated_milk_category = categories(:evaporated_milk)
+    assert_equal @evaporated_milk_category, builder.shop_item.category
+  end
+
+  test "create correct category from title params" do
+    @shop_item_params[:title] = "Sungold Milk"
+    @shop_item_params[:size] = 1 # Ensure size is blank to trigger extraction
+    @shop_item_params[:unit] = "lt" # Ensure size is blank to trigger extraction
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    @milk_category = categories(:milk)
+    assert_equal @milk_category, builder.shop_item.category
+  end
 end

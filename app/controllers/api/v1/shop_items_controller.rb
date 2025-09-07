@@ -19,7 +19,7 @@ class Api::V1::ShopItemsController < ApplicationController
   private
 
   def shop_item_params
-    params.require(:shop_item).permit(:url, :title, :image_url, :size, :unit, :location, :product_id, :shop)
+    params.require(:shop_item).permit(:url, :title, :breadcrumb, :image_url, :size, :unit, :location, :product_id, :shop)
   end
 
   def shop_item_update_params
