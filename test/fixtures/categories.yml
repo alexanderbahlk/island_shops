@@ -1,0 +1,263 @@
+# == Schema Information
+#
+# Table name: categories
+#
+#  id            :bigint           not null, primary key
+#  category_type :integer          default("root"), not null
+#  depth         :integer          default(0)
+#  lft           :integer          not null
+#  path          :string
+#  rgt           :integer          not null
+#  slug          :string           not null
+#  sort_order    :integer          default(0)
+#  title         :string           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :bigint
+#
+# Indexes
+#
+#  index_categories_on_category_type             (category_type)
+#  index_categories_on_lft_and_rgt               (lft,rgt)
+#  index_categories_on_parent_id                 (parent_id)
+#  index_categories_on_parent_id_and_slug        (parent_id,slug) UNIQUE
+#  index_categories_on_parent_id_and_sort_order  (parent_id,sort_order)
+#  index_categories_on_path                      (path)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => categories.id)
+#
+
+# Root categories
+food_root:
+  title: "Food"
+  category_type: 0  # root
+  depth: 0
+  slug: "food"
+  path: "food"
+  sort_order: 1
+  lft: 1
+  rgt: 50
+
+health_beauty_root:
+  title: "Health & Beauty"
+  category_type: 0  # root
+  depth: 0
+  slug: "health-beauty"
+  path: "health-beauty"
+  sort_order: 2
+  lft: 51
+  rgt: 60
+
+# Level 1 categories
+fresh_food:
+  title: "Fresh Food"
+  parent: food_root
+  category_type: 1  # category
+  depth: 1
+  slug: "fresh-food"
+  path: "food/fresh-food"
+  sort_order: 1
+  lft: 2
+  rgt: 25
+
+canned_food:
+  title: "Canned Food"
+  parent: food_root
+  category_type: 1  # category
+  depth: 1
+  slug: "canned-food"
+  path: "food/canned-food"
+  sort_order: 2
+  lft: 26
+  rgt: 35
+
+# Level 2 subcategories
+dairy:
+  title: "Dairy"
+  parent: fresh_food
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "dairy"
+  path: "food/fresh-food/dairy"
+  sort_order: 1
+  lft: 3
+  rgt: 10
+
+beverages:
+  title: "Beverages"
+  parent: fresh_food
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "beverages"
+  path: "food/fresh-food/beverages"
+  sort_order: 2
+  lft: 11
+  rgt: 20
+
+bakery:
+  title: "Bakery"
+  parent: fresh_food
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "bakery"
+  path: "food/fresh-food/bakery"
+  sort_order: 3
+  lft: 21
+  rgt: 24
+
+canned_vegetables:
+  title: "Canned Vegetables"
+  parent: canned_food
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "canned-vegetables"
+  path: "food/canned-food/canned-vegetables"
+  sort_order: 1
+  lft: 27
+  rgt: 30
+
+fresh_vegetables:
+  title: "Fresh Vegetables"
+  parent: fresh_food
+  category_type: 2  # subcategory
+  depth: 2
+  slug: "fresh-vegetables"
+  path: "food/fresh-food/fresh-vegetables"
+  sort_order: 1
+  lft: 27
+  rgt: 30
+
+# Level 3 products (the ones we match against)
+milk:
+  title: "Milk"
+  parent: dairy
+  category_type: 3  # product
+  depth: 3
+  slug: "milk"
+  path: "food/fresh-food/dairy/milk"
+  sort_order: 1
+  lft: 4
+  rgt: 5
+
+organic_milk:
+  title: "Organic Milk"
+  parent: dairy
+  category_type: 3  # product
+  depth: 3
+  slug: "organic-milk"
+  path: "food/fresh-food/dairy/organic-milk"
+  sort_order: 1
+  lft: 4
+  rgt: 5
+
+evaporated_milk:
+  title: "Evaporated Milk"
+  parent: beverages
+  category_type: 3  # product
+  depth: 3
+  slug: "organic-milk"
+  path: "food/fresh-food/beverages/evaporated-milk"
+  sort_order: 1
+  lft: 4
+  rgt: 5
+
+cheese:
+  title: "Cheese"
+  parent: dairy
+  category_type: 3  # product
+  depth: 3
+  slug: "cheese"
+  path: "food/fresh-food/dairy/cheese"
+  sort_order: 2
+  lft: 6
+  rgt: 7
+
+yogurt:
+  title: "Yogurt"
+  parent: dairy
+  category_type: 3  # product
+  depth: 3
+  slug: "yogurt"
+  path: "food/fresh-food/dairy/yogurt"
+  sort_order: 3
+  lft: 8
+  rgt: 9
+
+wine:
+  title: "Wine"
+  parent: beverages
+  category_type: 3  # product
+  depth: 3
+  slug: "wine"
+  path: "food/fresh-food/beverages/wine"
+  sort_order: 1
+  lft: 12
+  rgt: 13
+
+beer:
+  title: "Beer"
+  parent: beverages
+  category_type: 3  # product
+  depth: 3
+  slug: "beer"
+  path: "food/fresh-food/beverages/beer"
+  sort_order: 2
+  lft: 14
+  rgt: 15
+
+red_wine:
+  title: "Red Wine"
+  parent: beverages
+  category_type: 3  # product
+  depth: 3
+  slug: "red-wine"
+  path: "food/fresh-food/beverages/red-wine"
+  sort_order: 3
+  lft: 16
+  rgt: 17
+
+organic_wine:
+  title: "Organic Wine"
+  parent: beverages
+  category_type: 3  # product
+  depth: 3
+  slug: "organic-wine"
+  path: "food/fresh-food/beverages/organic-wine"
+  sort_order: 4
+  lft: 18
+  rgt: 19
+
+bread:
+  title: "Bread"
+  parent: bakery
+  category_type: 3  # product
+  depth: 3
+  slug: "bread"
+  path: "food/fresh-food/bakery/bread"
+  sort_order: 1
+  lft: 22
+  rgt: 23
+
+tomatoes_canned:
+  title: "Tomatoes"
+  parent: canned_vegetables
+  category_type: 3  # product
+  depth: 3
+  slug: "tomatoes"
+  path: "food/canned-food/canned-vegetables/tomatoes"
+  sort_order: 1
+  lft: 28
+  rgt: 29
+
+tomatoes_fresh:
+  title: "Tomatoes"
+  parent: fresh_vegetables
+  category_type: 3  # product
+  depth: 3
+  slug: "tomatoes"
+  path: "food/fresh-food/fresh-vegetables/tomatoes"
+  sort_order: 1
+  lft: 28
+  rgt: 29

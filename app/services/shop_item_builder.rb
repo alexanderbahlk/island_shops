@@ -29,8 +29,8 @@ class ShopItemBuilder
     @shop_item = existing_item
     @shop_item.assign_attributes(@shop_item_params.except(:id)) # Avoid changing the ID
 
-    # Auto-assign type if not already set
-    auto_assign_shop_item_type() if @shop_item.shop_item_type.nil?
+    # Auto-assign category if not already set
+    auto_assign_shop_item_category() if @shop_item.category.nil?
 
     # set size and/or unit from title
     set_shop_item_size_and_unit_from_title()
@@ -68,8 +68,8 @@ class ShopItemBuilder
   def create_new_shop_item_with_shop_item_update
     @shop_item = ShopItem.new(@shop_item_params)
 
-    # Auto-assign type for new items
-    auto_assign_shop_item_type()
+    # Auto-assign category for new items
+    auto_assign_shop_item_category()
 
     # set size and/or unit from title
     set_shop_item_size_and_unit_from_title()
@@ -85,44 +85,22 @@ class ShopItemBuilder
     end
   end
 
-  def auto_assign_shop_item_type
+  def auto_assign_shop_item_category
     return if @shop_item.title.blank?
 
-    # Try to find the best matching type
-    best_match = ShopItemTypeMatcher.find_best_match(@shop_item.title)
+    # Try to find the best matching category
+    best_match = ShopItemCategoryMatcher.find_best_match(@shop_item.title)
 
     if best_match
-      @shop_item.shop_item_type = best_match
-      @type_match_info = {
+      @shop_item.category = best_match
+      @category_match_info = {
         matched: true,
-        type: best_match.title,
+        category: best_match.title,
         similarity: best_match.respond_to?(:sim_score) ? best_match.sim_score : nil,
         method: "fuzzy_match",
       }
 
       Rails.logger.info "Auto-assigned ShopItemType '#{best_match.title}' to '#{@shop_item.title}'"
-    else
-      # Try to extract keywords and find potential matches
-      keywords = ShopItemTypeMatcher.extract_type_keywords(@shop_item.title)
-
-      if keywords.any?
-        # Try to find types that match any of the keywords
-        keyword_match = keywords.lazy.map { |keyword|
-          ShopItemTypeMatcher.find_best_match(keyword)
-        }.find(&:present?)
-
-        if keyword_match
-          @shop_item.shop_item_type = keyword_match
-          @type_match_info = {
-            matched: true,
-            type: keyword_match.title,
-            method: "keyword_match",
-            keywords_found: keywords,
-          }
-
-          Rails.logger.info "Auto-assigned ShopItemType '#{keyword_match.title}' to '#{@shop_item.title}' via keyword matching"
-        end
-      end
     end
   end
 

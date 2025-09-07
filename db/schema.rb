@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_07_003657) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_07_145030) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -61,40 +61,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_07_003657) do
     t.index ["path"], name: "index_categories_on_path"
   end
 
-  create_table "shop_item_categories", force: :cascade do |t|
-    t.string "title", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["title"], name: "index_shop_item_categories_on_title"
-  end
-
-  create_table "shop_item_sub_categories", force: :cascade do |t|
-    t.string "title", null: false
-    t.bigint "shop_item_category_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["shop_item_category_id", "title"], name: "idx_on_shop_item_category_id_title_46d450a20d", unique: true
-    t.index ["shop_item_category_id"], name: "index_shop_item_sub_categories_on_shop_item_category_id"
-    t.index ["title"], name: "index_shop_item_sub_categories_on_title"
-  end
-
-  create_table "shop_item_sub_category_types", force: :cascade do |t|
-    t.bigint "shop_item_sub_category_id", null: false
-    t.bigint "shop_item_type_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["shop_item_sub_category_id", "shop_item_type_id"], name: "index_sub_category_types_unique", unique: true
-    t.index ["shop_item_sub_category_id"], name: "idx_on_shop_item_sub_category_id_7ec89870ff"
-    t.index ["shop_item_type_id"], name: "index_shop_item_sub_category_types_on_shop_item_type_id"
-  end
-
-  create_table "shop_item_types", force: :cascade do |t|
-    t.string "title", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["title"], name: "index_shop_item_types_on_title", opclass: :gin_trgm_ops, using: :gin
-  end
-
   create_table "shop_item_updates", force: :cascade do |t|
     t.decimal "price", precision: 10, scale: 2, null: false
     t.decimal "price_per_unit", precision: 10, scale: 2
@@ -126,9 +92,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_07_003657) do
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"
-  add_foreign_key "shop_item_sub_categories", "shop_item_categories"
-  add_foreign_key "shop_item_sub_category_types", "shop_item_sub_categories"
-  add_foreign_key "shop_item_sub_category_types", "shop_item_types"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
 end

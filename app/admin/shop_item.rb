@@ -407,9 +407,12 @@ ActiveAdmin.register ShopItem do
       return
     end
 
+    # Enqueue the job
+    AssignShopItemCategoryJob.perform_later
+
     # You can implement auto-assignment logic here or create a job
     redirect_to collection_path,
-                notice: "Found #{missing_count} items without categories. Auto-assignment feature needs to be implemented."
+                notice: "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results."
   end
 
   # Keep the existing member action

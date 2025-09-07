@@ -310,7 +310,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "each", builder.shop_item.unit
   end
 
-  test "created shop_item_type" do
+  test "created category" do
     @shop_item_params[:title] = "Bag of Tomatos"
     @shop_item_params[:size] = nil
 
@@ -319,7 +319,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
     assert_nil builder.shop_item.size
     assert_nil builder.shop_item.unit
-    assert_equal "Tomato", builder.shop_item.shop_item_type.title
+    assert_equal "Tomatoes", builder.shop_item.category.title
   end
 
   test "extracts decimal size from title" do

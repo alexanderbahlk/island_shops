@@ -30,20 +30,27 @@
 
 shop_item_one:
   url: "https://example.com/existing-item"
-  shop_item_type: shop_item_type_tomato
+  category: milk  # References the milk category
   shop: "Massy"
-  title: "Tomato organic"
-  size: "500"
-  unit: "g"
+  title: "Organic Milk"
+  size: 1.0
+  unit: "l"
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
 
 shop_item_two:
   url: "https://example.com/another-item"
-  shop_item_type: shop_item_type_tomato
+  category: tomatoes_canned  # References the tomatoes category
   shop: "Massy"
-  title: "Tomatos"
-  size: "3"
-  unit: "kg"
+  title: "Canned Tomatoes"
+  size: 400.0
+  unit: "g"
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
+
+shop_item_without_category:
+  url: "https://example.com/no-category"
+  shop: "Massy"
+  title: "Unmatched Product"
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>

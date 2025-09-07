@@ -481,6 +481,13 @@
                             <type>Energy Drinks</type>
                             <type>Sparkling Water</type>
                             <type>Flavored Water</type>
+                            <type>Lemonade</type>
+                            <type>Iced Tea</type>
+                            <type>Sports Drinks</type>
+                            <type>Coconut Water</type>
+                            <type>Evaporated Milk</type>
+                            <type>Condensed Milk</type>
+                            <type>Powdered Milk</type>
                         </types>
                     </category>
                     <category>

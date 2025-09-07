@@ -1,3 +1,9 @@
+#run 'rails db:test:prepare' for missing migration
+
+# kill processes using the test db if required
+# bin/rails runner "puts ActiveRecord::Base.connection.execute(\"SELECT pid, usename, application_name, state FROM pg_stat_activity WHERE datname = 'island_shops_test'\").to_a"
+#bin/rails runner "ActiveRecord::Base.connection.execute(\"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'island_shops_test' AND pid <> pg_backend_pid()\")"
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
