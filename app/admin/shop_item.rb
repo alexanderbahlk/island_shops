@@ -94,6 +94,10 @@ ActiveAdmin.register ShopItem do
            method: :post,
            class: "member_link",
            confirm: "This will create a new shop item update with calculated price per unit. Continue?"
+      item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
+           method: :post,
+           class: "member_link",
+           confirm: "This will find and assign a new category to this item (replacing the current one). Continue?"
     end
   end
 
@@ -406,6 +410,47 @@ ActiveAdmin.register ShopItem do
     # You can implement auto-assignment logic here or create a job
     redirect_to collection_path,
                 notice: "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results."
+  end
+
+  # Add this after the existing member action (around line 450)
+  member_action :auto_assign_category, method: :post do
+    begin
+      original_category = resource.category
+
+      # Use the category matcher to find the best match
+      match_title = resource.breadcrumb.presence || resource.title
+      best_match = ShopItemCategoryMatcher.find_best_match(match_title)
+
+      if best_match
+        resource.update!(category: best_match)
+
+        # Build success message with breadcrumb
+        category_breadcrumb = best_match.breadcrumbs.map(&:title).join(" > ")
+
+        success_message = if original_category
+            "Successfully reassigned '#{resource.title}' from '#{original_category.breadcrumbs.map(&:title).join(" > ")}' to '#{category_breadcrumb}'"
+          else
+            "Successfully assigned '#{resource.title}' to category '#{category_breadcrumb}'"
+          end
+
+        # Add similarity score info if available
+        if best_match.respond_to?(:sim_score)
+          success_message += " (similarity: #{(best_match.sim_score * 100).round(1)}%)"
+        end
+
+        redirect_to collection_path, notice: success_message
+      else
+        redirect_to collection_path,
+                    alert: "No suitable category found for '#{resource.title}'. You may need to create a new category or assign manually."
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to collection_path,
+                  alert: "Failed to assign category to '#{resource.title}': #{e.record.errors.full_messages.join(", ")}"
+    rescue => e
+      Rails.logger.error "Error auto-assigning category for item #{resource.id}: #{e.message}"
+      redirect_to collection_path,
+                  alert: "An error occurred while assigning category to '#{resource.title}': #{e.message}"
+    end
   end
 
   # Keep the existing member action

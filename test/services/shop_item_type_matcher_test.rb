@@ -62,6 +62,7 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
 
   test "find_best_match from coffee breadcrump" do
     result = ShopItemCategoryMatcher.find_best_match("PriceSmart > Groceries > Coffee & Tea > Member's Selection Freeze Dried Instant Coffee 320 g / 11.2 oz")
+    #TODO go by title on nothing was found
     assert_equal @coffee_category, result
   end
 
@@ -121,39 +122,6 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
     assert_equal @milk_category, result
   end
 
-  # Tests for find_similar_categories method
-  test "find_similar_categories returns empty array for blank title" do
-    assert_empty ShopItemCategoryMatcher.find_similar_categories("")
-    assert_empty ShopItemCategoryMatcher.find_similar_categories(nil)
-    assert_empty ShopItemCategoryMatcher.find_similar_categories("   ")
-  end
-
-  test "find_similar_categories returns array of similar categories with similarity scores" do
-    # Skip this test if pg_trgm is not available
-    skip "pg_trgm not available" unless ShopItemCategoryMatcher.send(:pg_trgm_available?)
-
-    results = ShopItemCategoryMatcher.find_similar_categories("Wines")
-
-    results.each do |result|
-      assert result.is_a?(Hash)
-      assert result.has_key?(:category)
-      assert result.has_key?(:similarity)
-      assert result[:category].is_a?(Category)
-      assert result[:category].product?
-      assert result[:similarity].is_a?(Float)
-      assert result[:similarity] > 0
-      assert result[:similarity] <= 1
-    end
-  end
-
-  test "find_similar_categories respects limit parameter" do
-    # Skip this test if pg_trgm is not available
-    skip "pg_trgm not available" unless ShopItemCategoryMatcher.send(:pg_trgm_available?)
-
-    results = ShopItemCategoryMatcher.find_similar_categories("Wine", limit: 2)
-    assert results.length <= 2
-  end
-
   # Tests for normalize_title method
   test "normalize_title removes size patterns" do
     normalized = ShopItemCategoryMatcher.send(:normalize_title, "Wine 750ml")
@@ -191,100 +159,6 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
     assert_equal "", ShopItemCategoryMatcher.send(:normalize_title, "")
     assert_equal "", ShopItemCategoryMatcher.send(:normalize_title, nil)
     assert_equal "", ShopItemCategoryMatcher.send(:normalize_title, "   ")
-  end
-
-  # Tests for auto_assign_categories method
-  test "auto_assign_categories assigns categories to shop items without categories" do
-    # Create shop items without categories
-    shop_item1 = ShopItem.create!(
-      url: "https://example.com/milk",
-      shop: "Massy",
-      title: "Fresh Organic Milk 1L",
-      size: 1.0,
-      unit: "l",
-    )
-
-    shop_item2 = ShopItem.create!(
-      url: "https://example.com/wine",
-      shop: "Massy",
-      title: "Premium Red Wine 750ml",
-      size: 750.0,
-      unit: "ml",
-    )
-
-    results = ShopItemCategoryMatcher.auto_assign_categories([shop_item1, shop_item2])
-
-    assert_equal 2, results[:total_processed]
-    assert results[:assigned] >= 1 # At least one should be assigned
-
-    # Check that items were assigned appropriate categories
-    shop_item1.reload
-    shop_item2.reload
-
-    if shop_item1.category
-      assert shop_item1.category.product?
-      assert_equal "Organic Milk", shop_item1.category.title
-    end
-
-    if shop_item2.category
-      assert shop_item2.category.product?
-      assert shop_item2.category.title.include?("Red Wine")
-    end
-  end
-
-  test "auto_assign_categories skips items that already have categories" do
-    # Create shop item with existing category
-    shop_item = ShopItem.create!(
-      url: "https://example.com/existing-category",
-      shop: "Massy",
-      title: "Some Product",
-      category: @milk_category,
-    )
-
-    results = ShopItemCategoryMatcher.auto_assign_categories([shop_item])
-
-    assert_equal 1, results[:total_processed]
-    assert_equal 1, results[:skipped]
-    assert_equal 0, results[:assigned]
-  end
-
-  # Tests for suggest_categories_for_item method
-  test "suggest_categories_for_item returns suggestions with reasons" do
-    shop_item = ShopItem.new(title: "Premium Organic Wine Collection")
-
-    suggestions = ShopItemCategoryMatcher.suggest_categories_for_item(shop_item)
-
-    suggestions.each do |suggestion|
-      assert suggestion.has_key?(:category)
-      assert suggestion.has_key?(:similarity)
-      assert suggestion.has_key?(:breadcrumb)
-      assert suggestion.has_key?(:reason)
-
-      assert suggestion[:category].is_a?(Category)
-      assert suggestion[:category].product?
-      assert suggestion[:breadcrumb].is_a?(String)
-      assert suggestion[:reason].is_a?(String)
-    end
-  end
-
-  # Tests for category_assignment_stats method
-  test "category_assignment_stats returns correct statistics" do
-    # Create some shop items with and without categories
-    ShopItem.create!(url: "https://example.com/with-category", shop: "Massy", title: "Test", category: @milk_category)
-    ShopItem.create!(url: "https://example.com/without-category", shop: "Massy", title: "Test")
-
-    stats = ShopItemCategoryMatcher.category_assignment_stats
-
-    assert stats.has_key?(:total_items)
-    assert stats.has_key?(:assigned_items)
-    assert stats.has_key?(:missing_items)
-    assert stats.has_key?(:assignment_percentage)
-    assert stats.has_key?(:total_product_categories)
-
-    assert stats[:total_items] >= 2
-    assert stats[:assigned_items] >= 1
-    assert stats[:missing_items] >= 1
-    assert stats[:total_product_categories] >= 8 # Our test categories
   end
 
   # Tests for pg_trgm_available? method

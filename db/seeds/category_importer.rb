@@ -3,6 +3,7 @@ require "nokogiri"
 class CategoryImporter
   def self.import_from_xml(file_path)
     puts "🗑️  Clearing existing categories..."
+    ShopItem.update_all(category_id: nil) # Clear associations first
     Category.destroy_all
     puts "✅ Cleared all categories"
 

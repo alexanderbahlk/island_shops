@@ -4,6 +4,171 @@
         <title>Food</title>
         <categories>
             <category>
+                <title>Grains &amp; Pasta </title>
+                <categories>
+                    <category>
+                        <title>Rice</title>
+                        <types>
+                            <type>White Rice</type>
+                            <type>Brown Rice</type>
+                            <type>Jasmine Rice</type>
+                            <type>Basmati Rice</type>
+                            <type>Wild Rice</type>
+                            <type>Arborio Rice</type>
+                            <type>Sushi Rice</type>
+                            <type>Black Rice</type>
+                            <type>Red Rice</type>
+                            <type>Sticky Rice</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Pasta</title>
+                        <types>
+                            <type>Spaghetti</type>
+                            <type>Fettuccine</type>
+                            <type>Penni</type>
+                            <type>Macaroni</type>
+                            <type>Ravioli</type>
+                            <type>Tortellini</type>
+                            <type>Lasagna</type>
+                            <type>Angel Hair</type>
+                            <type>Orzo</type>
+                            <type>Rotini</type>
+                            <type>Fusilli</type>
+                            <type>Shells</type>
+                            <type>Vermicelli</type>
+                            <type>Cavatappi</type>
+                            <type>Pappardelle</type>
+                            <type>Gemelli</type>
+                            <type>Orecchiette</type>
+                            <type>Capellini</type>
+                            <type>Tagliatelle</type>
+                            <type>Gnocchi</type>
+                            <type>Mix</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Grains</title>
+                        <types>
+                            <type>Quinoa</type>
+                            <type>Couscous</type>
+                            <type>Bulgur</type>
+                            <type>Barley</type>
+                            <type>Farro</type>
+                            <type>Millet</type>
+                            <type>Amaranth</type>
+                            <type>Teff</type>
+                            <type>Sorghum</type>
+                            <type>Freekeh</type>
+                            <type>Kamut</type>
+                            <type>Spelt</type>
+                            <type>Wild Rice</type>
+                            <type>Oats</type>
+                            <type>Yellow Split Peas</type>
+                            <type>Green Split Peas</type>
+                            <type>Red Lentils</type>
+                            <type>Brown Lentils</type>
+                            <type>Black Lentils</type>
+                            <type>Chickpeas</type>
+                            <type>Black Beans</type>
+                            <type>Kidney Beans</type>
+                            <type>Pinto Beans</type>
+                            <type>Navy Beans</type>
+                            <type>Lima Beans</type>
+                            <type>Cannellini Beans</type>
+                            <type>Adzuki Beans</type>
+                            <type>Mung Beans</type>
+                            <type>Fava Beans</type>
+                            <type>Edamame</type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
+                <title>Snacks</title>
+                <categories>
+                    <category>
+                        <title>Chips &amp; Crackers</title>
+                        <types>
+                            <type>Potato Chips</type>
+                            <type>Tortilla Chips</type>
+                            <type>Vegetable Chips</type>
+                            <type>Pretzels</type>
+                            <type>Popcorn</type>
+                            <type>Rice Cakes</type>
+                            <type>Cheese Crackers</type>
+                            <type>Multigrain Crackers</type>
+                            <type>Whole Wheat Crackers</type>
+                            <type>Gluten-Free Crackers</type>
+                            <type>Flatbread Crackers</type>
+                            <type>Pita Chips</type>
+                            <type>Seaweed Snacks</type>
+                            <type>Plantain Chips</type>
+                            <type>Sweet Potato Chips</type>
+                            <type>Kale Chips</type>
+                            <type>Beet Chips</type>
+                            <type>Zucchini Chips</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Nuts &amp; Seeds</title>
+                        <types>
+                            <type>Almonds</type>
+                            <type>Cashews</type>
+                            <type>Walnuts</type>
+                            <type>Pistachios</type>
+                            <type>Pecans</type>
+                            <type>Hazelnuts</type>
+                            <type>Macadamia Nuts</type>
+                            <type>Brazil Nuts</type>
+                            <type>Coconut Chips</type>
+                            <type>Sunflower Seeds</type>
+                            <type>Pumpkin Seeds</type>
+                            <type>Chia Seeds</type>
+                            <type>Flaxseeds</type>
+                            <type>Hemp Seeds</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Dried Fruit</title>
+                        <types>
+                            <type>Raisins</type>
+                            <type>Cranberries</type>
+                            <type>Apricots</type>
+                            <type>Mangoes</type>
+                            <type>Pineapple</type>
+                            <type>Banana Chips</type>
+                            <type>Date</type>
+                            <type>Fig</type>
+                            <type>Prunes</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Candy &amp; Chocolate</title>
+                        <types>
+                            <type>Chocolate Bar</type>
+                            <type>Gummy Candy</type>
+                            <type>Hard Candy</type>
+                            <type>Lollipop</type>
+                            <type>Candy Cane</type>
+                            <type>Caramel</type>
+                            <type>Toffee</type>
+                            <type>Marshmallow</type>
+                            <type>Licorice</type>
+                            <type>Jelly Beans</type>
+                            <type>Chocolate-Covered Nuts</type>
+                            <type>Chocolate-Covered Fruit</type>
+                            <type>Truffles</type>
+                            <type>Fudge</type>
+                            <type>Nougat</type>
+                            <type>Peanut Butter Cups</type>
+                            <type>Chocolate Chips</type>
+                            <type>Chocolate Spread</type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
                 <title>Fresh Food</title>
                 <categories>
                     <category>
@@ -475,14 +640,26 @@
                     <category>
                         <title>Non-Alcoholic</title>
                         <types>
-                            <type>Soft Drinks</type>
-                            <type>Juices</type>
+                            <type>Coke</type>
+                            <type>Sprite</type>
+                            <type>Fante</type>
+                            <type>Diet Coke</type>
+                            <type>Pepsi</type>
+                            <type>Diet Pepsi</type>
+                            <type>Root Beer</type>
+                            <type>Ginger Ale</type>
+                            <type>Lemon-Lime Soda</type>
+                            <type>Club Soda</type>
+                            <type>Tonic Water</type>
+                            <type>Fruit Soda</type>
+                            <type>Flavored Soda</type>
                             <type>Water</type>
                             <type>Energy Drinks</type>
                             <type>Sparkling Water</type>
                             <type>Flavored Water</type>
                             <type>Lemonade</type>
                             <type>Iced Tea</type>
+                            <type>Mate Tea</type>
                             <type>Sports Drinks</type>
                             <type>Coconut Water</type>
                             <type>Evaporated Milk</type>
@@ -494,7 +671,12 @@
                         <title>Hot Beverages</title>
                         <types>
                             <type>Coffee</type>
-                            <type>Tea</type>
+                            <type>Coffee Beans</type>
+                            <type>Instant Coffee</type>
+                            <type>Green Tea</type>
+                            <type>Black Tea</type>
+                            <type>Herbal Tea</type>
+                            <type>Chai Tea</type>
                             <type>Hot Chocolate</type>
                             <type>Matcha</type>
                         </types>
@@ -502,7 +684,7 @@
                 </categories>
             </category>
             <category>
-                <title>Cooking &amp; Baking Needs</title>
+                <title>Cooking, Condiments &amp; Baking Needs</title>
                 <categories>
                     <category>
                         <title>Oils &amp; Vinegars</title>
@@ -519,19 +701,59 @@
                         <title>Spices &amp; Seasonings</title>
                         <types>
                             <type>Salt</type>
-                            <type>Pepper</type>
+                            <type>Ground Black Pepper</type>
+                            <type>Pepper Corn</type>
+                            <type>Cayenne Pepper</type>
                             <type>Garlic Powder</type>
                             <type>Onion Powder</type>
-                            <type>Cumin</type>
-                            <type>Cinnamon</type>
+                            <type>Cumin Powder</type>
+                            <type>Cinnamon Powder</type>
+                            <type>Cinnamon Sticks</type>
                             <type>Chili Powder</type>
-                            <type>Oregano</type>
-                            <type>Basil</type>
-                            <type>Thyme</type>
-                            <type>Rosemary</type>
-                            <type>Paprika</type>
+                            <type>Oregano Flakes</type>
+                            <type>Basil Leaves</type>
+                            <type>Thyme Flakes</type>
+                            <type>Rosemary Flakes</type>
+                            <type>Paprika Poweder</type>
                             <type>Curry Powder</type>
                             <type>Turmeric</type>
+                            <type>Citrus Blend</type>
+                            <type>Ground Pakrika</type>
+                            <type>Italian Seasoning</type>
+                            <type>Herbes de Provence</type>
+                            <type>Bay Leaves</type>
+                            <type>Red Pepper Flakes</type>
+                            <type>Fennel Seeds</type>
+                            <type>Cardamom</type>
+                            <type>Cloves</type>
+                            <type>Nutmeg</type>
+                            <type>Allspice</type>
+                            <type>Ginger</type>
+                            <type>Coriander</type>
+                            <type>Parsley Flakes</type>
+                            <type>Mustard Seeds</type>
+                            <type>Celery Seed</type>
+                            <type>Caraway Seeds</type>
+                            <type>Fenugreek</type>
+                            <type>Sumac</type>
+                            <type>Saffron</type>
+                            <type>Za'atar</type>
+                            <type>Chaat Masala</type>
+                            <type>Five-Spice Powder</type>
+                            <type>Chinese Five Spice</type>
+                            <type>Old Bay Seasoning</type>
+                            <type>Seasoned Salt</type>
+                            <type>Ranch Seasoning</type>
+                            <type>Taco Seasoning</type>
+                            <type>Adobo Seasoning</type>
+                            <type>Creole Seasoning</type>
+                            <type>Cajun Seasoning</type>
+                            <type>Jerk Seasoning</type>
+                            <type>Chili Seasoning</type>
+                            <type>Chicken Seasoning</type>
+                            <type>BBQ Rub</type>
+                            <type>Lime Pepper Seasoning</type>
+                            <type>Montreal Steak Seasoning</type>
                         </types>
                     </category>
                     <category>
@@ -544,10 +766,41 @@
                             <type>Yeast</type>
                             <type>Cocoa Powder</type>
                             <type>Chocolate Chips</type>
+                            <type>Vanilla Extract</type>
+                            <type>Sprinkles</type>
+                            <type>Food Coloring</type>
+                            <type>Frosting</type>
+                            <type>Pie Crust</type>
+                            <type>Cornstarch</type>
+                            <type>Powdered Sugar</type>
+                            <type>Brown Sugar</type>
+                            <type>Confectioners' Sugar</type>
+                            <type>Molasses</type>
+                            <type>Bread Crumbs</type>
+                            <type>Honey</type>
+                            <type>Maple Syrup</type>
+                            <type>Agave Nectar</type>
+                            <type>Stevia</type>
+                            <type>Gelatin</type>
+                            <type>Almond Flour</type>
+                            <type>Coconut Flour</type>
+                            <type>Gluten-Free Flour</type>
+                            <type>Oat Flour</type>
+                            <type>Chickpea Flour</type>
+                            <type>Rice Flour</type>
+                            <type>Tapioca Flour</type>
+                            <type>Sorghum Flour</type>
+                            <type>Teff Flour</type>
+                            <type>Millet Flour</type>
+                            <type>Quinoa Flour</type>
+                            <type>Arrowroot Powder</type>
+                            <type>Psyllium Husk</type>
+                            <type>Ground Flaxseed</type>
+                            <type>Chia Seeds</type>
                         </types>
                     </category>
                     <category>
-                        <title>Condiments &amp; Sauces</title>
+                        <title>Sauces</title>
                         <types>
                             <type>Ketchup</type>
                             <type>Mustard</type>
@@ -556,6 +809,28 @@
                             <type>Hot Sauce</type>
                             <type>Salad Dressing</type>
                             <type>Barbecue Sauce</type>
+                            <type>Ranch Dressing</type>
+                            <type>Vinaigrette</type>
+                            <type>Teriyaki Sauce</type>
+                            <type>Hoisin Sauce</type>
+                            <type>Chili Sauce</type>
+                            <type>Sweet and Sour Sauce</type>
+                            <type>Buffalo Sauce</type>
+                            <type>Tartar Sauce</type>
+                            <type>Salsa</type>
+                            <type>Guacamole</type>
+                            <type>Pesto</type>
+                            <type>Marinara Sauce</type>
+                            <type>Alfredo Sauce</type>
+                            <type>Curry Sauce</type>
+                            <type>BBC Sauce</type>
+                            <type>Fish Sauce</type>
+                            <type>Worcestershire Sauce</type>
+                            <type>Chimichurri Sauce</type>
+                            <type>Tapenade</type>
+                            <type>Aioli</type>
+                            <type>Gravy</type>
+                            <type>Stuffing Mix</type>
                         </types>
                     </category>
                 </categories>
