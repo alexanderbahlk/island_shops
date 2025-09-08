@@ -12,8 +12,7 @@ class AssignShopItemCategoryJob < ApplicationJob
       batch.each do |shop_item|
         begin
           # Try to find the best matching category
-          match_title = shop_item.breadcrumb.presence || shop_item.title
-          best_match = ShopItemCategoryMatcher.find_best_match(match_title)
+          best_match = ShopItemCategoryMatcher.find_best_match(shop_item)
 
           if best_match
             shop_item.update!(category: best_match)

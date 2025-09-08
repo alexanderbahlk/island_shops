@@ -1,44 +1,64 @@
 class ShopItemCategoryMatcher
   SIMILARITY_THRESHOLD = 0.2 # Adjust this value between 0.0 and 1.0
 
-  def self.find_best_match(title)
-    return nil if title.blank?
+  def self.find_best_match(shop_item)
+    if shop_item.blank?
+      Rails.logger.warn "No shop item provided for category matching."
+      return nil
+    end
 
-    # Clean and normalize the title
-    normalized_title = normalize_title(title)
-
-    # Use fuzzy matching if available
-    if pg_trgm_available?
-      return find_fuzzy_match(normalized_title)
-    else
+    if !pg_trgm_available?
       Rails.logger.warn "pg_trgm extension is not available in the database. Cannot perform fuzzy matching."
       return nil
     end
+
+    category = find_category_by_breadcrumb(shop_item.breadcrumb)
+
+    if category.nil?
+      category = find_category_by_title(shop_item.title)
+    end
+
+    return category
   end
 
   private
 
-  def self.find_fuzzy_match(normalized_title)
+  def self.find_category_by_breadcrumb(breadcrumb)
+    # Clean and normalize the breadcrumb
+    normalized_breadcrumb = normalize_title(breadcrumb)
+    find_fuzzy_match(normalized_breadcrumb)
+  end
+
+  def self.find_category_by_title(title)
+    # Clean and normalize the title
+    normalized_title = normalize_title(title)
+    find_fuzzy_match(normalized_title)
+  end
+
+  def self.find_fuzzy_match(shop_item_text)
     begin
       # Extract the last part of the path (product name) and also try full path matching
       # e.g.: "groceries coffee & tea freeze dried instant coffee"
-      sanitized_title = ActiveRecord::Base.connection.quote(normalized_title)
+      #
+
+      #
+      sanitized_shop_item_text = ActiveRecord::Base.connection.quote(shop_item_text)
 
       #look for categories.path
       #e.g.: food/beverages/hot-beverages/coffee
       sql = <<~SQL
         SELECT categories.*, 
                GREATEST(
-                 similarity(categories.path, #{sanitized_title}),
-                 similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_title}),
-                 similarity(categories.title, #{sanitized_title})
+                 similarity(categories.path, #{sanitized_shop_item_text}),
+                 similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_shop_item_text}),
+                 similarity(categories.title, #{sanitized_shop_item_text})
                ) as sim_score
         FROM categories
         WHERE category_type = #{Category.category_types[:product]}
           AND (
-            similarity(categories.path, #{sanitized_title}) > #{SIMILARITY_THRESHOLD}
-            OR similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_title}) > #{SIMILARITY_THRESHOLD}
-            OR similarity(categories.title, #{sanitized_title}) > #{SIMILARITY_THRESHOLD}
+            similarity(categories.path, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
+            OR similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
+            OR similarity(categories.title, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
           )
         ORDER BY sim_score DESC
         LIMIT 1

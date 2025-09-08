@@ -418,8 +418,7 @@ ActiveAdmin.register ShopItem do
       original_category = resource.category
 
       # Use the category matcher to find the best match
-      match_title = resource.breadcrumb.presence || resource.title
-      best_match = ShopItemCategoryMatcher.find_best_match(match_title)
+      best_match = ShopItemCategoryMatcher.find_best_match(resource)
 
       if best_match
         resource.update!(category: best_match)
