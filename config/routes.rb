@@ -9,7 +9,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  # 
+  #
+  # Defines the root path route ("/")
+  root "search#index"
+  get "/search", to: "search#index"
+  get "/search/categories", to: "search#categories"
+  #
+  #
   namespace :api do
     namespace :v1 do
       resources :shop_items, only: [:create]

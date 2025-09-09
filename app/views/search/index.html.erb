@@ -1,0 +1,442 @@
+<!-- filepath: /Users/alexanderbahlk/Development/Docker/DockerDesktop/island_shops/app/views/search/index.html.erb -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbados Shopping - Find Products - Save Money</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+            background: white;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .loading {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .results {
+            display: none;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .category-breadcrumb {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .items-count {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        .shop-items {
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .shop-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .shop-item:last-child {
+            border-bottom: none;
+        }
+
+        .shop-item:hover {
+            background-color:rgb(230, 234, 255);
+        }
+
+        .item-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+            background: #f0f0f0;
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-shop {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .no-results {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .search-input {
+                padding: 16px 18px;
+                font-size: 1rem;
+            }
+
+            .category-header,
+            .shop-item {
+                padding: 15px;
+            }
+
+            .item-image {
+                width: 45px;
+                height: 45px;
+                margin-right: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏝️ Barbados Shopping 🏝️</h1>
+            <p>Find the best cheapest products across the island stores</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for products, categories..." value="<%= @initial_query || '' %>">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div id="results" class="results"></div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <p>No products found. Try a different search term.</p>
+        </div>
+    </div>
+
+    <script>
+        class ProductSearch {
+            constructor() {
+                this.searchInput = document.getElementById('searchInput');
+                this.resultsContainer = document.getElementById('results');
+                this.loadingIndicator = document.getElementById('loading');
+                this.noResults = document.getElementById('noResults');
+                this.searchTimeout = null;
+
+                this.initializeEventListeners();
+                this.handleInitialSearch();
+            }
+
+            initializeEventListeners() {
+                this.searchInput.addEventListener('input', (e) => {
+                    this.handleSearch(e.target.value);
+                });
+
+                // Handle browser back/forward buttons
+                window.addEventListener('popstate', (e) => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const query = urlParams.get('q') || '';
+                    this.searchInput.value = query;
+                    this.handleSearch(query, false); // Don't update URL again
+                });
+            }
+
+            handleInitialSearch() {
+                // Check if there's an initial query from URL parameter
+                const initialQuery = this.searchInput.value.trim();
+                if (initialQuery.length >= 2) {
+                    this.handleSearch(initialQuery, false); // Don't update URL on initial load
+                }
+            }
+
+            handleSearch(query, updateUrl = true) {
+                clearTimeout(this.searchTimeout);
+
+                if (query.length < 2) {
+                    this.clearResults();
+                    if (updateUrl) {
+                        this.updateUrl('');
+                    }
+                    return;
+                }
+
+                this.showLoading();
+
+                this.searchTimeout = setTimeout(() => {
+                    this.performSearch(query);
+                    if (updateUrl) {
+                        this.updateUrl(query);
+                    }
+                }, 300);
+            }
+
+            updateUrl(query) {
+                const url = new URL(window.location);
+                if (query) {
+                    url.searchParams.set('q', query);
+                } else {
+                    url.searchParams.delete('q');
+                }
+
+                // Update URL without triggering page reload
+                window.history.pushState({
+                    query: query
+                }, '', url);
+
+                // Update page title with search query
+                if (query) {
+                    document.title = `Search: ${query} - Barbados Shopping`;
+                } else {
+                    document.title = 'Barbados Shopping - Find Products - Save Money';
+                }
+            }
+
+            async performSearch(query) {
+                try {
+                    const response = await fetch(`/search/categories?q=${encodeURIComponent(query)}`);
+                    const categories = await response.json();
+
+                    this.hideLoading();
+                    this.displayResults(categories);
+                } catch (error) {
+                    console.error('Search error:', error);
+                    this.hideLoading();
+                    this.showNoResults();
+                }
+            }
+
+            displayResults(categories) {
+                if (categories.length === 0) {
+                    this.showNoResults();
+                    return;
+                }
+
+                this.hideNoResults();
+
+                const html = categories.map(category => this.renderCategory(category)).join('');
+                this.resultsContainer.innerHTML = html;
+                this.resultsContainer.style.display = 'block';
+            }
+
+            renderCategory(category) {
+                console.log('Rendering category:', category);
+                const shopItemsHtml = category.shop_items.map(item => this.renderShopItem(item)).join('');
+
+                return `
+          <div class="category-card">
+            <div class="category-header">
+              <div class="category-title">${this.escapeHtml(category.title)}</div>
+              <div class="category-breadcrumb">${this.escapeHtml(category.breadcrumb)}</div>
+              <span class="items-count">${category.shop_items_count} products</span>
+            </div>
+            <div class="shop-items">
+              ${shopItemsHtml}
+            </div>
+          </div>
+        `;
+            }
+
+            renderShopItem(item) {
+                const imageUrl = item.image_url || '/assets/placeholder-product.png';
+                const price = item.latest_price ? `$${item.latest_price}` : 'N/A';
+                const pricePerUnit = item.latest_price_per_unit !== 'N/A' ? ` (${item.latest_price_per_unit})` : '';
+
+                return `
+          <div class="shop-item" onclick="window.open('${item.url}', '_blank')">
+            <img src="${imageUrl}" alt="${this.escapeHtml(item.title)}" class="item-image" 
+                 onerror="this.src='/assets/placeholder-product.png'">
+            <div class="item-details">
+              <div class="item-title">${this.escapeHtml(item.title)}</div>
+              <div class="item-shop">${this.escapeHtml(item.shop)}</div>
+              <div class="item-price">${price}${pricePerUnit}</div>
+            </div>
+          </div>
+        `;
+            }
+
+            showLoading() {
+                this.loadingIndicator.style.display = 'block';
+            }
+
+            hideLoading() {
+                this.loadingIndicator.style.display = 'none';
+            }
+
+            showNoResults() {
+                this.resultsContainer.style.display = 'none';
+                this.noResults.style.display = 'block';
+            }
+
+            hideNoResults() {
+                this.noResults.style.display = 'none';
+            }
+
+            clearResults() {
+                this.resultsContainer.style.display = 'none';
+                this.hideNoResults();
+                this.hideLoading();
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize the search when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProductSearch();
+        });
+    </script>
+</body>
+
+</html>
