@@ -14,6 +14,12 @@ ActiveAdmin.register ShopItem do
             class: "button"
   end
 
+  controller do
+    def category_collection
+      @category_collection ||= [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] }
+    end
+  end
+
   # Configure the index page
   index do
     selectable_column
@@ -70,7 +76,7 @@ ActiveAdmin.register ShopItem do
       best_in_place shop_item, :category_id,
                     as: :select,
                     url: admin_shop_item_path(shop_item),
-                    collection: [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] },
+                    collection: controller.category_collection,
                     html_attrs: { style: "cursor: pointer; min-width: 150px;" },
                     class: "bip-select-unit"
     end
@@ -286,10 +292,12 @@ ActiveAdmin.register ShopItem do
     redirect_to collection_path, alert: "#{ids.count} shop items have been unmarked as needing another review."
   end
 
-  batch_action :assign_category, form: {
-                                   category_id: Category.products.includes(:parent).map do |cat|
-                                     [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
-                                   end.unshift(["Remove Category", nil]),
+  batch_action :assign_category, form: -> {
+                                   {
+                                     category_id: Category.products.includes(:parent).map do |cat|
+                                       [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
+                                     end.unshift(["Remove Category", nil]),
+                                   }
                                  } do |ids, inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
     category_id = batch_inputs["category_id"].presence
@@ -307,22 +315,23 @@ ActiveAdmin.register ShopItem do
 
   # Add this batch action after the existing batch actions (around line 290):
 
-  batch_action :create_and_assign_category, form: {
-                                              category_title: :text,
-                                              parent_category_id: Category.where.not(category_type: :product)
-                                                                          .includes(:parent)
-                                                                          .map do |cat|
-                                                # Build breadcrumb manually
-                                                parts = []
-                                                current = cat
-                                                while current
-                                                  parts.unshift(current.title)
-                                                  current = current.parent
-                                                end
-                                                breadcrumb = parts.join(" > ")
-                                                [breadcrumb, cat.id]
-                                              end
-                                                                          .unshift(["No Parent (Root Category)", nil]),
+  batch_action :create_and_assign_category, form: -> {
+                                              {
+                                                category_title: :text,
+                                                parent_category_id: Category.where.not(category_type: :product)
+                                                                            .includes(:parent)
+                                                                            .map do |cat|
+                                                  # Build breadcrumb manually
+                                                  parts = []
+                                                  current = cat
+                                                  while current
+                                                    parts.unshift(current.title)
+                                                    current = current.parent
+                                                  end
+                                                  breadcrumb = parts.join(" > ")
+                                                  [breadcrumb, cat.id]
+                                                end.unshift(["No Parent (Root Category)", nil]),
+                                              }
                                             } do |ids, inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
     category_title = batch_inputs["category_title"].strip
