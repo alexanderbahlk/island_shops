@@ -40,9 +40,10 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production with dummy database URL
-RUN SECRET_KEY_BASE_DUMMY=1 \
-    DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy \
-    ./bin/rails assets:precompile
+#RUN SECRET_KEY_BASE_DUMMY=1 \
+#    DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy \
+#    RAILS_ENV=production \
+#    ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
