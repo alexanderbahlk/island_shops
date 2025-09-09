@@ -13,13 +13,19 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
-
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
-# Install packages needed to build gems
+# Install packages needed to build gems and PostgreSQL
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    git \
+    libvips \
+    pkg-config \
+    libpq-dev \
+    postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -33,16 +39,21 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
+# Precompiling assets for production with dummy database URL
+RUN SECRET_KEY_BASE_DUMMY=1 \
+    DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy \
+    ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
 
-# Install packages needed for deployment
+# Install packages needed for deployment (PostgreSQL client, not SQLite)
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
+    apt-get install --no-install-recommends -y \
+    curl \
+    libpq5 \
+    libvips \
+    postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
