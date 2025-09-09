@@ -4,10 +4,19 @@ set -e
 # Remove a potentially pre-existing server.pid for Rails.
 rm -f /rails/tmp/pids/server.pid
 
+# Check if RAILS_MASTER_KEY is set
+if [ -z "$RAILS_MASTER_KEY" ]; then
+  echo "ERROR: RAILS_MASTER_KEY environment variable is not set!"
+  exit 1
+fi
+
 # Precompile assets if they don't exist
 if [ ! -d "public/assets" ]; then
   echo "Precompiling assets..."
-  bundle exec rails assets:precompile
+  if ! bundle exec rails assets:precompile; then
+    echo "ERROR: Asset precompilation failed!"
+    exit 1
+  fi
 fi
 
 # Run database migrations (but don't fail if it errors)
