@@ -1,8 +1,19 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
+# Remove a potentially pre-existing server.pid for Rails.
+rm -f /rails/tmp/pids/server.pid
+
+# Precompile assets if they don't exist
+if [ ! -d "public/assets" ]; then
+  echo "Precompiling assets..."
+  bundle exec rails assets:precompile
 fi
 
-exec "${@}"
+# Run database migrations (but don't fail if it errors)
+echo "Running database migrations..."
+bundle exec rails db:create 2>/dev/null || true
+bundle exec rails db:migrate 2>/dev/null || true
+
+echo "Starting Rails server on 0.0.0.0:3000..."
+exec "$@"
