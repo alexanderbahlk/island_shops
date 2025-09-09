@@ -27,4 +27,5 @@ USER rails
 EXPOSE 3000
 
 # Modern Rails 7 startup
-CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
+# CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
+CMD ["./bin/docker-entrypoint"]
