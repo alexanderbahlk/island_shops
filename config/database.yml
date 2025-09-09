@@ -51,6 +51,4 @@ test:
 #
 production:
   <<: *default
-  database: island_shops_production
-  username: island_shops
-  password: <%= ENV["ISLAND_SHOPS_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
