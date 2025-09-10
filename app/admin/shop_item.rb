@@ -16,7 +16,7 @@ ActiveAdmin.register ShopItem do
 
   controller do
     def category_collection
-      @category_collection ||= [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] }
+      @category_collection ||= [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] }.sort_by { |id, breadcrumb| breadcrumb }
     end
   end
 
@@ -297,7 +297,7 @@ ActiveAdmin.register ShopItem do
                                    {
                                      category_id: Category.products.includes(:parent).map do |cat|
                                        [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
-                                     end.unshift(["Remove Category", nil]),
+                                     end.sort_by { |breadcrumb, id| breadcrumb }.unshift(["Remove Category", nil]),
                                    }
                                  } do |ids, inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
