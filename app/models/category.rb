@@ -57,6 +57,7 @@ class Category < ApplicationRecord
   scope :roots, -> { where(parent_id: nil) }
   scope :products, -> { where(category_type: :product) }
   scope :categories_only, -> { where.not(category_type: :product) }
+  scope :with_shop_items, -> { joins(:shop_items).distinct }
 
   # Efficient queries using materialized path
   scope :under_path, ->(path) { where("path LIKE ?", "#{path}%") }

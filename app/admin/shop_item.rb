@@ -49,9 +49,9 @@ ActiveAdmin.register ShopItem do
         "N/A"
       end
     end
-    column :latest_price_per_unit do |shop_item|
-      if shop_item.latest_price_per_unit != "N/A"
-        shop_item.latest_price_per_unit
+    column :latest_price_per_unified_unit do |shop_item|
+      if shop_item.latest_price_per_unified_unit != "N/A"
+        shop_item.latest_price_per_unified_unit
       else
         content_tag(:span, "N/A", style: "color: red; font-size: 11px;")
       end
@@ -108,12 +108,13 @@ ActiveAdmin.register ShopItem do
   end
 
   # Configure filters for the index page
-  filter :shop
   filter :title
+  filter :shop
   filter :url
   filter :location
   filter :approved
   filter :needs_another_review
+  filter :no_price_per_unified_unit, as: :boolean, label: "Missing Price per Unified Unit"
   filter :category, as: :select, collection: proc {
                Category.products.includes(:parent).map do |cat|
                  [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
@@ -197,8 +198,8 @@ ActiveAdmin.register ShopItem do
           "N/A"
         end
       end
-      row :latest_price_per_unit do |shop_item|
-        shop_item.latest_price_per_unit
+      row :latest_price_per_unified_unit do |shop_item|
+        shop_item.latest_price_per_unified_unit
       end
       row :location
       row :product_id
@@ -421,7 +422,6 @@ ActiveAdmin.register ShopItem do
                 notice: "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results."
   end
 
-  # Add this after the existing member action (around line 450)
   member_action :auto_assign_category, method: :post do
     begin
       original_category = resource.category

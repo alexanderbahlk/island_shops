@@ -16,8 +16,3 @@ require_relative "seeds/category_importer"
 if AdminUser.where(email: "admin@islandshop.com").blank?
   AdminUser.create!(email: "admin@islandshop.com", password: "1password#@", password_confirmation: "1password#@")
 end
-
-# Usage in db/seeds.rb
-CategoryImporter.import_from_xml(
-  Rails.root.join("db/seeds/shop_item_categories.xml")
-)

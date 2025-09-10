@@ -59,6 +59,27 @@ class ShopItem < ApplicationRecord
           joins(:category).where("categories.path LIKE ?", "#{path}%")
         }
   scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(category_id: nil) }
+  scope :no_price_per_unified_unit, -> {
+          # Items with no updates at all OR items where the latest update has no price_per_unit
+          where(
+            id: ShopItem.left_joins(:shop_item_updates)
+                        .where(shop_item_updates: { id: nil })
+                        .select(:id),
+          ).or(
+                          where(
+                            id: ShopItem.joins(:shop_item_updates)
+                                        .where(shop_item_updates: { price_per_unit: nil })
+                                        .where(
+                                          shop_item_updates: {
+                                            id: ShopItemUpdate.select("MAX(id)")
+                                                              .where("shop_item_updates.shop_item_id = shop_items.id")
+                                                              .group(:shop_item_id),
+                                          },
+                                        )
+                                        .select(:id),
+                          )
+                        )
+        }
 
   # For Ransack search
   def self.ransackable_attributes(auth_object = nil)
@@ -69,10 +90,23 @@ class ShopItem < ApplicationRecord
     ["shop_item_updates", "category"]
   end
 
-  def latest_price_per_unit
+  def self.ransackable_scopes(auth_object = nil)
+    [:no_price_per_unified_unit]
+  end
+
+  def latest_price_per_unified_unit
     latest_update = self.shop_item_updates.order(created_at: :desc).first
     if latest_update&.price_per_unit
       "$" + latest_update.price_per_unit.to_s + " per " + latest_update.normalized_unit.to_s
+    else
+      "N/A"
+    end
+  end
+
+  def latest_price_per_unit
+    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    if latest_update&.price && self.unit.present?
+      self.size.to_s + self.unit.to_s + " for $" + latest_update.price.to_s
     else
       "N/A"
     end
@@ -102,6 +136,11 @@ class ShopItem < ApplicationRecord
     elsif text.blank?
       self.category = nil
     end
+  end
+
+  def no_price_per_unified_unit
+    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    latest_update.nil? || latest_update.price_per_unit.nil?
   end
 
   private

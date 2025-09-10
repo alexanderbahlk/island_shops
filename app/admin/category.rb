@@ -111,6 +111,13 @@ ActiveAdmin.register Category do
             link_to item.title, admin_shop_item_path(item)
           end
           column :created_at
+          column :actions do |item|
+            link_to "Remove from Category",
+                    remove_shop_item_admin_category_path(category, shop_item_id: item.id),
+                    method: :delete,
+                    data: { confirm: "Remove this item from category?" },
+                    class: "button small"
+          end
         end
 
         if category.shop_items.count > 20
@@ -129,11 +136,30 @@ ActiveAdmin.register Category do
   scope :roots, -> { where(parent_id: nil) }
   scope :products, -> { where(category_type: :product) }
   scope :categories_only, -> { where.not(category_type: :product) }
+  scope :with_shop_items, -> { joins(:shop_items).distinct }
 
   # Custom collection action to rebuild tree (if needed)
   collection_action :rebuild_tree, method: :post do
     Category.rebuild!
     redirect_to collection_path, notice: "Category tree has been rebuilt."
+  end
+
+  # Add collection action for importing categories
+  collection_action :import_categories, method: :post do
+    begin
+      # Path to your XML file - adjust as needed
+      xml_file_path = Rails.root.join("db", "seeds", "shop_item_categories.xml")
+
+      if File.exist?(xml_file_path)
+        # Run async with background job (recommended)
+        CategoryImportJob.perform_later(xml_file_path.to_s)
+        #redirect_to collection_path, notice: "Category import started in background. Check logs for progress."
+      else
+        redirect_to collection_path, alert: "Categories XML file not found at #{xml_file_path}"
+      end
+    rescue => e
+      redirect_to collection_path, alert: "Error starting import: #{e.message}"
+    end
   end
 
   # Add action item for rebuilding tree
@@ -142,6 +168,36 @@ ActiveAdmin.register Category do
             method: :post,
             data: { confirm: "This will rebuild the category tree structure. Continue?" },
             class: "button"
+  end
+
+  # Add action item for importing categories
+  action_item :import_categories, only: :index do
+    link_to "Import Categories", import_categories_admin_categories_path,
+            method: :post,
+            data: { confirm: "This will import categories from XML. This may take a while. Continue?" },
+            class: "button"
+  end
+
+  # Add member action for removing shop items from category
+  member_action :remove_shop_item, method: :delete do
+    shop_item_id = params[:shop_item_id]
+
+    if shop_item_id.present?
+      shop_item = ShopItem.find(shop_item_id)
+
+      begin
+        # Remove the association between category and shop item
+        resource.shop_items.delete(shop_item)
+        redirect_to admin_category_path(resource),
+                    notice: "Successfully removed '#{shop_item.title}' from category '#{resource.title}'"
+      rescue => e
+        redirect_to admin_category_path(resource),
+                    alert: "Error removing shop item: #{e.message}"
+      end
+    else
+      redirect_to admin_category_path(resource),
+                  alert: "No shop item specified for removal"
+    end
   end
 
   # Batch actions

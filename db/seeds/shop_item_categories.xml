@@ -570,6 +570,9 @@
                             <type>Salmon</type>
                             <type>Tuna</type>
                             <type>Cod</type>
+                            <type>King Fish</type>
+                            <type>Sword Fish</type>
+                            <type>Catfish</type>
                             <type>Tilapia</type>
                         </types>
                     </category>

@@ -30,12 +30,15 @@ class SearchController < ApplicationController
         path: category.path,
         shop_items_count: category.shop_items.approved.count,
         shop_items: shop_items.map do |item|
+          latest_update = item.shop_item_updates.order(created_at: :desc).first
           {
             id: item.id,
             title: item.display_title.presence || item.title,
             shop: item.shop,
             image_url: item.image_url,
-            latest_price: item.shop_item_updates.order(created_at: :desc).first&.price,
+            unit: item.unit || "N/A",
+            latest_price: latest_update&.price || "N/A",
+            latest_price_per_unified_unit: item.latest_price_per_unified_unit,
             latest_price_per_unit: item.latest_price_per_unit,
             url: item.url,
           }
@@ -62,12 +65,13 @@ class SearchController < ApplicationController
       breadcrumb_parts.unshift(current_category.title)
       current_category = current_category.parent
     end
-
-    breadcrumb_parts.join(" > ")
+    #remove last part if it is "Products"
+    breadcrumb_parts.pop
+    breadcrumb_parts
   rescue => e
     Rails.logger.warn "Failed to build breadcrumb for category #{category.id}: #{e.message}"
     # Fallback to category title if breadcrumb building fails
-    category.title
+    [category.title]
   end
 
   SIMILARITY_THRESHOLD = 0.2 # Adjust this value between 0.0 and 1.0

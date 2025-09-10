@@ -140,6 +140,10 @@
             font-size: 0.9rem;
         }
 
+        .category-breadcrumb-item:last-child {
+            font-weight: 600;
+        }
+
         .items-count {
             display: inline-block;
             background: #667eea;
@@ -201,9 +205,17 @@
         }
 
         .item-price {
-            font-weight: 600;
+
             color: #667eea;
             font-size: 0.9rem;
+
+            .item-price-unified-unit {
+                font-weight: 600;
+            }
+
+            .item-price-unit {
+                padding-left: 4px;
+            }
         }
 
         .no-results {
@@ -215,7 +227,7 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 10px;
+                padding: 15px;
             }
 
             .container {
@@ -346,7 +358,7 @@
     <div class="container">
         <div class="header">
             <h1>🇧🇧 Barbados Shopping 🇧🇧</h1>
-            <p>Find the most affordable products across the island stores</p>
+            <p>Find the most affordable products across the island's stores</p>
         </div>
 
         <div class="search-container">
@@ -475,7 +487,7 @@
           <div class="category-card">
             <div class="category-header">
               <div class="category-title">${this.escapeHtml(category.title)}</div>
-              <div class="category-breadcrumb">${this.escapeHtml(category.breadcrumb)}</div>
+              <div class="category-breadcrumb">${category.breadcrumb.map(item => `<span class="category-breadcrumb-item">${this.escapeHtml(item)}</span>`).join(' > ')}</div>
               <span class="items-count">${category.shop_items_count} products</span>
             </div>
             <div class="shop-items">
@@ -488,7 +500,8 @@
             renderShopItem(item) {
                 const imageUrl = item.image_url || '/assets/placeholder-product.png';
                 const price = item.latest_price ? `$${item.latest_price}` : 'N/A';
-                const pricePerUnit = item.latest_price_per_unit !== 'N/A' ? ` (${item.latest_price_per_unit})` : '';
+                const pricePerUnit = item.latest_price_per_unit !== 'N/A' ? `(${item.latest_price_per_unit})` : 'N/A';
+                const pricePerUnifiedUnit = item.latest_price_per_unified_unit !== 'N/A' ? `${item.latest_price_per_unified_unit}` : 'N/A';
 
                 return `
           <div class="shop-item" onclick="window.open('${item.url}', '_blank')">
@@ -497,7 +510,10 @@
             <div class="item-details">
               <div class="item-title">${this.escapeHtml(item.title)}</div>
               <div class="item-shop">${this.escapeHtml(item.shop)}</div>
-              <div class="item-price">${price}${pricePerUnit}</div>
+              <div class="item-price">
+                <span class="item-price-unified-unit">${pricePerUnifiedUnit}</span>
+                <span class="item-price-unit">${pricePerUnit}</span>
+              </div>
             </div>
           </div>
         `;

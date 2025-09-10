@@ -3,9 +3,10 @@ require "nokogiri"
 class CategoryImporter
   def self.import_from_xml(file_path)
     puts "🗑️  Clearing existing categories..."
-    ShopItem.update_all(category_id: nil) # Clear associations first
-    Category.destroy_all
-    puts "✅ Cleared all categories"
+
+    ##ShopItem.update_all(category_id: nil) # Clear associations first
+    ##Category.destroy_all
+    #puts "✅ Cleared all categories"
 
     doc = Nokogiri::XML(File.open(file_path))
     puts "📄 Loaded XML file: #{file_path}"
@@ -56,17 +57,23 @@ class CategoryImporter
     # Create the category
     puts "#{" " * (expected_depth * 2)}📁 Creating: #{title} (depth #{expected_depth})"
 
-    begin
-      category = Category.create!(
-        title: title,
-        parent: parent_category,
-        sort_order: sort_order,
-      )
+    # Check for duplicates within this parent
+    category = Category.find_by(title: title, parent: parent_category)
+    if !category.nil?
+      puts "#{" " * (expected_depth * 2)}   ⚠️  SKIP: #{title} (duplicate)"
+    else
+      begin
+        category = Category.create!(
+          title: title,
+          parent: parent_category,
+          sort_order: sort_order,
+        )
 
-      puts "#{" " * (expected_depth * 2)}   ✅ #{category.title} (#{category.category_type})"
-    rescue => e
-      puts "#{" " * (expected_depth * 2)}   ❌ Failed: #{e.message}"
-      return
+        puts "#{" " * (expected_depth * 2)}   ✅ #{category.title} (#{category.category_type})"
+      rescue => e
+        puts "#{" " * (expected_depth * 2)}   ❌ Failed: #{e.message}"
+        return
+      end
     end
 
     # Check for nested categories first
