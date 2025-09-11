@@ -225,6 +225,35 @@
             margin-top: 40px;
         }
 
+        .item-stock-status {
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .stock-available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .stock-out {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .stock-low {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .stock-unknown {
+            background-color: #e2e3e5;
+            color: #6c757d;
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 15px;
@@ -306,6 +335,11 @@
             /* Ensure proper text wrapping */
             .item-details {
                 overflow: hidden;
+            }
+
+            .item-stock-status {
+                font-size: 0.75rem;
+                padding: 1px 4px;
             }
         }
 
@@ -502,6 +536,7 @@
                 const price = item.latest_price ? `$${item.latest_price}` : 'N/A';
                 const pricePerUnit = item.latest_price_per_unit !== 'N/A' ? `(${item.latest_price_per_unit})` : 'N/A';
                 const pricePerUnifiedUnit = item.latest_price_per_unified_unit !== 'N/A' ? `${item.latest_price_per_unified_unit}` : 'N/A';
+                const stockStatus = item.stock_status || 'N/A';
 
                 return `
           <div class="shop-item" onclick="window.open('${item.url}', '_blank')">
@@ -514,9 +549,25 @@
                 <span class="item-price-unified-unit">${pricePerUnifiedUnit}</span>
                 <span class="item-price-unit">${pricePerUnit}</span>
               </div>
+              <div class="item-stock-status ${this.getStockStatusClass(stockStatus)}">${this.escapeHtml(stockStatus)}</div>
             </div>
           </div>
         `;
+            }
+
+            getStockStatusClass(stockStatus) {
+                if (!stockStatus) return 'stock-unknown';
+
+                const status = stockStatus.toLowerCase();
+                if (status.includes('in stock') || status.includes('available')) {
+                    return 'stock-available';
+                } else if (status.includes('out of stock') || status.includes('unavailable')) {
+                    return 'stock-out';
+                } else if (status.includes('low stock') || status.includes('limited')) {
+                    return 'stock-low';
+                } else {
+                    return 'stock-unknown';
+                }
             }
 
             showLoading() {

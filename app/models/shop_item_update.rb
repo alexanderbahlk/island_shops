@@ -24,4 +24,17 @@ class ShopItemUpdate < ApplicationRecord
 
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :price_per_unit, presence: false, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
+
+  def normalized_stock_status
+    case stock_status&.downcase
+    when "in stock", "available", "yes", "true"
+      "in stock"
+    when "out of stock", "unavailable", "no", "false"
+      "out of stock"
+    when "limited", "few left", "low stock"
+      "limited"
+    else
+      "N/A"
+    end
+  end
 end

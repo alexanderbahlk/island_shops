@@ -37,6 +37,7 @@ class SearchController < ApplicationController
             shop: item.shop,
             image_url: item.image_url,
             unit: item.unit || "N/A",
+            stock_status: latest_update&.normalized_stock_status || "N/A",
             latest_price: latest_update&.price || "N/A",
             latest_price_per_unified_unit: item.latest_price_per_unified_unit,
             latest_price_per_unit: item.latest_price_per_unit,
