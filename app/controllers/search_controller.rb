@@ -24,7 +24,6 @@ class SearchController < ApplicationController
       Rails.logger.info "  Found #{shop_items.count} shop items"
 
       {
-        id: category.id,
         title: category.title,
         breadcrumb: build_breadcrumb(category),
         path: category.path,
@@ -32,7 +31,6 @@ class SearchController < ApplicationController
         shop_items: shop_items.map do |item|
           latest_update = item.shop_item_updates.order(created_at: :desc).first
           {
-            id: item.id,
             title: item.display_title.presence || item.title,
             shop: item.shop,
             image_url: item.image_url,
