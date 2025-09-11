@@ -63,14 +63,19 @@ ActiveAdmin.register ShopItem do
     column :title do |shop_item|
       link_to shop_item.title, shop_item.url, target: "_blank"
     end
-    column :display_title do |shop_item|
-      best_in_place shop_item, :display_title,
-                    as: :input,
-                    url: admin_shop_item_path(shop_item),
-                    placeholder: "Click to edit display title",
-                    class: "bip-input-unit",
-                    html_attrs: { style: "width: 200px" }
+    column :breadcrumb do |shop_item|
+      breadcrumbs = shop_item.breadcrumb.split(">")
+      breadcrumb = breadcrumbs[0..-2].join(" > ")
+      breadcrumb.present? ? breadcrumb : "N/A"
     end
+    #column :display_title do |shop_item|
+    #  best_in_place shop_item, :display_title,
+    #                as: :input,
+    #                url: admin_shop_item_path(shop_item),
+    #                placeholder: "Click to edit display title",
+    #                class: "bip-input-unit",
+    #                html_attrs: { style: "width: 200px" }
+    #end
     column :image_url do |shop_item|
       if shop_item.image_url.present?
         image_tag shop_item.image_url, size: "50x50", style: "object-fit: cover;"
@@ -372,7 +377,12 @@ ActiveAdmin.register ShopItem do
     end
   end
 
-  # Add this batch action after the existing batch actions (around line 290):
+  batch_action :calculate_prices_per_unified_unit do |ids|
+    # Enqueue the job with selected shop item IDs
+    CalculatePricesPerUnifiedUnitJob.perform_later(ids)
+
+    redirect_to_collection_with_filters(:notice, "Price calculation job started for #{ids.count} shop items. Check back in a few minutes to see results.")
+  end
 
   batch_action :create_and_assign_category, form: -> {
                                               {
