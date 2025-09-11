@@ -316,21 +316,52 @@ ActiveAdmin.register ShopItem do
   # Update batch actions for categories
   batch_action :approve do |ids|
     ShopItem.where(id: ids).update_all(approved: true)
-    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been approved.")
+    redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been approved.")
   end
 
   batch_action :reject do |ids|
     ShopItem.where(id: ids).update_all(approved: false)
-    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been rejected.")
+    redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been rejected.")
   end
 
   batch_action :mark_needs_review do |ids|
     ShopItem.where(id: ids).update_all(needs_another_review: true)
-    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been marked as needing another review.")
+    redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been marked as needing another review.")
   end
+
   batch_action :unmark_needs_review do |ids|
     ShopItem.where(id: ids).update_all(needs_another_review: false)
-    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been unmarked as needing another review.")
+    redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been unmarked as needing another review.")
+  end
+
+  batch_action :set_unit, form: -> {
+                            {
+                              unit: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
+                            }
+                          } do |ids, inputs|
+    batch_inputs = JSON.parse(params[:batch_action_inputs])
+    selected_unit = batch_inputs["unit"].presence
+
+    if selected_unit.blank?
+      redirect_to_collection_with_filters(:alert, "Please select a unit.")
+      return
+    end
+
+    # Validate the unit is in the allowed list
+    unless UnitParser::VALID_UNITS.include?(selected_unit)
+      redirect_to_collection_with_filters(:alert, "Invalid unit selected: #{selected_unit}")
+      return
+    end
+
+    begin
+      # Update all selected shop items with the new unit
+      updated_count = ShopItem.where(id: ids).update_all(unit: selected_unit)
+
+      redirect_to_collection_with_filters(:notice, "Successfully set unit to '#{selected_unit}' for #{updated_count} shop items.")
+    rescue => e
+      Rails.logger.error "Error setting unit for shop items #{ids}: #{e.message}"
+      redirect_to_collection_with_filters(:alert, "An error occurred while setting the unit: #{e.message}")
+    end
   end
 
   batch_action :assign_category, form: -> {
