@@ -491,18 +491,19 @@ ActiveAdmin.register ShopItem do
     # ... existing implementation stays the same ...
     latest_update = resource.shop_item_updates.order(created_at: :desc).first
 
+    stored_filters = session[:shop_item_filters] || {}
+    Rails.logger.debug "Redirecting with stored filters: #{stored_filters.inspect}"
+
     # Determine redirect path based on parameter or referer
     redirect_path = case params[:redirect_to]
       when "show"
         admin_shop_item_path(resource)
       when "index"
-        query_params = request.query_parameters.except("page", "batch_action", "collection_selection", "batch_action_inputs")
-        collection_path(query_params)
+        collection_path(stored_filters)
       else
         # Fallback: check referer to determine where we came from
         if request.referer&.include?("/admin/shop_items") && !request.referer&.include?("/#{resource.id}")
-          query_params = request.query_parameters.except("page", "batch_action", "collection_selection", "batch_action_inputs")
-          collection_path(query_params)
+          collection_path(stored_filters)
         else
           admin_shop_item_path(resource)
         end
