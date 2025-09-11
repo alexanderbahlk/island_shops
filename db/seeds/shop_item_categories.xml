@@ -924,6 +924,56 @@
         <title>Household</title>
         <categories>
             <category>
+                <title>Disposable Items</title>
+                <categories>
+                    <category>
+                        <title>Trash Bags</title>
+                        <types>
+                            <type>Kitchen Trash Bags</type>
+                            <type>Outdoor Trash Bags</type>
+                            <type>Recycling Bags</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Cooking</title>
+                        <types>
+                            <type>All Purpose Pan</type>
+                            <type>Baking Pan</type>
+                            <type>Roasting Pan</type>
+                            <type>Grill Pan</type>
+                            <type>Aluminum Pans</type>
+                            <type>Loaf Pans</type>
+                            <type>Disposable Cutlery</type>
+                            <type>Disposable Cups</type>
+                            <type>Disposable Plates</type>
+                            <type>Disposable Napkins</type>
+                            <type>Cornstarch Forks</type>
+                            <type>Cornstarch Spoons</type>
+                            <type>Cornstarch Knives</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Food Storage</title>
+                        <types>
+                            <type>Ziplock Bags</type>
+                            <type>Freezer Bags</type>
+                            <type>Vacuum Seal Bags</type>
+                            <type>Snadwich Bags</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Aluminum Foil &amp; Wraps</title>
+                        <types>
+                            <type>Aluminum Foil</type>
+                            <type>Plastic Wrap</type>
+                            <type>Parchment Paper</type>
+                            <type>Baking Paper</type>
+                            <type>Baking Cups</type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
                 <title>Cleaning</title>
                 <categories>
                     <category>
