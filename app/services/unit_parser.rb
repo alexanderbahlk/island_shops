@@ -1,5 +1,6 @@
 module UnitParser
   VALID_UNITS = %w[
+    ft
     ct
     pc
     each
@@ -14,6 +15,7 @@ module UnitParser
   ].freeze
 
   UNIT_PATTERNS = {
+    "ft" => /(\d+(?:\.\d+)?)\s*ft\s*$/i,
     "ct" => /(\d+(?:\.\d+)?)\s*ct\s*$/i,
     "lbs" => /(\d+(?:\.\d+)?)\s*lbs\s*$/i,
     "lb" => /(\d+(?:\.\d+)?)\s*lb\s*$/i,
@@ -33,6 +35,7 @@ module UnitParser
 
   # Extended aliases for fuzzy matching
   UNIT_ALIASES = {
+    "feet" => "ft",
     "pounds" => "lbs",
     "lb" => "lbs",
     "gr" => "g",

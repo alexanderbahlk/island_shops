@@ -7,7 +7,8 @@ class PricePerUnitCalculator
     "ml" => 100,     # Price per 100ml
     "l" => 100,      # Price per 100ml (converted from l)
     "oz" => 100,     # Price per 100g (converted from oz)
-    "fl" => 1,       # Price per 1fl oz
+    "ft" => 1,       # Price per 1 ft
+    "fl" => 1,       # Price per 1 fl
     "pc" => 1,       # Price per 1 piece
     "ct" => 1,       # Price per 1 count
     "each" => 1,     # Price per 1 each
@@ -30,6 +31,7 @@ class PricePerUnitCalculator
 
   # Normalized unit labels
   NORMALIZED_UNITS = {
+    "ft" => "1ft",
     "g" => "100g",
     "kg" => "100g",
     "lbs" => "100g",

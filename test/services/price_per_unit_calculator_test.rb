@@ -73,6 +73,16 @@ class PricePerUnitCalculatorTest < ActiveSupport::TestCase
     assert_equal "1fl", result[:normalized_unit]
   end
 
+  test "calculate returns correct values for alu foil in feet" do
+    result = PricePerUnitCalculator.calculate(25.95, 120, "ft")
+
+    assert_not_nil result
+    assert_equal 0.22, result[:display_value]
+    assert_equal 0.2163, result[:value]
+    assert_equal 1, result[:base_quantity]
+    assert_equal "1ft", result[:normalized_unit]
+  end
+
   # Tests for count/piece units
   test "calculate returns correct values for pieces (1pc base)" do
     result = PricePerUnitCalculator.calculate(12.00, 6, "pc")
