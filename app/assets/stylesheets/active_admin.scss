@@ -16,6 +16,36 @@
 //
 //   .status_tag { background: #6090DB; }
 
+body>div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-buttons.ui-draggable.ui-resizable {
+    width: fit-content !important;
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 9999;
+    margin: 0px;
+    padding: 0px;
+
+    .ui-menu-item {
+        font-size: 12px;
+        background-color: #d4e6d4;
+        border-bottom: 1px solid #495057;
+        cursor: pointer;
+        margin: 0px;
+        padding-bottom: 4px;
+    }
+}
+
+input[name*="category_search"] {
+    width: 300px;
+    margin-bottom: 10px;
+}
+
+
+
+
 .bip-select-unit {
     cursor: pointer !important;
     font-size: 11px;

@@ -33,7 +33,7 @@ gem "awesome_nested_set"
 
 gem "activeadmin"
 gem "best_in_place", "~> 4.0"
-gem "jquery-rails"
+gem "jquery-ui-rails"
 
 # Plus integrations with:
 gem "devise"

@@ -330,6 +330,7 @@ ActiveAdmin.register ShopItem do
 
   batch_action :assign_category, form: -> {
                                    {
+                                     category_search: :text,
                                      category_id: Category.products.includes(:parent).map do |cat|
                                        [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
                                      end.sort_by { |breadcrumb, id| breadcrumb }.unshift(["Remove Category", nil]),
@@ -337,6 +338,28 @@ ActiveAdmin.register ShopItem do
                                  } do |ids, inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
     category_id = batch_inputs["category_id"].presence
+    category_search = batch_inputs["category_search"].presence
+
+    # If search term is provided, try to find category by path or title
+    if category_search.present? && category_id.blank?
+      # Search by path or title
+      found_category = Category.products
+        .joins("LEFT JOIN categories parents ON categories.parent_id = parents.id")
+        .where(
+          "categories.path ILIKE ? OR categories.title ILIKE ? OR categories.path ILIKE ?",
+          "%#{category_search}%",
+          "%#{category_search}%",
+          "%#{category_search.gsub(" ", "%")}%"
+        )
+        .first
+
+      if found_category
+        category_id = found_category.id
+      else
+        redirect_to_collection_with_filters(:alert, "No category found matching '#{category_search}'. Please try a different search term.")
+        return
+      end
+    end
 
     if category_id
       category = Category.find(category_id)
@@ -448,6 +471,34 @@ ActiveAdmin.register ShopItem do
 
     # You can implement auto-assignment logic here or create a job
     redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results.")
+  end
+
+  # Add collection action for category autocomplete
+  collection_action :category_autocomplete, method: :get do
+    term = params[:term].to_s.strip
+
+    if term.length >= 2
+      categories = Category.products
+        .includes(:parent)
+        .where(
+          "categories.path ILIKE ? OR categories.title ILIKE ?",
+          "%#{term}%",
+          "%#{term}%"
+        )
+        .limit(20)
+        .map do |cat|
+        {
+          id: cat.id,
+          label: cat.breadcrumbs.map(&:title).join(" > "),
+          value: cat.breadcrumbs.map(&:title).join(" > "),
+          path: cat.path,
+        }
+      end
+
+      render json: categories
+    else
+      render json: []
+    end
   end
 
   member_action :auto_assign_category, method: :post do
