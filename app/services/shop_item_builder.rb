@@ -27,7 +27,8 @@ class ShopItemBuilder
 
   def create_shop_item_update_for_existing_shop_item(existing_item)
     @shop_item = existing_item
-    @shop_item.assign_attributes(@shop_item_params.except(:id)) # Avoid changing the ID
+    # Avoid changing the ID, size, or unit of the existing item
+    @shop_item.assign_attributes(@shop_item_params.except(:id, :size, :unit))
 
     # Auto-assign category if not already set
     auto_assign_shop_item_category() if @shop_item.category.nil?
