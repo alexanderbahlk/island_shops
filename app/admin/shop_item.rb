@@ -15,8 +15,43 @@ ActiveAdmin.register ShopItem do
   end
 
   controller do
+    before_action :store_current_filters, only: [:index]
+
     def category_collection
       @category_collection ||= [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] }.sort_by { |id, breadcrumb| breadcrumb }
+    end
+
+    def redirect_to_collection_with_filters(message_type, message)
+      # Get stored filters from session
+      stored_filters = session[:shop_item_filters] || {}
+
+      Rails.logger.debug "Redirecting with stored filters: #{stored_filters.inspect}"
+
+      redirect_to collection_path(stored_filters), message_type => message
+    end
+
+    private
+
+    def store_current_filters
+      # Only store if this is a GET request (not batch actions)
+      if request.get?
+        filters_to_store = {}
+
+        # Store scope
+        filters_to_store[:scope] = params[:scope] if params[:scope].present?
+
+        # Store search/filter params
+        filters_to_store[:q] = params[:q] if params[:q].present?
+
+        # Store order
+        filters_to_store[:order] = params[:order] if params[:order].present?
+
+        # Store per_page
+        filters_to_store[:per_page] = params[:per_page] if params[:per_page].present?
+
+        session[:shop_item_filters] = filters_to_store
+        Rails.logger.debug "Stored filters in session: #{filters_to_store.inspect}"
+      end
     end
   end
 
@@ -276,21 +311,21 @@ ActiveAdmin.register ShopItem do
   # Update batch actions for categories
   batch_action :approve do |ids|
     ShopItem.where(id: ids).update_all(approved: true)
-    redirect_to collection_path, alert: "#{ids.count} shop items have been approved."
+    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been approved.")
   end
 
   batch_action :reject do |ids|
     ShopItem.where(id: ids).update_all(approved: false)
-    redirect_to collection_path, alert: "#{ids.count} shop items have been rejected."
+    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been rejected.")
   end
 
   batch_action :mark_needs_review do |ids|
     ShopItem.where(id: ids).update_all(needs_another_review: true)
-    redirect_to collection_path, alert: "#{ids.count} shop items have been marked as needing another review."
+    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been marked as needing another review.")
   end
   batch_action :unmark_needs_review do |ids|
     ShopItem.where(id: ids).update_all(needs_another_review: false)
-    redirect_to collection_path, alert: "#{ids.count} shop items have been unmarked as needing another review."
+    redirect_to_collection_with_filters(:alert, "#{ids.count} shop items have been unmarked as needing another review.")
   end
 
   batch_action :assign_category, form: -> {
@@ -307,10 +342,10 @@ ActiveAdmin.register ShopItem do
       category = Category.find(category_id)
       ShopItem.where(id: ids).update_all(category_id: category_id)
       category_name = category.breadcrumbs.map(&:title).join(" > ")
-      redirect_to collection_path, notice: "#{ids.count} shop items assigned to '#{category_name}'."
+      redirect_to_collection_with_filters(:notice, "#{ids.count} shop items assigned to '#{category_name}'.")
     else
       ShopItem.where(id: ids).update_all(category_id: nil)
-      redirect_to collection_path, notice: "Category removed from #{ids.count} shop items."
+      redirect_to_collection_with_filters(:notice, "Category removed from #{ids.count} shop items.")
     end
   end
 
@@ -340,7 +375,7 @@ ActiveAdmin.register ShopItem do
 
     # Validate inputs
     if category_title.blank?
-      redirect_to collection_path, alert: "Category title cannot be blank."
+      redirect_to_collection_with_filters(:alert, "Category title cannot be blank.")
       return
     end
 
@@ -350,8 +385,7 @@ ActiveAdmin.register ShopItem do
 
       # Validate parent category depth (can't exceed 3 levels for products)
       if parent_category && parent_category.depth >= 3
-        redirect_to collection_path,
-                    alert: "Cannot create product category under '#{parent_category.title}' - maximum hierarchy depth exceeded."
+        redirect_to_collection_with_filters(:alert, "Cannot create product category under '#{parent_category.title}' - maximum hierarchy depth exceeded.")
         return
       end
 
@@ -374,8 +408,7 @@ ActiveAdmin.register ShopItem do
 
       # Ensure the category is a product type (depth 3)
       unless new_category.product?
-        redirect_to collection_path,
-                    alert: "Category '#{category_title}' is not a product category (must be at depth 3). Current depth: #{new_category.depth}"
+        redirect_to_collection_with_filters(:alert, "Category '#{category_title}' is not a product category (must be at depth 3). Current depth: #{new_category.depth}")
         return
       end
 
@@ -391,17 +424,13 @@ ActiveAdmin.register ShopItem do
       end
       category_breadcrumb = breadcrumb_parts.join(" > ")
 
-      redirect_to collection_path,
-                  notice: "#{action_message} '#{category_breadcrumb}' and assigned it to #{ids.count} shop items."
+      redirect_to_collection_with_filters(:notice, "#{action_message} '#{category_breadcrumb}' and assigned it to #{ids.count} shop items.")
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to collection_path,
-                  alert: "Failed to create category: #{e.record.errors.full_messages.join(", ")}"
+      redirect_to_collection_with_filters(:alert, "Failed to create category: #{e.record.errors.full_messages.join(", ")}")
     rescue ActiveRecord::RecordNotFound
-      redirect_to collection_path,
-                  alert: "Selected parent category not found."
+      redirect_to_collection_with_filters(:alert, "Selected parent category not found.")
     rescue => e
-      redirect_to collection_path,
-                  alert: "An error occurred: #{e.message}"
+      redirect_to_collection_with_filters(:alert, "An error occurred: #{e.message}")
     end
   end
 
@@ -410,7 +439,7 @@ ActiveAdmin.register ShopItem do
     missing_count = ShopItem.missing_category.count
 
     if missing_count == 0
-      redirect_to collection_path, notice: "No items found without category assignments."
+      redirect_to_collection_with_filters(:notice, "No items found without category assignments.")
       return
     end
 
@@ -418,8 +447,7 @@ ActiveAdmin.register ShopItem do
     AssignShopItemCategoryJob.perform_later
 
     # You can implement auto-assignment logic here or create a job
-    redirect_to collection_path,
-                notice: "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results."
+    redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results.")
   end
 
   member_action :auto_assign_category, method: :post do
@@ -446,18 +474,15 @@ ActiveAdmin.register ShopItem do
           success_message += " (similarity: #{(best_match.sim_score * 100).round(1)}%)"
         end
 
-        redirect_to collection_path, notice: success_message
+        redirect_to_collection_with_filters(:notice, success_message)
       else
-        redirect_to collection_path,
-                    alert: "No suitable category found for '#{resource.title}'. You may need to create a new category or assign manually."
+        redirect_to_collection_with_filters(:alert, "No suitable category found for '#{resource.title}'. You may need to create a new category or assign manually.")
       end
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to collection_path,
-                  alert: "Failed to assign category to '#{resource.title}': #{e.record.errors.full_messages.join(", ")}"
+      redirect_to_collection_with_filters(:alert, "Failed to assign category to '#{resource.title}': #{e.record.errors.full_messages.join(", ")}")
     rescue => e
       Rails.logger.error "Error auto-assigning category for item #{resource.id}: #{e.message}"
-      redirect_to collection_path,
-                  alert: "An error occurred while assigning category to '#{resource.title}': #{e.message}"
+      redirect_to_collection_with_filters(:alert, "An error occurred while assigning category to '#{resource.title}': #{e.message}")
     end
   end
 
@@ -471,11 +496,13 @@ ActiveAdmin.register ShopItem do
       when "show"
         admin_shop_item_path(resource)
       when "index"
-        collection_path
+        query_params = request.query_parameters.except("page", "batch_action", "collection_selection", "batch_action_inputs")
+        collection_path(query_params)
       else
         # Fallback: check referer to determine where we came from
         if request.referer&.include?("/admin/shop_items") && !request.referer&.include?("/#{resource.id}")
-          collection_path
+          query_params = request.query_parameters.except("page", "batch_action", "collection_selection", "batch_action_inputs")
+          collection_path(query_params)
         else
           admin_shop_item_path(resource)
         end
@@ -500,13 +527,7 @@ ActiveAdmin.register ShopItem do
           )
 
           if new_update.save
-            success_message = if redirect_path == collection_path
-                "New update created"
-              else
-                "New update created"
-              end
-
-            redirect_to redirect_path, notice: success_message
+            redirect_to redirect_path, notice: "New update created"
           else
             error_message = if redirect_path == collection_path
                 "Failed to create update for '#{resource.title}': #{new_update.errors.full_messages.join(", ")}"
