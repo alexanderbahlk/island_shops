@@ -53,6 +53,9 @@ class SearchController < ApplicationController
       }
     end
 
+    #sort formatted_categories by amount of shop_items desc
+    formatted_categories.sort_by! { |cat| -cat[:shop_items].size }
+
     # Sort shop items in categories by lowest price (now safe from nils)
     formatted_categories.each do |cat|
       cat[:shop_items].sort_by! { |item| item[:latest_price_per_unified_unit] || Float::INFINITY }
