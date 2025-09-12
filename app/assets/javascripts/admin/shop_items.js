@@ -141,9 +141,67 @@ function createCategoryDropdowns() {
     });
 }
 
+function restoreSelectedItems() {
+    // Get stored selected items from the server via AJAX
+    $.ajax({
+        url: '/admin/shop_items/get_stored_selected_items',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (data.selected_items && data.selected_items.length > 0) {
+                console.log('Restoring selected items:', data.selected_items);
+
+                // Restore selections
+                data.selected_items.forEach(function (id) {
+                    var checkbox = $('input[type="checkbox"][value="' + id + '"]');
+                    if (checkbox.length > 0) {
+                        checkbox.prop('checked', true);
+                    }
+                });
+
+                // Update the batch action selector state
+                updateBatchActionSelector();
+
+                // Clear stored items from session
+                $.ajax({
+                    url: '/admin/shop_items/clear_stored_selected_items',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log('Error restoring selected items:', error);
+        }
+    });
+}
+
+function updateBatchActionSelector() {
+    var paginated_collection_selector = 'collection_selection_toggle_all';
+    // Trigger change event to update batch actions dropdown
+    var checkedBoxes = $('.paginated_collection input[type="checkbox"][id="' + paginated_collection_selector + '"]');
+    if (checkedBoxes.length > 0) {
+        checkedBoxes.prop('checked', true);
+    }
+
+    var batch_action_selector = '.batch_actions_selector a.dropdown_menu_button';
+    // remove thge displaed class from this element
+    var batchActionButton = $(batch_action_selector);
+    if (batchActionButton.length > 0) {
+        batchActionButton.removeClass('disabled');
+    }
+}
+
 
 $(document).ready(function () {
     initializeBestInPlace();
     initializeCategorySearchAutocomplete();
     //createCategoryDropdowns();
+
+    // Restore selections after page load
+    setTimeout(function () {
+        restoreSelectedItems();
+    }, 500);
 });

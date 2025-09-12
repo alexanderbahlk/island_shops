@@ -128,11 +128,18 @@
             border-bottom: 1px solid #eee;
         }
 
+        .category-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
         .category-title {
             font-size: 1.3rem;
             font-weight: 600;
             color: #333;
-            margin-bottom: 5px;
+            margin: 0;
         }
 
         .category-breadcrumb {
@@ -151,7 +158,7 @@
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 0.8rem;
-            margin-top: 8px;
+            white-space: nowrap;
         }
 
         .shop-items {
@@ -520,9 +527,11 @@
                 return `
           <div class="category-card">
             <div class="category-header">
-              <div class="category-title">${this.escapeHtml(category.title)}</div>
+              <div class="category-title-row">
+                <div class="category-title">${this.escapeHtml(category.title)}</div>
+                <span class="items-count">${category.shop_items_count} products</span>
+              </div>
               <div class="category-breadcrumb">${category.breadcrumb.map(item => `<span class="category-breadcrumb-item">${this.escapeHtml(item)}</span>`).join(' > ')}</div>
-              <span class="items-count">${category.shop_items_count} products</span>
             </div>
             <div class="shop-items">
               ${shopItemsHtml}

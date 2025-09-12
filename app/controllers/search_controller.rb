@@ -48,7 +48,7 @@ class SearchController < ApplicationController
     formatted_categories.sort_by! { |cat| -cat[:shop_items_count] }
     #sort shopitems in catregories by lowest price
     formatted_categories.each do |cat|
-      cat[:shop_items].sort_by! { |item| item[:latest_price] || Float::INFINITY }
+      cat[:shop_items].sort_by! { |item| item[:latest_price_per_unified_unit] || Float::INFINITY }
     end
     render json: formatted_categories
   end

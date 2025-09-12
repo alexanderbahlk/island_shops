@@ -96,8 +96,8 @@ class ShopItem < ApplicationRecord
 
   def latest_price_per_unified_unit
     latest_update = self.shop_item_updates.order(created_at: :desc).first
-    if latest_update&.price_per_unit
-      "$" + latest_update.price_per_unit.to_s + " per " + latest_update.normalized_unit.to_s
+    if latest_update&.price_per_unit && latest_update&.price_per_unit.is_a?(Numeric)
+      "$" + sprintf("%.2f", latest_update.price_per_unit).to_s + " per " + latest_update.normalized_unit.to_s
     else
       "N/A"
     end

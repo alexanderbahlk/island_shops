@@ -30,6 +30,19 @@ ActiveAdmin.register ShopItem do
       redirect_to collection_path(stored_filters), message_type => message
     end
 
+    def store_selected_items(ids)
+      session[:selected_shop_items] = ids
+      Rails.logger.debug "Stored selected items: #{ids.inspect}"
+    end
+
+    def c_get_stored_selected_items
+      session[:selected_shop_items] || []
+    end
+
+    def c_clear_stored_selected_items
+      session.delete(:selected_shop_items)
+    end
+
     private
 
     def store_current_filters
@@ -315,21 +328,25 @@ ActiveAdmin.register ShopItem do
 
   # Update batch actions for categories
   batch_action :approve do |ids|
+    store_selected_items(ids)
     ShopItem.where(id: ids).update_all(approved: true)
     redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been approved.")
   end
 
   batch_action :reject do |ids|
+    store_selected_items(ids)
     ShopItem.where(id: ids).update_all(approved: false)
     redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been rejected.")
   end
 
   batch_action :mark_needs_review do |ids|
+    store_selected_items(ids)
     ShopItem.where(id: ids).update_all(needs_another_review: true)
     redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been marked as needing another review.")
   end
 
   batch_action :unmark_needs_review do |ids|
+    store_selected_items(ids)
     ShopItem.where(id: ids).update_all(needs_another_review: false)
     redirect_to_collection_with_filters(:notice, "#{ids.count} shop items have been unmarked as needing another review.")
   end
@@ -339,6 +356,7 @@ ActiveAdmin.register ShopItem do
                               unit: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
                             }
                           } do |ids, inputs|
+    store_selected_items(ids)
     batch_inputs = JSON.parse(params[:batch_action_inputs])
     selected_unit = batch_inputs["unit"].presence
 
@@ -372,6 +390,7 @@ ActiveAdmin.register ShopItem do
                                      end.sort_by { |breadcrumb, id| breadcrumb }.unshift(["Remove Category", nil]),
                                    }
                                  } do |ids, inputs|
+    store_selected_items(ids)
     batch_inputs = JSON.parse(params[:batch_action_inputs])
     category_id = batch_inputs["category_id"].presence
     category_search = batch_inputs["category_search"].presence
@@ -409,6 +428,7 @@ ActiveAdmin.register ShopItem do
   end
 
   batch_action :calculate_prices_per_unified_unit do |ids|
+    store_selected_items(ids)
     # Enqueue the job with selected shop item IDs
     CalculatePricesPerUnifiedUnitJob.perform_later(ids)
 
@@ -433,6 +453,7 @@ ActiveAdmin.register ShopItem do
                                                 end.unshift(["No Parent (Root Category)", nil]),
                                               }
                                             } do |ids, inputs|
+    store_selected_items(ids)
     batch_inputs = JSON.parse(params[:batch_action_inputs])
     category_title = batch_inputs["category_title"].strip
     parent_category_id = batch_inputs["parent_category_id"].presence
@@ -540,6 +561,18 @@ ActiveAdmin.register ShopItem do
     else
       render json: []
     end
+  end
+
+  # Collection action to get stored selected items
+  collection_action :get_stored_selected_items, method: :get do
+    selected_items = c_get_stored_selected_items
+    render json: { selected_items: selected_items }
+  end
+
+  # Collection action to clear stored selected items
+  collection_action :clear_stored_selected_items, method: :post do
+    c_clear_stored_selected_items
+    render json: { status: "success" }
   end
 
   member_action :auto_assign_category, method: :post do
