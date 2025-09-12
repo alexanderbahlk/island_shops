@@ -690,6 +690,7 @@
                             <type>White Bread</type>
                             <type>Wheat Bread</type>
                             <type>Whole Wheat Bread</type>
+                            <type>Boule</type>
                             <type>Bagels</type>
                             <type>Buns</type>
                             <type>Rolls</type>
@@ -710,8 +711,10 @@
                             <type>Tarts</type>
                             <type>Turnovers</type>
                             <type>Strudel</type>
+                            <type>Strudel Stick</type>
                             <type>Scone</type>
                             <type>Cinnamon Rolls</type>
+                            <type>Jam Puff</type>
                         </types>
                     </category>
                     <category>

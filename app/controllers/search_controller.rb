@@ -106,7 +106,7 @@ class SearchController < ApplicationController
           OR similarity(categories.path, #{sanitized_query}) > #{SIMILARITY_THRESHOLD}
         )
       ORDER BY sim_score DESC
-      LIMIT 3
+      LIMIT 5
     SQL
 
     results = ActiveRecord::Base.connection.exec_query(sql)
