@@ -44,7 +44,7 @@
 
         .search-container {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         .search-input {
@@ -94,6 +94,38 @@
 
             100% {
                 transform: rotate(360deg);
+            }
+        }
+
+        .filter-container {
+            margin-bottom: 20px;
+            margin-left: 4px;
+            display: flex;
+            justify-content: left;
+
+            .filter-checkbox {
+                display: flex;
+                align-items: center;
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 1.2rem;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .filter-checkbox input[type="checkbox"] {
+                margin-right: 8px;
+                transform: scale(1.2);
+                cursor: pointer;
+            }
+
+            .filter-checkbox:hover {
+                color: white;
+            }
+
+            @media (max-width: 480px) {
+                .filter-checkbox {
+                    font-size: 1.0rem;
+                }
             }
         }
 
@@ -409,6 +441,15 @@
             </div>
         </div>
 
+        <!-- Add filter controls -->
+        <div class="filter-container">
+            <label class="filter-checkbox">
+                <input type="checkbox" id="inStockOnly" <%= 'checked' if params[:in_stock] == 'true' %>>
+                <span class="checkmark"></span>
+                Show in-stock items only
+            </label>
+        </div>
+
         <div id="results" class="results"></div>
 
         <div id="noResults" class="no-results" style="display: none;">
@@ -420,6 +461,7 @@
         class ProductSearch {
             constructor() {
                 this.searchInput = document.getElementById('searchInput');
+                this.inStockFilter = document.getElementById('inStockOnly');
                 this.resultsContainer = document.getElementById('results');
                 this.loadingIndicator = document.getElementById('loading');
                 this.noResults = document.getElementById('noResults');
@@ -434,11 +476,19 @@
                     this.handleSearch(e.target.value);
                 });
 
+                this.inStockFilter.addEventListener('change', () => {
+                    this.handleSearch(this.searchInput.value);
+                });
+
                 // Handle browser back/forward buttons
                 window.addEventListener('popstate', (e) => {
                     const urlParams = new URLSearchParams(window.location.search);
                     const query = urlParams.get('q') || '';
+                    const inStock = urlParams.get('in_stock') === 'true';
+
                     this.searchInput.value = query;
+                    this.inStockFilter.checked = inStock;
+
                     this.handleSearch(query, false); // Don't update URL again
                 });
             }
@@ -467,12 +517,12 @@
                 this.searchTimeout = setTimeout(() => {
                     this.performSearch(query);
                     if (updateUrl) {
-                        this.updateUrl(query);
+                        this.updateUrl(query, this.inStockFilter.checked);
                     }
                 }, 300);
             }
 
-            updateUrl(query) {
+            updateUrl(query, inStock) {
                 const url = new URL(window.location);
                 if (query) {
                     url.searchParams.set('q', query);
@@ -480,9 +530,16 @@
                     url.searchParams.delete('q');
                 }
 
+                if (inStock) {
+                    url.searchParams.set('in_stock', 'true');
+                } else {
+                    url.searchParams.delete('in_stock');
+                }
+
                 // Update URL without triggering page reload
                 window.history.pushState({
-                    query: query
+                    query: query,
+                    inStock: inStock
                 }, '', url);
 
                 // Update page title with search query
@@ -495,7 +552,15 @@
 
             async performSearch(query) {
                 try {
-                    const response = await fetch(`/search/categories?q=${encodeURIComponent(query)}`);
+                    const params = new URLSearchParams({
+                        q: query
+                    });
+
+                    if (this.inStockFilter.checked) {
+                        params.append('in_stock', 'true');
+                    }
+
+                    const response = await fetch(`/search/categories?${params}`);
                     const categories = await response.json();
 
                     this.hideLoading();
@@ -529,7 +594,7 @@
             <div class="category-header">
               <div class="category-title-row">
                 <div class="category-title">${this.escapeHtml(category.title)}</div>
-                <span class="items-count">${category.shop_items_count} products</span>
+                <span class="items-count">${category.shop_items.length} products</span>
               </div>
               <div class="category-breadcrumb">${category.breadcrumb.map(item => `<span class="category-breadcrumb-item">${this.escapeHtml(item)}</span>`).join(' > ')}</div>
             </div>

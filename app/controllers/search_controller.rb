@@ -5,6 +5,7 @@ class SearchController < ApplicationController
 
   def categories
     query = params[:q]&.strip
+    in_stock_only = params[:in_stock] == "true"
 
     if query.blank? || query.length < 2
       render json: []
@@ -18,38 +19,45 @@ class SearchController < ApplicationController
     # Build the formatted response
     formatted_categories = categories.map do |category|
       Rails.logger.info "Processing category: #{category.title}, ID: #{category.id}"
-
       # Fetch shop items for this category
       shop_items = category.shop_items.approved.limit(5).includes(:shop_item_updates)
       Rails.logger.info "  Found #{shop_items.count} shop items"
+
+      # Filter and map shop items, removing nils
+      shop_items_data = shop_items.filter_map do |item|
+        latest_update = item.shop_item_updates.order(created_at: :desc).first
+
+        # Skip if in_stock_only is true and item is not in stock
+        if in_stock_only && (!latest_update || !latest_update.is_in_stock?)
+          next
+        end
+
+        {
+          title: item.display_title.presence || item.title,
+          shop: item.shop,
+          image_url: item.image_url,
+          unit: item.unit || "N/A",
+          stock_status: latest_update&.normalized_stock_status || "N/A",
+          latest_price: latest_update&.price || "N/A",
+          latest_price_per_unified_unit: item.latest_price_per_unified_unit,
+          latest_price_per_unit: item.latest_price_per_unit,
+          url: item.url,
+        }
+      end
 
       {
         title: category.title,
         breadcrumb: build_breadcrumb(category),
         path: category.path,
-        shop_items_count: category.shop_items.approved.count,
-        shop_items: shop_items.map do |item|
-          latest_update = item.shop_item_updates.order(created_at: :desc).first
-          {
-            title: item.display_title.presence || item.title,
-            shop: item.shop,
-            image_url: item.image_url,
-            unit: item.unit || "N/A",
-            stock_status: latest_update&.normalized_stock_status || "N/A",
-            latest_price: latest_update&.price || "N/A",
-            latest_price_per_unified_unit: item.latest_price_per_unified_unit,
-            latest_price_per_unit: item.latest_price_per_unit,
-            url: item.url,
-          }
-        end,
+        shop_items: shop_items_data,
       }
     end
-    #sort by shop item count desc
-    formatted_categories.sort_by! { |cat| -cat[:shop_items_count] }
-    #sort shopitems in catregories by lowest price
+
+    # Sort shop items in categories by lowest price (now safe from nils)
     formatted_categories.each do |cat|
       cat[:shop_items].sort_by! { |item| item[:latest_price_per_unified_unit] || Float::INFINITY }
     end
+
     render json: formatted_categories
   end
 
