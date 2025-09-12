@@ -15,6 +15,8 @@ ActiveAdmin.register ShopItem do
   end
 
   controller do
+    include ActionView::Helpers::NumberHelper
+
     before_action :store_current_filters, only: [:index]
 
     def category_collection
@@ -74,7 +76,7 @@ ActiveAdmin.register ShopItem do
     id_column
     column :shop
     column :title do |shop_item|
-      link_to shop_item.title, shop_item.url, target: "_blank"
+      link_to shop_item.title, shop_item.url, target: "_blank", data: { shop_item_id: shop_item.id }
     end
     column :breadcrumb do |shop_item|
       #find ">" in the breadcrumb
@@ -158,14 +160,24 @@ ActiveAdmin.register ShopItem do
     end
     column :created_at
     actions do |shop_item|
-      item "Calculate Price", user_update_shop_item_update_admin_shop_item_path(shop_item),
+      item "Re-Calculate Price per Unit", user_update_shop_item_update_admin_shop_item_path(shop_item),
            method: :post,
-           class: "member_link",
-           confirm: "This will create a new shop item update with calculated price per unit. Continue?"
+           class: "member_link calculate-price-link",
+           data: {
+             remote: true,
+             type: "json",
+             confirm: "This will create a new shop item update with calculated price per unit. Continue?",
+             shop_item_id: shop_item.id,
+           }
       item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
            method: :post,
-           class: "member_link",
-           confirm: "This will find and assign a new category to this item (replacing the current one). Continue?"
+           class: "member_link reassign-category-link",
+           data: {
+             remote: true,
+             type: "json",
+             confirm: "This will find and assign a new category to this item (replacing the current one). Continue?",
+             shop_item_id: shop_item.id,
+           }
     end
   end
 
@@ -607,40 +619,52 @@ ActiveAdmin.register ShopItem do
           success_message += " (similarity: #{(best_match.sim_score * 100).round(1)}%)"
         end
 
-        redirect_to_collection_with_filters(:notice, success_message)
+        respond_to do |format|
+          format.html { redirect_to_collection_with_filters(:notice, success_message) }
+          format.json {
+            render json: {
+              status: "success",
+              message: success_message,
+              category_id: best_match.id,
+              category_breadcrumb: category_breadcrumb,
+              shop_item_id: resource.id,
+            }
+          }
+        end
       else
-        redirect_to_collection_with_filters(:alert, "No suitable category found for '#{resource.title}'. You may need to create a new category or assign manually.")
+        error_message = "No suitable category found for '#{resource.title}'. You may need to create a new category or assign manually."
+
+        respond_to do |format|
+          format.html { redirect_to_collection_with_filters(:alert, error_message) }
+          format.json {
+            render json: {
+              status: "error",
+              message: error_message,
+              shop_item_id: resource.id,
+            }
+          }
+        end
       end
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to_collection_with_filters(:alert, "Failed to assign category to '#{resource.title}': #{e.record.errors.full_messages.join(", ")}")
+      error_message = "Failed to assign category to '#{resource.title}': #{e.record.errors.full_messages.join(", ")}"
+
+      respond_to do |format|
+        format.html { redirect_to_collection_with_filters(:alert, error_message) }
+        format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+      end
     rescue => e
       Rails.logger.error "Error auto-assigning category for item #{resource.id}: #{e.message}"
-      redirect_to_collection_with_filters(:alert, "An error occurred while assigning category to '#{resource.title}': #{e.message}")
+      error_message = "An error occurred while assigning category to '#{resource.title}': #{e.message}"
+
+      respond_to do |format|
+        format.html { redirect_to_collection_with_filters(:alert, error_message) }
+        format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+      end
     end
   end
 
-  # Keep the existing member action
   member_action :user_update_shop_item_update, method: :post do
-    # ... existing implementation stays the same ...
     latest_update = resource.shop_item_updates.order(created_at: :desc).first
-
-    stored_filters = session[:shop_item_filters] || {}
-    Rails.logger.debug "Redirecting with stored filters: #{stored_filters.inspect}"
-
-    # Determine redirect path based on parameter or referer
-    redirect_path = case params[:redirect_to]
-      when "show"
-        admin_shop_item_path(resource)
-      when "index"
-        collection_path(stored_filters)
-      else
-        # Fallback: check referer to determine where we came from
-        if request.referer&.include?("/admin/shop_items") && !request.referer&.include?("/#{resource.id}")
-          collection_path(stored_filters)
-        else
-          admin_shop_item_path(resource)
-        end
-      end
 
     if latest_update&.price.present? && resource.size.present? && resource.unit.present?
       # Check if calculation is possible
@@ -661,24 +685,69 @@ ActiveAdmin.register ShopItem do
           )
 
           if new_update.save
-            redirect_to redirect_path, notice: "New update created"
-          else
-            error_message = if redirect_path == collection_path
-                "Failed to create update for '#{resource.title}': #{new_update.errors.full_messages.join(", ")}"
-              else
-                "Failed to create update: #{new_update.errors.full_messages.join(", ")}"
-              end
+            # Use view_context to access helper methods
+            formatted_price = view_context.number_to_currency(calculation_result[:price_per_unit])
+            success_message = "New update created with price per unit: #{formatted_price} per #{calculation_result[:normalized_unit]}"
 
-            redirect_to redirect_path, alert: error_message
+            respond_to do |format|
+              format.html {
+                stored_filters = session[:shop_item_filters] || {}
+                redirect_to collection_path(stored_filters), notice: success_message
+              }
+              format.json {
+                render json: {
+                  status: "success",
+                  message: success_message,
+                  shop_item_id: resource.id,
+                  price_per_unit: number_to_currency(calculation_result[:price_per_unit]),
+                  normalized_unit: calculation_result[:normalized_unit],
+                  latest_price_per_unified_unit: resource.reload.latest_price_per_unified_unit,
+                }
+              }
+            end
+          else
+            error_message = "Failed to create update for '#{resource.title}': #{new_update.errors.full_messages.join(", ")}"
+
+            respond_to do |format|
+              format.html {
+                stored_filters = session[:shop_item_filters] || {}
+                redirect_to collection_path(stored_filters), alert: error_message
+              }
+              format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+            end
           end
         else
-          redirect_to redirect_path, alert: "Price calculation failed#{redirect_path == collection_path ? " for '#{resource.title}'" : ""}"
+          error_message = "Price calculation failed for '#{resource.title}'"
+
+          respond_to do |format|
+            format.html {
+              stored_filters = session[:shop_item_filters] || {}
+              redirect_to collection_path(stored_filters), alert: error_message
+            }
+            format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+          end
         end
       else
-        redirect_to redirect_path, alert: "Cannot calculate price per unit#{redirect_path == collection_path ? " for '#{resource.title}'" : ""}. Check if price, size, and unit are valid."
+        error_message = "Cannot calculate price per unit for '#{resource.title}'. Check if price, size, and unit are valid."
+
+        respond_to do |format|
+          format.html {
+            stored_filters = session[:shop_item_filters] || {}
+            redirect_to collection_path(stored_filters), alert: error_message
+          }
+          format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+        end
       end
     else
-      redirect_to redirect_path, alert: "Missing required data#{redirect_path == collection_path ? " for '#{resource.title}'" : ""}: latest price, size, or unit"
+      error_message = "Missing required data for '#{resource.title}': latest price, size, or unit"
+
+      respond_to do |format|
+        format.html {
+          stored_filters = session[:shop_item_filters] || {}
+          redirect_to collection_path(stored_filters), alert: error_message
+        }
+        format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+      end
     end
   end
 end

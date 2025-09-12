@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <categories>
     <category>
+        <title>Pharmacy</title>
+        <categories>
+            <category>
+                <title>Pain Relief</title>
+                <types>
+                    <type>Ibuprofen</type>
+                    <type>Acetaminophen</type>
+                    <type>Aspirin</type>
+                    <type>Naproxen</type>
+                    <type>Topical Analgesics</type>
+                    <type>Muscle Rubs</type>
+                    <type>Heat Patches</type>
+                    <type>Cold Packs</type>
+                </types>
+            </category>
+            <category>
+                <title>Allergy &amp; Sinus</title>
+                <types>
+                    <type>Antihistamines</type>
+                    <type>Nasal Sprays</type>
+                    <type>Decongestants</type>
+                    <type>Eye Drops</type>
+                    <type>Saline Nasal Spray</type>
+                    <type>Allergy Relief Tablets</type>
+                    <type>Allergy Relief Liquids</type>
+                </types>
+            </category>
+            <category>
+                <title>Cold &amp; Flu</title>
+                <types>
+                    <type>Cough Syrup</type>
+                    <type>Throat Lozenges</type>
+                    <type>Decongestants</type>
+                    <type>Fever Reducers</type>
+                    <type>Cold &amp; Flu Tablets</type>
+                    <type>Cold &amp; Flu Liquids</type>
+                    <type>Nasal Sprays</type>
+                </types>
+            </category>
+            <category>
+                <title>Digestive Health</title>
+                <types>
+                    <type>Antacids</type>
+                    <type>H2 Blockers</type>
+                    <type>Proton Pump Inhibitors</type>
+                    <type>Laxatives</type>
+                    <type>Anti-Diarrheal</type>
+                    <type>Fiber Supplements</type>
+                    <type>Probiotics</type>
+                </types>
+            </category>
+            <category>
+                <title>Vitamins &amp; Supplements</title>
+                <types>
+                    <type>Multivitamins</type>
+                    <type>Vitamin C</type>
+                    <type>Vitamin D</type>
+                    <type>Calcium</type>
+                    <type>Iron</type>
+                    <type>Magnesium</type>
+                    <type>Fish Oil</type>
+                    <type>Probiotics</type>
+                    <type>Herbal Supplements</type>
+                </types>
+            </category>
+        </categories>
+    </category>
+    <category>
         <title>Food</title>
         <categories>
             <category>
@@ -19,6 +87,7 @@
                             <type>Black Rice</type>
                             <type>Red Rice</type>
                             <type>Sticky Rice</type>
+                            <type>Parboiled Rice</type>
                         </types>
                     </category>
                     <category>
@@ -613,6 +682,7 @@
                             <type>Rolls</type>
                             <type>Flatbreads</type>
                             <type>Specialty Breads</type>
+                            <type>Wraps</type>
                         </types>
                     </category>
                     <category>
@@ -681,6 +751,19 @@
                             <type>Condensed Milk</type>
                             <type>Powdered Milk</type>
                             <type>Powdered Drink Mixes</type>
+                            <type>Vegetable Juice</type>
+                            <type>Fruit Juice</type>
+                            <type>Apple Juice</type>
+                            <type>Orange Juice</type>
+                            <type>Grape Juice</type>
+                            <type>Cranberry Juice</type>
+                            <type>Pineapple Juice</type>
+                            <type>Cran-Apple Juice</type>
+                            <type>Tomato Juice</type>
+                            <type>Ginger Beer</type>
+                            <type>Non-Alcoholic Beer</type>
+                            <type>Non-Alcoholic Wine</type>
+                            <type>Kombucha</type>
                         </types>
                     </category>
                     <category>
@@ -692,6 +775,7 @@
                             <type>Green Tea</type>
                             <type>Black Tea</type>
                             <type>Herbal Tea</type>
+                            <type>Other Tea</type>
                             <type>Chai Tea</type>
                             <type>Hot Chocolate</type>
                             <type>Matcha</type>
