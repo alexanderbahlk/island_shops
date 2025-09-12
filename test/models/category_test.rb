@@ -82,9 +82,13 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   test "destroys children categories" do
+    assert_equal @subcategory.parent, @category
+    assert_equal 4, @subcategory.children.count
     assert_difference "Category.count", -5 do # subcategory + 2 products
       @subcategory.destroy!
     end
+    assert_not Category.exists?(@subcategory.id)
+    assert Category.exists?(@category.id)
   end
 
   test "nullifies shop item references instead of destroying them" do

@@ -1,6 +1,9 @@
 ActiveAdmin.register Category do
   # Permit parameters for create/update actions
-  permit_params :title, :parent_id, :sort_order
+  permit_params :title, :slug, :category_type, :sort_order, :parent_id
+
+  controller do
+  end
 
   # Configure the index page
   index do
@@ -76,40 +79,68 @@ ActiveAdmin.register Category do
         category.breadcrumbs.map(&:title).join(" > ")
       end
       row :path
+      row :sort_order
       row :slug
       row :depth
       row :sort_order
+      row :lft
+      row :rgt
       row :created_at
       row :updated_at
     end
 
-    # Show children if any
-    if category.children.any?
-      panel "Child Categories (#{category.children.count})" do
-        table_for category.children.order(:sort_order) do
-          column :title do |child|
-            link_to child.title, admin_category_path(child)
+    panel "Child Categories (#{category.children.count})" do
+      table_for category.children.order(:sort_order) do
+        column :title do |child|
+          link_to child.title, admin_category_path(child)
+        end
+        column :category_type do |child|
+          status_tag child.category_type
+        end
+        column :children_count do |child|
+          child.children.count
+        end
+        column :shop_items_count do |child|
+          child.shop_items.count if child.product?
+        end
+        column :sort_order do |child|
+          child.sort_order
+        end
+      end
+    end
+
+    if !category.product?
+      panel "Add New Child Category" do
+        # Use a Rails form with POST to admin_categories_path
+        form action: admin_categories_path, method: :post do |f|
+          # CSRF token for Rails authenticity
+          input type: "hidden", name: "authenticity_token", value: form_authenticity_token
+
+          div class: "inputs" do
+            input type: "hidden", name: "category[parent_id]", value: category.id
+            div do
+              label "Title", for: "category_title"
+              input type: "text", name: "category[title]", id: "category_title", required: true
+            end
+            div do
+              input type: "hidden", name: "category[sort_order]", id: "category_sort_order", value: (category.children.maximum(:sort_order) || 0) + 1
+            end
           end
-          column :category_type do |child|
-            status_tag child.category_type
-          end
-          column :children_count do |child|
-            child.children.count
-          end
-          column :shop_items_count do |child|
-            child.shop_items.count if child.product?
+          div class: "actions" do
+            input type: "submit", value: "Create Child Category", class: "button"
           end
         end
       end
     end
 
     # Show associated shop items if this is a product category
-    if category.product? && category.shop_items.any?
+    if category.product?
       panel "Associated Shop Items (#{category.shop_items.count})" do
         table_for category.shop_items.limit(20) do
           column :title do |item|
             link_to item.title, admin_shop_item_path(item)
           end
+          column :sort_order
           column :created_at
           column :actions do |item|
             link_to "Remove from Category",
