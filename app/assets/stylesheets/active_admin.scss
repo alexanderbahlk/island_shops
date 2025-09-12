@@ -20,6 +20,13 @@ body>div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-
     width: fit-content !important;
 }
 
+.table_actions {
+    .member_link {
+        display: inline-block;
+        margin: 3px;
+    }
+}
+
 .ui-autocomplete {
     max-height: 200px;
     overflow-y: auto;
