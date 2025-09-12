@@ -718,6 +718,17 @@
                         <title>Desserts</title>
                         <types>
                             <type>Cakes</type>
+                            <type>Fruit Cakes</type>
+                            <type>Iced Cakes</type>
+                            <type>Creme Cakes</type>
+                            <type>Chocolate Cakes</type>
+                            <type>Black Cakes</type>
+                            <type>Rainbow Cakes</type>
+                            <type>Vanilla Cakes</type>
+                            <type>Cake Loaf</type>
+
+                            <type>Sliced Cakes</type>
+                            <type>Fruit Cake Slice</type>
                             <type>Cookies</type>
                             <type>Pies</type>
                             <type>Cupcakes</type>
