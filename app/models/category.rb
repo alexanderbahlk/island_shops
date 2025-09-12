@@ -133,7 +133,7 @@ class Category < ApplicationRecord
 
   def clear_shop_item_references
     # Clear references from shop items that reference this category
-    ShopItem.where(category: self).update_all(category_id: nil)
+    ShopItem.where(category: self).update_all(category_id: nil, approved: false)
     Rails.logger.info "Cleared #{ShopItem.where(category: self).count} shop item references for category: #{title}"
   end
 

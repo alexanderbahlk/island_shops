@@ -706,20 +706,6 @@
                             <type>Danish</type>
                             <type>Donuts</type>
                             <type>Muffins</type>
-                            <type>Cake</type>
-                            <type>Pie</type>
-                            <type>Tarts</type>
-                            <type>Turnovers</type>
-                            <type>Strudel</type>
-                            <type>Strudel Stick</type>
-                            <type>Scone</type>
-                            <type>Cinnamon Rolls</type>
-                            <type>Jam Puff</type>
-                        </types>
-                    </category>
-                    <category>
-                        <title>Desserts</title>
-                        <types>
                             <type>Cakes</type>
                             <type>Fruit Cakes</type>
                             <type>Iced Cakes</type>
@@ -734,6 +720,19 @@
                             <type>Cookies</type>
                             <type>Pies</type>
                             <type>Cupcakes</type>
+                            <type>Tarts</type>
+                            <type>Turnovers</type>
+                            <type>Strudel</type>
+                            <type>Strudel Stick</type>
+                            <type>Scone</type>
+                            <type>Cinnamon Rolls</type>
+                            <type>Jam Puff</type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Desserts</title>
+                        <types>
+                            
                         </types>
                     </category>
                 </categories>
