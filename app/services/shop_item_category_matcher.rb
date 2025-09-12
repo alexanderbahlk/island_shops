@@ -1,5 +1,5 @@
 class ShopItemCategoryMatcher
-  SIMILARITY_THRESHOLD = 0.2 # Adjust this value between 0.0 and 1.0
+  SIMILARITY_THRESHOLD = 0.22 # Adjust this value between 0.0 and 1.0
 
   def self.find_best_match(shop_item)
     if shop_item.blank?
@@ -95,10 +95,15 @@ class ShopItemCategoryMatcher
     # Handle the specific format: "Shop / Grocery / Canned Goods, Soups, & Broths / Canned Vegetables / Hunts Tomatoes Diced 8 14.5"
     normalized = title.dup
 
-    # Split by "/" and take relevant parts
-    parts = normalized.split(/\s*\>\s+/)
+    if normalized.count(">") > 1
+      parts = normalized.split(/\s*\>\s+/)
+    elsif normalized.count("/") > 1
+      parts = normalized.split(/\s*\/\s+/)
+    else
+      parts = nil
+    end
 
-    if parts.length > 1
+    if parts && parts.length > 1
       # Skip "Shop" and "Grocery" if they exist at the beginning
       # Skip Brand names like "Member's Selection"
       relevant_parts = parts.drop_while { |part| part.downcase.match?(/^(pricesmart|home|shop|grocery)$/) }

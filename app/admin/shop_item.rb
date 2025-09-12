@@ -80,7 +80,7 @@ ActiveAdmin.register ShopItem do
     end
     column :breadcrumb do |shop_item|
       #find ">" in the breadcrumb
-      if shop_item.breadcrumb.present? && shop_item.breadcrumb.include?("> ")
+      if shop_item.breadcrumb.present? && shop_item.breadcrumb.include?(">")
         breadcrumbs = shop_item.breadcrumb.split(" > ")
       elsif shop_item.breadcrumb.present? && shop_item.breadcrumb.include?("/")
         breadcrumbs = shop_item.breadcrumb.split("/")
