@@ -237,7 +237,8 @@ function handleCalculatePriceSuccess(data, shopItemId) {
         var $row = $titleLink.closest('tr');
 
         // Update the latest_price_per_unified_unit column (column index 6)
-        var $priceCell = $row.find('td').eq(6);
+        // instead of the index find prioceCell by class 'col-latest_price_per_unified_unit'
+        var $priceCell = $row.find('td').has('.col-latest_price_per_unified_unit');
 
         if (data.latest_price_per_unified_unit && data.latest_price_per_unified_unit !== 'N/A') {
             $priceCell.html(data.latest_price_per_unified_unit);

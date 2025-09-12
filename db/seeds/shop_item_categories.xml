@@ -599,6 +599,18 @@
                             <type>Pasta</type>
                         </types>
                     </category>
+                    <category>
+                        <title>Pastries</title>
+                        <types>
+                            <type>Pies</type>
+                            <type>Cakes</type>
+                            <type>Cookies</type>
+                            <type>Donuts</type>
+                            <type>Croissants</type>
+                            <type>Danish</type>
+                            <type>Muffins</type>
+                        </types>
+                    </category>
                 </categories>
             </category>
             <category>
@@ -674,6 +686,7 @@
                     <category>
                         <title>Bread</title>
                         <types>
+                            <type>Salt Breads</type>
                             <type>White Bread</type>
                             <type>Wheat Bread</type>
                             <type>Whole Wheat Bread</type>
@@ -692,6 +705,13 @@
                             <type>Danish</type>
                             <type>Donuts</type>
                             <type>Muffins</type>
+                            <type>Cake</type>
+                            <type>Pie</type>
+                            <type>Tarts</type>
+                            <type>Turnovers</type>
+                            <type>Strudel</type>
+                            <type>Scone</type>
+                            <type>Cinnamon Rolls</type>
                         </types>
                     </category>
                     <category>
