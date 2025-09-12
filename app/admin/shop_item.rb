@@ -77,8 +77,17 @@ ActiveAdmin.register ShopItem do
       link_to shop_item.title, shop_item.url, target: "_blank"
     end
     column :breadcrumb do |shop_item|
-      breadcrumbs = shop_item.breadcrumb.split(">")
-      breadcrumb = breadcrumbs[0..-2].join(" > ")
+      #find ">" in the breadcrumb
+      if shop_item.breadcrumb.present? && shop_item.breadcrumb.include?("> ")
+        breadcrumbs = shop_item.breadcrumb.split(" > ")
+      elsif shop_item.breadcrumb.present? && shop_item.breadcrumb.include?("/")
+        breadcrumbs = shop_item.breadcrumb.split("/")
+      else
+        breadcrumbs = [shop_item.breadcrumb]
+      end
+      # remove last item if list is longer than 1
+      breadcrumbs.pop if breadcrumbs.length > 1
+      breadcrumb = breadcrumbs.join(" > ")
       breadcrumb.present? ? breadcrumb : "N/A"
     end
     #column :display_title do |shop_item|

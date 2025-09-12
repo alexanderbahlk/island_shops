@@ -494,6 +494,15 @@
                             <type>Peas</type>
                             <type>Corn</type>
                             <type>Spinach</type>
+                            <type>Broccoli</type>
+                            <type>Green Beans</type>
+                            <type>Carrots</type>
+                            <type>Cauliflower</type>
+                            <type>Asparagus</type>
+                            <type>Brussels Sprouts</type>
+                            <type>Edamame</type>
+                            <type>Okra</type>
+                            <type>Mixed Greens</type>
                             <type>Mixed Vegetables</type>
                         </types>
                     </category>
@@ -507,6 +516,9 @@
                             <type>Mango</type>
                             <type>Peach</type>
                             <type>Grape</type>
+                            <type>Blueberries</type>
+                            <type>Raspberries</type>
+                            <type>Blackberries</type>
                         </types>
                     </category>
                     <category>
