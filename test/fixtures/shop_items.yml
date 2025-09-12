@@ -31,7 +31,7 @@
 #
 
 shop_item_one:
-  url: "https://example.com/existing-item"
+  url: "https://example.com/existing-item_1"
   category: milk  # References the milk category
   shop: "Massy"
   title: "Organic Milk"
@@ -56,3 +56,13 @@ shop_item_without_category:
   title: "Unmatched Product"
   created_at: <%= 3.days.ago %>
   updated_at: <%= 3.days.ago %>
+
+shop_item_four:
+  url: "https://example.com/existing-item_2"
+  category: milk  # References the milk category
+  shop: "Massy"
+  title: "Goat Milk"
+  size: 1.0
+  unit: "l"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>

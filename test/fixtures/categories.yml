@@ -1,4 +1,33 @@
-# Root categories - these look correct
+# == Schema Information
+#
+# Table name: categories
+#
+#  id            :bigint           not null, primary key
+#  category_type :integer          default("root"), not null
+#  depth         :integer          default(0)
+#  lft           :integer          not null
+#  path          :string
+#  rgt           :integer          not null
+#  slug          :string           not null
+#  sort_order    :integer          default(0)
+#  title         :string           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  parent_id     :bigint
+#
+# Indexes
+#
+#  index_categories_on_category_type             (category_type)
+#  index_categories_on_lft_and_rgt               (lft,rgt)
+#  index_categories_on_parent_id                 (parent_id)
+#  index_categories_on_parent_id_and_slug        (parent_id,slug) UNIQUE
+#  index_categories_on_parent_id_and_sort_order  (parent_id,sort_order)
+#  index_categories_on_path                      (path)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (parent_id => categories.id)
+#
 food_root:
   title: "Food"
   category_type: 0  # root

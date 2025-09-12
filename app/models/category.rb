@@ -52,7 +52,7 @@ class Category < ApplicationRecord
   after_save :update_children_paths, if: :saved_change_to_path?
 
   # Add this callback to handle shop item references before deletion
-  before_destroy :clear_shop_item_references
+  around_destroy :clear_all_references_around_destroy
 
   scope :roots, -> { where(parent_id: nil) }
   scope :products, -> { where(category_type: :product) }
@@ -129,12 +129,50 @@ class Category < ApplicationRecord
       .limit(limit)
   end
 
+  # Remove the callback and add this method instead:
+  def destroy
+    # Use a transaction to ensure atomicity
+    ActiveRecord::Base.transaction do
+      # Get all descendant IDs before any deletion
+      descendant_ids = self_and_descendants.pluck(:id)
+
+      # Clear all shop item references first
+      cleared_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
+      Rails.logger.info "Cleared #{cleared_count} shop item references for category '#{title}' and its descendants before deletion"
+
+      # Now call the parent destroy method
+      super
+    end
+  end
+
+  def destroy!
+    # Use a transaction to ensure atomicity
+    ActiveRecord::Base.transaction do
+      # Get all descendant IDs before any deletion
+      descendant_ids = self_and_descendants.pluck(:id)
+
+      # Clear all shop item references first
+      cleared_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
+      Rails.logger.info "Cleared #{cleared_count} shop item references for category '#{title}' and its descendants before deletion"
+
+      # Now call the parent destroy! method
+      super
+    end
+  end
+
   private
 
-  def clear_shop_item_references
-    # Clear references from shop items that reference this category
-    ShopItem.where(category: self).update_all(category_id: nil, approved: false)
-    Rails.logger.info "Cleared #{ShopItem.where(category: self).count} shop item references for category: #{title}"
+  # Remove the old clear_shop_item_references method and replace with this:
+  def clear_all_references_around_destroy
+    # Get all descendant IDs before destruction begins
+    descendant_ids = self_and_descendants.pluck(:id)
+
+    # Clear all shop item references for this category and all descendants
+    cleared_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
+    Rails.logger.info "Cleared #{cleared_count} shop item references for category '#{title}' and its descendants"
+
+    # Now proceed with the actual destruction
+    yield
   end
 
   def generate_slug
