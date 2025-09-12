@@ -3,6 +3,19 @@ ActiveAdmin.register Category do
   permit_params :title, :slug, :category_type, :sort_order, :parent_id
 
   controller do
+    def create
+      @category = Category.new(permitted_params[:category])
+      if @category.save
+        # Redirect to the parent category show page if parent_id is present
+        if @category.parent_id.present?
+          redirect_to admin_category_path(@category.parent_id), notice: "Child category created successfully."
+        else
+          redirect_to admin_category_path(@category), notice: "Category created successfully."
+        end
+      else
+        render :new
+      end
+    end
   end
 
   # Configure the index page
