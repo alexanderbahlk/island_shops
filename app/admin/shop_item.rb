@@ -162,9 +162,8 @@ ActiveAdmin.register ShopItem do
 
   # Configure filters for the index page
   filter :title
-  filter :shop
-  filter :url
-  filter :location
+  filter :breadcrumb
+  filter :shop, as: :select, collection: Shop::ALLOWED, include_blank: "N/A"
   filter :approved
   filter :needs_another_review
   filter :no_price_per_unified_unit, as: :boolean, label: "Missing Price per Unified Unit"

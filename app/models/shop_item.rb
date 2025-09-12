@@ -94,7 +94,7 @@ class ShopItem < ApplicationRecord
 
   # For Ransack search
   def self.ransackable_attributes(auth_object = nil)
-    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review"]
+    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review", "breadcrumb"]
   end
 
   def self.ransackable_associations(auth_object = nil)
