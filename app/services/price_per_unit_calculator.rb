@@ -6,10 +6,12 @@ class PricePerUnitCalculator
     "lbs" => 100,    # Price per 100g (converted from lbs)
     "ml" => 100,     # Price per 100ml
     "l" => 100,      # Price per 100ml (converted from l)
+    "gal" => 100,    # Price per 100ml (converted from gal)
     "oz" => 100,     # Price per 100g (converted from oz)
     "ft" => 1,       # Price per 1 ft
     "fl" => 1,       # Price per 1 fl
     "pc" => 1,       # Price per 1 piece
+    "pk" => 1,       # Price per 1 pack
     "ct" => 1,       # Price per 1 count
     "each" => 1,     # Price per 1 each
     "N/A" => 1,      # Price per 1 unit (when unit is unknown)
@@ -27,6 +29,7 @@ class PricePerUnitCalculator
   VOLUME_TO_ML = {
     "ml" => 1,
     "l" => 1000,        # 1 liter = 1000 milliliters
+    "gal" => 3785.41,   # 1 US gallon = 3785.41 milliliters
   }.freeze
 
   # Normalized unit labels
@@ -37,6 +40,7 @@ class PricePerUnitCalculator
     "lbs" => "100g",
     "oz" => "100g",
     "ml" => "100ml",
+    "gal" => "100ml",
     "l" => "100ml",
     "fl" => "1fl",
     "pc" => "1pc",

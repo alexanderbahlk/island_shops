@@ -142,7 +142,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     builder.build
 
     assert_equal 12.0, builder.shop_item.size
-    assert_equal "pc", builder.shop_item.unit
+    assert_equal "pk", builder.shop_item.unit
   end
 
   test "extracts size and unit from title with ct (count) - without space" do
@@ -274,10 +274,21 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     builder.build
 
     assert_equal 6.0, builder.shop_item.size
-    assert_equal "pc", builder.shop_item.unit
+    assert_equal "pk", builder.shop_item.unit
   end
 
-  test "extracts size and unit from title with pcs (pieces)" do
+  test "extracts size and unit from title with pack in center" do
+    @shop_item_params[:title] = "Chicken Variety Pack Fresh Skinless"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 1.0, builder.shop_item.size
+    assert_equal "pk", builder.shop_item.unit
+  end
+
+  test "extracts size and unit from title with pcs (packs)" do
     @shop_item_params[:title] = "Chicken Wings 10pcs"
     @shop_item_params[:size] = nil
 
@@ -285,7 +296,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     builder.build
 
     assert_equal 10.0, builder.shop_item.size
-    assert_equal "pc", builder.shop_item.unit
+    assert_equal "pk", builder.shop_item.unit
   end
 
   test "extracts size and unit from title with EACH" do
@@ -297,6 +308,17 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
     assert_equal 1.0, builder.shop_item.size
     assert_equal "each", builder.shop_item.unit
+  end
+
+  test "extracts size and unit from title with whole" do
+    @shop_item_params[:title] = "Golden Ridge Whole Turkey"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 1.0, builder.shop_item.size
+    assert_equal "whole", builder.shop_item.unit
   end
 
   test "extracts size and unit from title with [EACH]" do

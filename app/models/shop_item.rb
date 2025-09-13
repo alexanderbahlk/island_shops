@@ -80,7 +80,9 @@ class ShopItem < ApplicationRecord
                           )
                         )
         }
-
+  scope :no_unit_size, -> {
+          where(unit: [nil, ""]).or(where(size: nil))
+        }
   scope :in_stock, -> {
           joins(:shop_item_updates)
             .where(shop_item_updates: {

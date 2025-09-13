@@ -1,8 +1,10 @@
 module UnitParser
   VALID_UNITS = %w[
     ft
+    whole
     ct
     pc
+    pk
     each
     g
     kg
@@ -10,20 +12,21 @@ module UnitParser
     l
     ml
     oz
+    gal
     fl
     N/A
   ].freeze
 
   UNIT_PATTERNS = {
     "ft" => /(\d+(?:\.\d+)?)\s*ft\s*$/i,
-    "ct" => /(\d+(?:\.\d+)?)\s*ct\s*$/i,
+    "ct" => /(?:(\d+(?:\.\d+)?)\s*)?ct\s*$/i,
     "lbs" => /(\d+(?:\.\d+)?)\s*lbs\s*$/i,
     "lb" => /(\d+(?:\.\d+)?)\s*lb\s*$/i,
-    "packs" => /(\d+(?:\.\d+)?)\s*packs\s*$/i,
-    "pack" => /(\d+(?:\.\d+)?)\s*pack\s*$/i,
-    "pcs" => /(\d+(?:\.\d+)?)\s*pcs\s*$/i,
-    "pc" => /(\d+(?:\.\d+)?)\s*pc\s*$/i,
-    "each" => /(\d+(?:\.\d+)?)\s*(each|\[each\])\s*$/i,
+    "packs" => /(?:(\d+(?:\.\d+)?)\s*)?packs\s*$/i,
+    "pack" => /(?:(\d+(?:\.\d+)?)\s*)?pack\s*/i,
+    "pcs" => /(?:(\d+(?:\.\d+)?)\s*)?pcs\s*$/i,
+    "pc" => /(?:(\d+(?:\.\d+)?)\s*)?pc\s*$/i,
+    "each" => /(?:(\d+(?:\.\d+)?)\s*)?(each|\[each\])\s*$/i,
     "g" => /(\d+(?:\.\d+)?)\s*(g|gr)\s*$/i,
     "kg" => /(\d+(?:\.\d+)?)\s*kg\s*$/i,
     "lt" => /(\d+(?:\.\d+)?)\s*lt\s*$/i,
@@ -31,6 +34,8 @@ module UnitParser
     "ml" => /(\d+(?:\.\d+)?)\s*ml\s*$/i,
     "oz" => /(\d+(?:\.\d+)?)\s*oz\s*$/i,
     "fl" => /(\d+(?:\.\d+)?)\s*fl\s*$/i,
+    "gal" => /(\d+(?:\.\d+)?)\s*gal\s*$/i,
+    "whole" => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
   }.freeze
 
   # Extended aliases for fuzzy matching
@@ -41,13 +46,16 @@ module UnitParser
     "gr" => "g",
     "gram" => "g",
     "grams" => "g",
-    "pack" => "pc",
-    "packs" => "pc",
+    "pack" => "pk",
+    "packs" => "pk",
+    "pcs" => "pk",
     "piece" => "pc",
     "pieces" => "pc",
-    "pk" => "pc",
-    "pcs" => "pc",
+    "piece(s)" => "pc",
+    "whole" => "pc",
     "count" => "ct",
+    "gallon" => "gal",
+    "gallons" => "gal",
     "lt" => "l",
     "liter" => "l",
     "liters" => "l",
@@ -70,6 +78,8 @@ module UnitParser
     "na" => "N/A",
   }.freeze
 
+  ONE_SIZE_FROM_UNITS = %w[pk whole].freeze
+
   def self.parse_from_title(title)
     return { size: nil, unit: nil } if title.blank?
 
@@ -78,6 +88,14 @@ module UnitParser
       match = title.match(pattern)
       if match
         normalized_unit = normalize_unit(unit)
+        #if normalized_unit is in ONE_SIZE_FROM_UNITS and size is nil, set size to 1
+        if ONE_SIZE_FROM_UNITS.include?(normalized_unit) && match[1].nil?
+          return {
+                   size: 1.0,
+                   unit: normalized_unit,
+                 }
+        end
+
         return {
                  size: match[1].to_f,
                  unit: normalized_unit,

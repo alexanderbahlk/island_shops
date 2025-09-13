@@ -32,17 +32,5 @@ class AssignShopItemCategoryJob < ApplicationJob
     end
 
     Rails.logger.info "ShopItem Category assignment completed: #{processed_count} processed, #{matched_count} matched, #{error_count} errors"
-
-    # Store results for later retrieval (optional)
-    Rails.cache.write(
-      "shop_item_category_assignment_results",
-      {
-        processed: processed_count,
-        matched: matched_count,
-        errors: error_count,
-        completed_at: Time.current,
-      },
-      expires_in: 1.hour,
-    )
   end
 end

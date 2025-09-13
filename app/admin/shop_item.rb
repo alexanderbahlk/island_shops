@@ -14,6 +14,17 @@ ActiveAdmin.register ShopItem do
             class: "button"
   end
 
+  action_item :assign_missing_categories, only: :index do
+    link_to "Auto-assign Missing Size & Unit",
+            assign_missing_size_unit_admin_shop_items_path,
+            method: :post,
+            data: {
+              confirm: "This will automatically assign Size and Unit to all items without a Size and Unit. Continue?",
+              disable_with: "Processing...",
+            },
+            class: "button"
+  end
+
   controller do
     include ActionView::Helpers::NumberHelper
 
@@ -166,7 +177,6 @@ ActiveAdmin.register ShopItem do
            data: {
              remote: true,
              type: "json",
-             confirm: "This will create a new shop item update with calculated price per unit. Continue?",
              shop_item_id: shop_item.id,
            }
       item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
@@ -175,7 +185,6 @@ ActiveAdmin.register ShopItem do
            data: {
              remote: true,
              type: "json",
-             confirm: "This will find and assign a new category to this item (replacing the current one). Continue?",
              shop_item_id: shop_item.id,
            }
     end
@@ -550,6 +559,22 @@ ActiveAdmin.register ShopItem do
 
     # Enqueue the job
     AssignShopItemCategoryJob.perform_later
+
+    # You can implement auto-assignment logic here or create a job
+    redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results.")
+  end
+
+  # Collection action for auto-assigning categories
+  collection_action :assign_missing_size_unit, method: :post do
+    missing_count = ShopItem.no_unit_size.count
+
+    if missing_count == 0
+      redirect_to_collection_with_filters(:notice, "No items found without category assignments.")
+      return
+    end
+
+    # Enqueue the job
+    AssignShopItemUnitSizeJob.perform_later
 
     # You can implement auto-assignment logic here or create a job
     redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results.")

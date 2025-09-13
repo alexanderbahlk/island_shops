@@ -491,6 +491,19 @@
                         </types>
                     </category>
                     <category>
+                        <title>Canned Meals</title>
+                        <types>
+                            <type>Chili</type>
+                            <type>Stew</type>
+                            <type>Spaghetti</type>
+                            <type>Ravioli</type>
+                            <type>Beef Stew</type>
+                            <type>Chicken Stew</type>
+                            <type>Vegetable Stew</type>
+                            <type>Mashed Potatoes</type>
+                        </types>
+                    </category>
+                    <category>
                         <title>Other Canned Goods</title>
                         <types>
                             <type>Tuna</type>
@@ -538,6 +551,8 @@
                             <type>Regular Yogurt</type>
                             <type>Frozen Yogurt</type>
                             <type>Probiotic Yogurt</type>
+                            <type>Unsweetened Yogurt</type>
+                            <type>Flavoured Yogurt</type>
                         </types>
                     </category>
                     <category>
@@ -735,7 +750,7 @@
                     <category>
                         <title>Desserts</title>
                         <types>
-                            
+
                         </types>
                     </category>
                 </categories>
@@ -746,9 +761,14 @@
                     <category>
                         <title>Alcoholic</title>
                         <types>
-                            <type>Wine</type>
+                            <type>Red Wine</type>
+                            <type>White Wine</type>
+                            <type>Rose Wine</type>
+                            <type>Champagne</type>
                             <type>Beer</type>
+                            <type>Shandy</type>
                             <type>Rum</type>
+                            <type>Rum Punch</type>
                             <type>Whiskey</type>
                             <type>Vodka</type>
                             <type>Tequila</type>
@@ -782,6 +802,7 @@
                             <type>Mate Tea</type>
                             <type>Sports Drinks</type>
                             <type>Coconut Water</type>
+                            <type>Barista Milk</type>
                             <type>Evaporated Milk</type>
                             <type>Condensed Milk</type>
                             <type>Powdered Milk</type>
