@@ -639,15 +639,16 @@
                             <type>Muffins</type>
                         </types>
                     </category>
-                    <category></category>
-                    <title>Ice Cream</title>
-                    <types>
-                        <type>Ice Cream</type>
-                        <type>Frozen Yogurt</type>
-                        <type>Sorbet</type>
-                        <type>Gelato</type>
-                        <type>Popsicles</type>
-                    </types>
+                    <category>
+                        <title>Ice Cream</title>
+                        <types>
+                            <type>Ice Cream</type>
+                            <type>Frozen Yogurt</type>
+                            <type>Sorbet</type>
+                            <type>Gelato</type>
+                            <type>Popsicles</type>
+                        </types>
+                    </category>
                 </categories>
             </category>
             <category>
