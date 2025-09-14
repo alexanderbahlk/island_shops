@@ -300,6 +300,16 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal 250.0, builder.shop_item.size
     assert_equal "ml", builder.shop_item.unit
   end
+  test "extracts size and unit from title with [per kg]" do
+    @shop_item_params[:title] = "Sweet Potatoes Stewing [per kg]"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 0.0, builder.shop_item.size
+    assert_equal "kg", builder.shop_item.unit
+  end
 
   test "extracts size and unit from title with ounces" do
     @shop_item_params[:title] = "Cereal Box 12Oz"

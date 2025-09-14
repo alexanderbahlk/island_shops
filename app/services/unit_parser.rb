@@ -40,6 +40,7 @@ module UnitParser
     "gal" => /(\d+(?:\.\d+)?)\s*gal\s*$/i,
     "qt" => /(\d+(?:\.\d+)?)\s*qt\s*$/i,
     "whole" => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
+    "kg_per" => /(?:(\d+(?:\.\d+)?)\s*)?\[per\s*kg\]/i,
   }.freeze
 
   # Extended aliases for fuzzy matching
@@ -71,8 +72,10 @@ module UnitParser
     "millilitre" => "ml",
     "millilitres" => "ml",
     "mL" => "ml",
+    "[per kg]" => "kg",
     "kilogram" => "kg",
     "kilograms" => "kg",
+    "kg_per" => "kg",
     "ounce" => "oz",
     "ounces" => "oz",
     "fluid" => "fl",
