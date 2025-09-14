@@ -12,6 +12,7 @@ module UnitParser
     l
     ml
     oz
+    fz
     gal
     qt
     fl
@@ -34,6 +35,7 @@ module UnitParser
     "l" => /(\d+(?:\.\d+)?)\s*l\s*$/i,
     "ml" => /(\d+(?:\.\d+)?)\s*ml\s*$/i,
     "oz" => /(\d+(?:\.\d+)?)\s*oz\s*$/i,
+    "fz" => /(\d+(?:\.\d+)?)\s*fz\s*$/i,
     "fl" => /(\d+(?:\.\d+)?)\s*fl\s*$/i,
     "gal" => /(\d+(?:\.\d+)?)\s*gal\s*$/i,
     "qt" => /(\d+(?:\.\d+)?)\s*qt\s*$/i,

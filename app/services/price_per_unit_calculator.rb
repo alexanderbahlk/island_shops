@@ -8,6 +8,7 @@ class PricePerUnitCalculator
     "l" => 100,      # Price per 100ml (converted from l)
     "gal" => 100,    # Price per 100ml (converted from gal)
     "qt" => 100,    # Price per 100ml (converted from gal)
+    "fz" => 100,     # Price per 100ml (converted from fl oz)
     "oz" => 100,     # Price per 100g (converted from oz)
     "ft" => 1,       # Price per 1 ft
     "fl" => 1,       # Price per 1 fl
@@ -33,6 +34,7 @@ class PricePerUnitCalculator
     "l" => 1000,        # 1 liter = 1000 milliliters
     "gal" => 3785.41,   # 1 US gallon = 3785.41 milliliters
     "qt" => 946.353,    # 1 US quart = 946.353 milliliters
+    "fz" => 29.5735,    # 1 fluid ounce = 29.5735 milliliters
   }.freeze
 
   # Normalized unit labels
@@ -45,6 +47,7 @@ class PricePerUnitCalculator
     "ml" => "100ml",
     "gal" => "100ml",
     "qt" => "100ml",
+    "fz" => "100ml",
     "l" => "100ml",
     "fl" => "1fl",
     "pc" => "1pc",

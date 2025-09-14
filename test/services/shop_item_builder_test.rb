@@ -256,6 +256,40 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "100ml", first_shop_item_update.normalized_unit
   end
 
+  test "extracts size and unit from title with qt in size" do
+    @shop_item_params[:title] = "L/Flavor Icecream Coconut 1.5qt"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 1.5, builder.shop_item.size
+    assert_equal "qt", builder.shop_item.unit
+
+    first_shop_item_update = builder.shop_item.shop_item_updates.order(:created_at).first
+    assert_not first_shop_item_update.nil?
+    assert_equal @shop_item_update_params[:price], first_shop_item_update.price
+    assert_equal 2.11, first_shop_item_update.price_per_unit
+    assert_equal "100ml", first_shop_item_update.normalized_unit
+  end
+
+  test "extracts size and unit from title with fz" do
+    @shop_item_params[:title] = "BB Icecream Pistachio Almond 45 fz"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 45, builder.shop_item.size
+    assert_equal "fz", builder.shop_item.unit
+
+    first_shop_item_update = builder.shop_item.shop_item_updates.order(:created_at).first
+    assert_not first_shop_item_update.nil?
+    assert_equal @shop_item_update_params[:price], first_shop_item_update.price
+    assert_equal 2.25, first_shop_item_update.price_per_unit
+    assert_equal "100ml", first_shop_item_update.normalized_unit
+  end
+
   test "extracts size and unit from title with milliliters" do
     @shop_item_params[:title] = "Vanilla Extract 250ml"
     @shop_item_params[:size] = nil
