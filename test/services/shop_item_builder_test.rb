@@ -433,6 +433,17 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "g", builder.shop_item.unit
   end
 
+  test "handles complex title with oz" do
+    @shop_item_params[:title] = "Betty Crocker Mashed Potatoes Butter & Herb 4oz"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 4.0, builder.shop_item.size
+    assert_equal "oz", builder.shop_item.unit
+  end
+
   test "create correct category from breadcrumb params" do
     @shop_item_params[:title] = "Sungold Evaporated Milk"
     @shop_item_params[:breadcrumb] = "Shop / Grocery / Beverages / Milks , Evaporated, Condensed , Powdered, Shelf Stable / Sungold Evaporated Milk"

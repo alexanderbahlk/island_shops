@@ -180,7 +180,7 @@ class ShopItem < ApplicationRecord
     parsed_data = UnitParser.parse_from_title(title)
 
     # Only set if current values are blank
-    self.size = parsed_data[:size] if size.blank? && parsed_data[:size].present?
-    self.unit = parsed_data[:unit] if unit.blank? && parsed_data[:unit].present?
+    self.size = parsed_data[:size] if (size.blank? || size == 0) && parsed_data[:size].present?
+    self.unit = parsed_data[:unit] if (unit.blank? || unit == "N/A") && parsed_data[:unit].present?
   end
 end

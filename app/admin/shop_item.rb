@@ -187,6 +187,14 @@ ActiveAdmin.register ShopItem do
              type: "json",
              shop_item_id: shop_item.id,
            }
+      item "Re-assign Unit & Size", auto_assign_unit_size_admin_shop_item_path(shop_item),
+           method: :post,
+           class: "member_link reassign-unit-size-link",
+           data: {
+             remote: true,
+             type: "json",
+             shop_item_id: shop_item.id,
+           }
     end
   end
 
@@ -618,6 +626,39 @@ ActiveAdmin.register ShopItem do
   collection_action :clear_stored_selected_items, method: :post do
     c_clear_stored_selected_items
     render json: { status: "success" }
+  end
+
+  member_action :auto_assign_unit_size, method: :post do
+    parsed_data = UnitParser.parse_from_title(resource.title)
+    Rails.logger.debug "Parsed data for item #{resource.id} - Title: '#{resource.title}' => Size: #{parsed_data[:size]}, Unit: #{parsed_data[:unit]}"
+    resource.size = parsed_data[:size] if (resource.size.blank? || resource.size == 0) && parsed_data[:size].present?
+    resource.unit = parsed_data[:unit] if (resource.unit.blank? || resource.unit == "N/A") && parsed_data[:unit].present?
+    if resource.changed?
+      resource.save!
+      success_message = "Successfully updated '#{resource.title}'"
+      success_message += " with size: #{resource.size}" if parsed_data[:size].present?
+      success_message += " and unit: #{resource.unit}" if parsed_data[:unit].present?
+
+      respond_to do |format|
+        format.html { redirect_to_collection_with_filters(:notice, success_message) }
+        format.json {
+          render json: {
+            status: "success",
+            message: success_message,
+            shop_item_id: resource.id,
+            size: resource.size,
+            unit: resource.unit,
+          }
+        }
+      end
+    else
+      error_message = "No changes made to '#{resource.title}'. It may already have size and unit assigned."
+
+      respond_to do |format|
+        format.html { redirect_to_collection_with_filters(:alert, error_message) }
+        format.json { render json: { status: "error", message: error_message, shop_item_id: resource.id } }
+      end
+    end
   end
 
   member_action :auto_assign_category, method: :post do

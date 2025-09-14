@@ -228,6 +228,23 @@ function initializeActionLinks() {
             showNotification('error', 'An error occurred while reassigning category');
         });
     });
+
+    // Handle Re-assign Unit Size AJAX with direct event handling
+    $('.reassign-unit-size-link').on('click', function (e) {
+        var $link = $(this);
+        var shopItemId = $link.data('shop-item-id');
+
+        // Don't prevent default - let Rails UJS handle the request
+
+        // Listen for the response on the document
+        $(document).one('ajax:success', '.reassign-unit-size-link', function (event, data) {
+            handleReassignUnitSizeSuccess(data, shopItemId);
+        });
+
+        $(document).one('ajax:error', '.reassign-unit-size-link', function (event, xhr) {
+            showNotification('error', 'An error occurred while reassigning unit & size');
+        });
+    });
 }
 
 function handleCalculatePriceSuccess(data, shopItemId) {
@@ -278,6 +295,35 @@ function handleReassignCategorySuccess(data, shopItemId) {
             $bipElement.attr('data-bip-value', data.category_id);
             $bipElement.text(data.category_breadcrumb);
             $bipElement.trigger('best_in_place:update');
+        }
+
+        // Show success notification
+        showNotification('success', data.message);
+
+        // Add visual feedback
+        $row.addClass('success-highlight');
+        setTimeout(function () {
+            $row.removeClass('success-highlight');
+        }, 3000);
+    } else {
+        showNotification('error', data.message);
+    }
+}
+
+function handleReassignUnitSizeSuccess(data, shopItemId) {
+    if (data.status === 'success') {
+        // Find the row by shop item ID
+        var $titleLink = $('a[data-shop-item-id="' + shopItemId + '"]');
+        var $row = $titleLink.closest('tr');
+
+        var $unitCell = $row.find('td.col-unit span')
+        if (data.unit && data.unit !== 'N/A') {
+            $unitCell.html(data.unit);
+        }
+
+        var $sizeCell = $row.find('td.col-size')
+        if (data.size && data.size !== 'N/A') {
+            $sizeCell.html(data.size);
         }
 
         // Show success notification

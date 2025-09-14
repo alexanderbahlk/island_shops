@@ -14,8 +14,8 @@ class AssignShopItemUnitSizeJob < ApplicationJob
           Rails.logger.debug "Processing ShopItem ID #{shop_item.id} - Title: '#{shop_item.title}'"
           parsed_data = UnitParser.parse_from_title(shop_item.title)
           Rails.logger.debug "  Parsed data: #{parsed_data.inspect}"
-          shop_item.size = parsed_data[:size] if shop_item.size.blank? && parsed_data[:size].present?
-          shop_item.unit = parsed_data[:unit] if shop_item.unit.blank? && parsed_data[:unit].present?
+          shop_item.size = parsed_data[:size] if (shop_item.size.blank? || shop_item.size == 0) && parsed_data[:size].present?
+          shop_item.unit = parsed_data[:unit] if (shop_item.unit.blank? || shop_item.unit == "N/A") && parsed_data[:unit].present?
           if shop_item.changed?
             shop_item.save!
             matched_count += 1
