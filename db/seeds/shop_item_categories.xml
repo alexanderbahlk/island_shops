@@ -640,18 +640,13 @@
                         </types>
                     </category>
                     <category></category>
-                    <title>Ice Cream &amp; Desserts</title>
+                    <title>Ice Cream</title>
                     <types>
                         <type>Ice Cream</type>
                         <type>Frozen Yogurt</type>
                         <type>Sorbet</type>
                         <type>Gelato</type>
                         <type>Popsicles</type>
-                        <type>Frozen Custard</type>
-                        <type>Frozen Pie</type>
-                        <type>Frozen Cake</type>
-                        <type>Frozen Brownies</type>
-                        <type>Frozen Cheesecake</type>
                     </types>
                 </categories>
             </category>
