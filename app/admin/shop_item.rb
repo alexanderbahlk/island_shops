@@ -116,19 +116,20 @@ ActiveAdmin.register ShopItem do
         image_tag shop_item.image_url, size: "50x50", style: "object-fit: cover;"
       end
     end
+    column :category do |shop_item|
+      best_in_place shop_item, :category_id,
+                    as: :select,
+                    url: admin_shop_item_path(shop_item),
+                    collection: controller.category_collection,
+                    html_attrs: { style: "cursor: pointer; min-width: 150px;" },
+                    class: "bip-select-unit"
+    end
     column :latest_price do |shop_item|
       latest_update = shop_item.shop_item_updates.order(created_at: :desc).first
       if latest_update&.price
         number_to_currency(latest_update.price)
       else
         "N/A"
-      end
-    end
-    column :latest_price_per_unified_unit do |shop_item|
-      if shop_item.latest_price_per_unified_unit != "N/A"
-        shop_item.latest_price_per_unified_unit
-      else
-        content_tag(:span, "N/A", style: "color: red; font-size: 11px;")
       end
     end
     column :size do |shop_item|
@@ -147,13 +148,12 @@ ActiveAdmin.register ShopItem do
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
     end
-    column :category do |shop_item|
-      best_in_place shop_item, :category_id,
-                    as: :select,
-                    url: admin_shop_item_path(shop_item),
-                    collection: controller.category_collection,
-                    html_attrs: { style: "cursor: pointer; min-width: 150px;" },
-                    class: "bip-select-unit"
+    column :latest_price_per_unified_unit do |shop_item|
+      if shop_item.latest_price_per_unified_unit != "N/A"
+        shop_item.latest_price_per_unified_unit
+      else
+        content_tag(:span, "N/A", style: "color: red; font-size: 11px;")
+      end
     end
     column :approved do |shop_item|
       best_in_place shop_item, :approved,
@@ -171,14 +171,6 @@ ActiveAdmin.register ShopItem do
     end
     column :created_at
     actions do |shop_item|
-      item "Re-Calculate Price per Unit", user_update_shop_item_update_admin_shop_item_path(shop_item),
-           method: :post,
-           class: "member_link calculate-price-link",
-           data: {
-             remote: true,
-             type: "json",
-             shop_item_id: shop_item.id,
-           }
       item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
            method: :post,
            class: "member_link reassign-category-link",
@@ -190,6 +182,14 @@ ActiveAdmin.register ShopItem do
       item "Re-assign Unit & Size", auto_assign_unit_size_admin_shop_item_path(shop_item),
            method: :post,
            class: "member_link reassign-unit-size-link",
+           data: {
+             remote: true,
+             type: "json",
+             shop_item_id: shop_item.id,
+           }
+      item "Re-Calculate Price per Unit", user_update_shop_item_update_admin_shop_item_path(shop_item),
+           method: :post,
+           class: "member_link calculate-price-link",
            data: {
              remote: true,
              type: "json",
