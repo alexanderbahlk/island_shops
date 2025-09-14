@@ -564,7 +564,6 @@
                             <type>Sour Cream</type>
                             <type>Cottage Cheese</type>
                             <type>Cream Cheese</type>
-                            <type>Ice Cream</type>
                         </types>
                     </category>
                 </categories>
@@ -640,6 +639,20 @@
                             <type>Muffins</type>
                         </types>
                     </category>
+                    <category></category>
+                    <title>Ice Cream &amp; Desserts</title>
+                    <types>
+                        <type>Ice Cream</type>
+                        <type>Frozen Yogurt</type>
+                        <type>Sorbet</type>
+                        <type>Gelato</type>
+                        <type>Popsicles</type>
+                        <type>Frozen Custard</type>
+                        <type>Frozen Pie</type>
+                        <type>Frozen Cake</type>
+                        <type>Frozen Brownies</type>
+                        <type>Frozen Cheesecake</type>
+                    </types>
                 </categories>
             </category>
             <category>
