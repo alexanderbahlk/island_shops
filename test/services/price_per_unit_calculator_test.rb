@@ -111,7 +111,7 @@ class PricePerUnitCalculatorTest < ActiveSupport::TestCase
     assert_equal 2.5, result[:display_value]
     assert_equal 2.5, result[:value]
     assert_equal 1, result[:base_quantity]
-    assert_equal "1each", result[:normalized_unit]
+    assert_equal "each", result[:normalized_unit]
   end
 
   test "calculate returns correct values for N/A unit" do
@@ -309,7 +309,42 @@ class PricePerUnitCalculatorTest < ActiveSupport::TestCase
     # 1 piece at $2.50 → $2.50 per piece
     result = PricePerUnitCalculator.calculate(2.50, 1, "each")
     assert_equal 2.5, result[:display_value]
-    assert_equal "1each", result[:normalized_unit]
+    assert_equal "each", result[:normalized_unit]
+
+    # 12 pieces at $12.00 → $1.00 per piece
+    result = PricePerUnitCalculator.calculate(12.00, 12, "pc")
+    assert_equal 1.0, result[:display_value]
+    assert_equal "1pc", result[:normalized_unit]
+
+    # 16 count at $15.99 → $1.00 per count
+    result = PricePerUnitCalculator.calculate(15.99, 16, "ct")
+    assert_equal 1.0, result[:display_value]
+    assert_equal "1ct", result[:normalized_unit]
+
+    # 1 gallon at $3.79 → ~$0.10 per 100ml
+    result = PricePerUnitCalculator.calculate(3.79, 1, "gal")
+    assert_in_delta 0.1, result[:display_value], 0.01
+    assert_equal "100ml", result[:normalized_unit]
+
+    # 16 fluid ounces at $4.50 → ~$0.28 per fl oz
+    result = PricePerUnitCalculator.calculate(4.50, 16, "fl")
+    assert_equal 0.28, result[:display_value]
+    assert_equal "1fl", result[:normalized_unit]
+
+    # 120 feet at $25.95 → ~$0.22 per foot
+    result = PricePerUnitCalculator.calculate(25.95, 120, "ft")
+    assert_equal 0.22, result[:display_value]
+    assert_equal "1ft", result[:normalized_unit]
+
+    # 1 pack at $3.99 → $3.99 per pack
+    result = PricePerUnitCalculator.calculate(3.99, 1, "pk")
+    assert_equal 3.99, result[:display_value]
+    assert_equal "1pc", result[:normalized_unit]
+
+    # 1 whole item at $29.99 → $29.99 per each
+    result = PricePerUnitCalculator.calculate(29.99, 1, "whole")
+    assert_equal 29.99, result[:display_value]
+    assert_equal "each", result[:normalized_unit]
   end
 
   test "weight units all normalize to 100g base for comparison" do

@@ -319,6 +319,12 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
     assert_equal 1.0, builder.shop_item.size
     assert_equal "whole", builder.shop_item.unit
+
+    first_shop_item_update = builder.shop_item.shop_item_updates.order(:created_at).first
+    assert_not first_shop_item_update.nil?
+    assert_equal @shop_item_update_params[:price], first_shop_item_update.price
+    assert_equal 29.99, first_shop_item_update.price_per_unit
+    assert_equal "each", first_shop_item_update.normalized_unit
   end
 
   test "extracts size and unit from title with [EACH]" do
@@ -442,6 +448,24 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
     assert_equal 4.0, builder.shop_item.size
     assert_equal "oz", builder.shop_item.unit
+  end
+
+  test "handles complex title with pack" do
+    @shop_item_params[:title] = "Oh so GOOD! Purified Water 24 Pack"
+    @shop_item_update_params[:price] = 14.49
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 24.0, builder.shop_item.size
+    assert_equal "pk", builder.shop_item.unit
+
+    first_shop_item_update = builder.shop_item.shop_item_updates.order(:created_at).first
+    assert_not first_shop_item_update.nil?
+    assert_equal @shop_item_update_params[:price], first_shop_item_update.price
+    assert_equal 0.60, first_shop_item_update.price_per_unit
+    assert_equal "1pc", first_shop_item_update.normalized_unit
   end
 
   test "create correct category from breadcrumb params" do

@@ -13,6 +13,7 @@ class PricePerUnitCalculator
     "pc" => 1,       # Price per 1 piece
     "pk" => 1,       # Price per 1 pack
     "ct" => 1,       # Price per 1 count
+    "whole" => 1,     # Price per 1 whole
     "each" => 1,     # Price per 1 each
     "N/A" => 1,      # Price per 1 unit (when unit is unknown)
   }.freeze
@@ -44,8 +45,10 @@ class PricePerUnitCalculator
     "l" => "100ml",
     "fl" => "1fl",
     "pc" => "1pc",
+    "whole" => "each",
+    "pk" => "1pc",
     "ct" => "1ct",
-    "each" => "1each",
+    "each" => "each",
     "N/A" => "1unit",
   }.freeze
 
