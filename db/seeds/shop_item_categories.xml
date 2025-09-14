@@ -612,6 +612,20 @@
                             <type>Dinners</type>
                             <type>Rice</type>
                             <type>Pasta</type>
+                            <type>Chicken Wings</type>
+                            <type>Chicken Drumsticks</type>
+                            <type>Chicken Nuggets</type>
+                            <type>Fries</type>
+                            <type>Onion Rings</type>
+                            <type>Vegetable Mix</type>
+                            <type>Meatballs</type>
+                            <type>Fish Sticks</type>
+                            <type>Egg Rolls</type>
+                            <type>Spring Rolls</type>
+                            <type>Dim Sum</type>
+                            <type>Lasagna</type>
+                            <type>Mac &amp; Cheese</type>
+                            <type>Calamari</type>
                         </types>
                     </category>
                     <category>
