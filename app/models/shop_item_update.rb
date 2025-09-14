@@ -38,7 +38,7 @@ class ShopItemUpdate < ApplicationRecord
     end
   end
 
-  def is_in_stock?
-    normalized_stock_status == "in stock"
+  def out_of_stock?
+    normalized_stock_status == "out of stock"
   end
 end

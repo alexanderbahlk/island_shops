@@ -83,16 +83,6 @@ class ShopItem < ApplicationRecord
   scope :no_unit_size, -> {
           where(unit: [nil, ""]).or(where(size: nil))
         }
-  scope :in_stock, -> {
-          joins(:shop_item_updates)
-            .where(shop_item_updates: {
-                     id: ShopItemUpdate.select("MAX(id)")
-                                       .where("shop_item_updates.shop_item_id = shop_items.id")
-                                       .group(:shop_item_id),
-                   })
-            .where("shop_item_updates.stock_status ILIKE ANY (ARRAY[?, ?, ?, ?])",
-                   "%in stock%", "%available%", "%in-stock%", "%low stock%")
-        }
 
   # For Ransack search
   def self.ransackable_attributes(auth_object = nil)

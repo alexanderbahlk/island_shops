@@ -5,7 +5,7 @@ class SearchController < ApplicationController
 
   def categories
     query = params[:q]&.strip
-    in_stock_only = params[:in_stock] == "true"
+    hide_out_of_stock = params[:out_of_stock] == "true"
 
     if query.blank? || query.length < 2
       render json: []
@@ -27,8 +27,8 @@ class SearchController < ApplicationController
       shop_items_data = shop_items.filter_map do |item|
         latest_update = item.shop_item_updates.order(created_at: :desc).first
 
-        # Skip if in_stock_only is true and item is not in stock
-        if in_stock_only && (!latest_update || !latest_update.is_in_stock?)
+        # Skip if hide_out_of_stock is true and item is not in stock
+        if hide_out_of_stock && (!latest_update || latest_update.out_of_stock?)
           next
         end
 

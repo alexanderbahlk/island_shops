@@ -445,9 +445,9 @@
         <!-- Add filter controls -->
         <div class="filter-container">
             <label class="filter-checkbox">
-                <input type="checkbox" id="inStockOnly" <%= 'checked' if params[:in_stock] == 'true' %>>
+                <input type="checkbox" id="outOfStockOnly" <%= 'checked' if params[:out_of_stock] == 'true' %>>
                 <span class="checkmark"></span>
-                Show in-stock items only
+                Hide out of stock products
             </label>
         </div>
 
@@ -462,7 +462,7 @@
         class ProductSearch {
             constructor() {
                 this.searchInput = document.getElementById('searchInput');
-                this.inStockFilter = document.getElementById('inStockOnly');
+                this.outOfStockFilter = document.getElementById('outOfStockOnly');
                 this.resultsContainer = document.getElementById('results');
                 this.loadingIndicator = document.getElementById('loading');
                 this.noResults = document.getElementById('noResults');
@@ -477,7 +477,7 @@
                     this.handleSearch(e.target.value);
                 });
 
-                this.inStockFilter.addEventListener('change', () => {
+                this.outOfStockFilter.addEventListener('change', () => {
                     this.handleSearch(this.searchInput.value);
                 });
 
@@ -485,10 +485,10 @@
                 window.addEventListener('popstate', (e) => {
                     const urlParams = new URLSearchParams(window.location.search);
                     const query = urlParams.get('q') || '';
-                    const inStock = urlParams.get('in_stock') === 'true';
+                    const outOfStock = urlParams.get('out_of_stock') === 'true';
 
                     this.searchInput.value = query;
-                    this.inStockFilter.checked = inStock;
+                    this.outOfStockFilter.checked = outOfStock;
 
                     this.handleSearch(query, false); // Don't update URL again
                 });
@@ -518,12 +518,12 @@
                 this.searchTimeout = setTimeout(() => {
                     this.performSearch(query);
                     if (updateUrl) {
-                        this.updateUrl(query, this.inStockFilter.checked);
+                        this.updateUrl(query, this.outOfStockFilter.checked);
                     }
                 }, 300);
             }
 
-            updateUrl(query, inStock) {
+            updateUrl(query, outOfStock) {
                 const url = new URL(window.location);
                 if (query) {
                     url.searchParams.set('q', query);
@@ -531,16 +531,16 @@
                     url.searchParams.delete('q');
                 }
 
-                if (inStock) {
-                    url.searchParams.set('in_stock', 'true');
+                if (outOfStock) {
+                    url.searchParams.set('out_of_stock', 'true');
                 } else {
-                    url.searchParams.delete('in_stock');
+                    url.searchParams.delete('out_of_stock');
                 }
 
                 // Update URL without triggering page reload
                 window.history.pushState({
                     query: query,
-                    inStock: inStock
+                    outOfStock: outOfStock
                 }, '', url);
 
                 // Update page title with search query
@@ -557,8 +557,8 @@
                         q: query
                     });
 
-                    if (this.inStockFilter.checked) {
-                        params.append('in_stock', 'true');
+                    if (this.outOfStockFilter.checked) {
+                        params.append('out_of_stock', 'true');
                     }
 
                     const response = await fetch(`/search/categories?${params}`);
