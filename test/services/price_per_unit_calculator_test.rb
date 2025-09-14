@@ -326,6 +326,11 @@ class PricePerUnitCalculatorTest < ActiveSupport::TestCase
     assert_in_delta 0.1, result[:display_value], 0.01
     assert_equal "100ml", result[:normalized_unit]
 
+    # 1 quart at $1.49 → ~$0.16 per 100ml
+    result = PricePerUnitCalculator.calculate(1.49, 1, "qt")
+    assert_in_delta 0.16, result[:display_value], 0.01
+    assert_equal "100ml", result[:normalized_unit]
+
     # 16 fluid ounces at $4.50 → ~$0.28 per fl oz
     result = PricePerUnitCalculator.calculate(4.50, 16, "fl")
     assert_equal 0.28, result[:display_value]

@@ -13,6 +13,7 @@ module UnitParser
     ml
     oz
     gal
+    qt
     fl
     N/A
   ].freeze
@@ -35,6 +36,7 @@ module UnitParser
     "oz" => /(\d+(?:\.\d+)?)\s*oz\s*$/i,
     "fl" => /(\d+(?:\.\d+)?)\s*fl\s*$/i,
     "gal" => /(\d+(?:\.\d+)?)\s*gal\s*$/i,
+    "qt" => /(\d+(?:\.\d+)?)\s*qt\s*$/i,
     "whole" => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
   }.freeze
 
@@ -54,6 +56,7 @@ module UnitParser
     "piece(s)" => "pc",
     "whole" => "pc",
     "count" => "ct",
+    "quart" => "qt",
     "gallon" => "gal",
     "gallons" => "gal",
     "lt" => "l",

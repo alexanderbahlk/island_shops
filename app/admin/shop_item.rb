@@ -173,7 +173,7 @@ ActiveAdmin.register ShopItem do
     actions do |shop_item|
       item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
            method: :post,
-           class: "member_link reassign-category-link",
+           class: "member_link reassign-category-link custom-action-link",
            data: {
              remote: true,
              type: "json",
@@ -181,7 +181,7 @@ ActiveAdmin.register ShopItem do
            }
       item "Re-assign Unit & Size", auto_assign_unit_size_admin_shop_item_path(shop_item),
            method: :post,
-           class: "member_link reassign-unit-size-link",
+           class: "member_link reassign-unit-size-link custom-action-link",
            data: {
              remote: true,
              type: "json",
@@ -189,7 +189,7 @@ ActiveAdmin.register ShopItem do
            }
       item "Re-Calculate Price per Unit", user_update_shop_item_update_admin_shop_item_path(shop_item),
            method: :post,
-           class: "member_link calculate-price-link",
+           class: "member_link calculate-price-link custom-action-link",
            data: {
              remote: true,
              type: "json",

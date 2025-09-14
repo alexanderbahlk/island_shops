@@ -83,6 +83,35 @@ body>div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-
     }
 }
 
+.member_link {
+    &.custom-action-link {
+        font-size: 12px;
+        text-decoration: none;
+        padding: 3px;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 4px;
+        color: white;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &.reassign-category-link {
+            background-color: #007bff;
+        }
+
+        &.reassign-unit-size-link {
+            background-color: #28a745;
+        }
+
+        &.calculate-price-link {
+            background-color: #17a2b8;
+        }
+    }
+
+}
+
 .ui-autocomplete {
     max-height: 200px;
     overflow-y: auto;
