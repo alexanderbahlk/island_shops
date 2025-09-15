@@ -1,15 +1,17 @@
 <category>
-  <title><%= category.title.to_s.gsub('&', '&amp;') %></title>
-  <% if category.children.products.any? %>
+  <title><%= CGI.escapeHTML(category.title.to_s) %></title>
+  <% leaf_children = category.children.select { |c| c.children.empty? } %>
+  <% if leaf_children.any? %>
     <types>
-      <% category.children.products.each do |product| %>
-        <type><%= product.title.to_s.gsub('&', '&amp;') %></type>
+      <% leaf_children.each do |leaf| %>
+        <type><%= CGI.escapeHTML(leaf.title.to_s) %></type>
       <% end %>
     </types>
   <% end %>
-  <% if category.children.where.not(category_type: :product).any? %>
+  <% non_leaf_children = category.children.reject { |c| c.children.empty? } %>
+  <% if non_leaf_children.any? %>
     <categories>
-      <% category.children.where.not(category_type: :product).each do |child| %>
+      <% non_leaf_children.each do |child| %>
         <%= render partial: "category", locals: { category: child } %>
       <% end %>
     </categories>
