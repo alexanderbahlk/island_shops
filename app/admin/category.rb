@@ -46,6 +46,7 @@ ActiveAdmin.register Category do
     end
     column :slug
     column :path
+    column :created_at
     actions
   end
 
