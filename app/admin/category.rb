@@ -182,6 +182,10 @@ ActiveAdmin.register Category do
   scope :categories_only, -> { where.not(category_type: :product) }
   scope :with_shop_items, -> { joins(:shop_items).distinct }
 
+  action_item :export_categories_xml, only: :index do
+    link_to "Export Categories XML", categories_export_path(hash: "hello"), class: "button"
+  end
+
   # Custom collection action to rebuild tree (if needed)
   collection_action :rebuild_tree, method: :post do
     Category.rebuild!

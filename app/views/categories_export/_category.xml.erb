@@ -1,0 +1,17 @@
+<category>
+  <title><%= category.title.to_s.gsub('&', '&amp;') %></title>
+  <% if category.children.products.any? %>
+    <types>
+      <% category.children.products.each do |product| %>
+        <type><%= product.title.to_s.gsub('&', '&amp;') %></type>
+      <% end %>
+    </types>
+  <% end %>
+  <% if category.children.where.not(category_type: :product).any? %>
+    <categories>
+      <% category.children.where.not(category_type: :product).each do |child| %>
+        <%= render partial: "category", locals: { category: child } %>
+      <% end %>
+    </categories>
+  <% end %>
+</category>
