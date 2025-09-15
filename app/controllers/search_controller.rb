@@ -20,7 +20,7 @@ class SearchController < ApplicationController
     formatted_categories = categories.map do |category|
       Rails.logger.info "Processing category: #{category.title}, ID: #{category.id}"
       # Fetch shop items for this category
-      shop_items = category.shop_items.approved.limit(5).includes(:shop_item_updates)
+      shop_items = category.shop_items.approved.limit(25).includes(:shop_item_updates)
       Rails.logger.info "  Found #{shop_items.count} shop items"
 
       # Filter and map shop items, removing nils
