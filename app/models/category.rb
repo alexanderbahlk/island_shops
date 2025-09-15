@@ -176,8 +176,6 @@ class Category < ApplicationRecord
   end
 
   def generate_slug
-    return if slug.present?
-
     base_slug = title.parameterize
     self.slug = base_slug
 
