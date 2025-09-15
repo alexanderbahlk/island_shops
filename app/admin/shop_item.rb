@@ -155,6 +155,9 @@ ActiveAdmin.register ShopItem do
         content_tag(:span, "N/A", style: "color: red; font-size: 11px;")
       end
     end
+    column :latest_stock_status do |shop_item|
+      shop_item.latest_stock_status
+    end
     column :approved do |shop_item|
       best_in_place shop_item, :approved,
                     as: :checkbox,

@@ -106,6 +106,11 @@ class ShopItem < ApplicationRecord
     end
   end
 
+  def latest_stock_status
+    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    latest_update&.normalized_stock_status || "N/A"
+  end
+
   def latest_price_per_unit
     latest_update = self.shop_item_updates.order(created_at: :desc).first
     if latest_update&.price && self.unit.present?
