@@ -16,6 +16,7 @@ module UnitParser
     gal
     qt
     fl
+    unit
     N/A
   ].freeze
 
@@ -41,6 +42,7 @@ module UnitParser
     "qt" => /(\d+(?:\.\d+)?)\s*qt\s*$/i,
     "whole" => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
     "kg_per" => /(?:(\d+(?:\.\d+)?)\s*)?\[per\s*kg\]/i,
+    "unit" => /(?:(\d+(?:\.\d+)?)\s*)?unit\s*$/i,
   }.freeze
 
   # Extended aliases for fuzzy matching

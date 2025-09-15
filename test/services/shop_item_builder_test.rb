@@ -517,6 +517,17 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "oz", builder.shop_item.unit
   end
 
+  test "handles complex title with Unit" do
+    @shop_item_params[:title] = "Iceberg Lettuce Unit"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 0.0, builder.shop_item.size
+    assert_equal "unit", builder.shop_item.unit
+  end
+
   test "handles complex title with pack" do
     @shop_item_params[:title] = "Oh so GOOD! Purified Water 24 Pack"
     @shop_item_update_params[:price] = 14.49
