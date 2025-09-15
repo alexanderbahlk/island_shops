@@ -154,6 +154,26 @@
                 </categories>
             </category>
             <category>
+                <title>Desserts</title>
+                <categories>
+                    <category>
+                        <title>Jelly</title>
+                        <types>
+                            <type>Fruit Jelly</type>
+                            <type>Grape Jelly</type>
+                            <type>Strawberry Jelly</type>
+                            <type>Raspberry Jelly</type>
+                            <type>Apricot Jelly</type>
+                            <type>Apple Jelly</type>
+                            <type>Peach Jelly</type>
+                            <type>Mixed Fruit Jelly</type>
+                            <type>Orange Marmalade</type>
+                            <type>Lemon Curd</type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
                 <title>Snacks</title>
                 <categories>
                     <category>
@@ -177,6 +197,17 @@
                             <type>Kale Chips</type>
                             <type>Beet Chips</type>
                             <type>Zucchini Chips</type>
+                            <type>Trail Mix</type>
+                            <type>Snack Mix</type>
+                            <type>Cheese Puffs</type>
+                            <type>Veggie Straws</type>
+                            <type>Popchips</type>
+                            <type>Bagel Chips</type>
+                            <type>Cheese Balls</type>
+                            <type>Cheese Twists</type>
+                            <type>Cheese Crisps</type>
+                            <type>Cheese Sticks</type>
+                            <type>Cheese Wafers</type>
                         </types>
                     </category>
                     <category>
@@ -233,6 +264,9 @@
                             <type>Peanut Butter Cups</type>
                             <type>Chocolate Chips</type>
                             <type>Chocolate Spread</type>
+                            <type>Praline</type>
+                            <type>Rock Candy</type>
+                            <type>Chocolate-Covered Pretzels</type>
                         </types>
                     </category>
                 </categories>
@@ -350,16 +384,8 @@
                             <type>Pomelo</type>
                             <type>Ugli Fruit</type>
                             <type>Currants</type>
-                            <type>Elderberrie</type>
-                            <type>Gooseberrie</type>
-                            <type>Boysenberrie</type>
-                            <type>Marionberrie</type>
-                            <type>Cloudberrie</type>
-                            <type>Salmonberrie</type>
-                            <type>Huckleberrie</type>
-                            <type>Mulberrie</type>
-                            <type>Chokecherrie</type>
-                            <type>Serviceberrie</type>
+                            <type>Elderberry</type>
+                            <type>Gooseberry</type>
                             <type>Medlar</type>
                             <type>Loquat</type>
                             <type>Miracle Fruit</type>
@@ -769,12 +795,6 @@
                             <type>Scone</type>
                             <type>Cinnamon Rolls</type>
                             <type>Jam Puff</type>
-                        </types>
-                    </category>
-                    <category>
-                        <title>Desserts</title>
-                        <types>
-
                         </types>
                     </category>
                 </categories>
