@@ -20,6 +20,24 @@ body>div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-
     width: fit-content !important;
 }
 
+.category-tree-item {
+    margin-left: 20px;
+}
+
+.category-tree-level-1>.category-tree-item {
+    margin-left: 20px;
+}
+
+.category-tree-level-2>.category-tree-item {
+    margin-left: 40px;
+}
+
+.category-tree-level-3>.category-tree-item {
+    margin-left: 60px;
+}
+
+/* ...etc... */
+
 .editable-title {
     font-size: 14px;
     cursor: pointer;

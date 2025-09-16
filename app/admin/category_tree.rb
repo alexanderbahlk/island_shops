@@ -5,10 +5,10 @@ ActiveAdmin.register_page "Category Tree" do
     panel "All Categories (Tree View)" do
       roots = Category.where(parent_id: nil).includes(:children)
 
-      def render_category_tree(categories)
-        ul do
+      def render_category_tree(categories, depth = 0)
+        ul class: "category-tree-level-#{depth}" do
           categories.each do |category|
-            li do
+            li class: "category-tree-item" do
               span best_in_place(category, :title, as: :input, url: [:admin, category]), class: "editable-title"
               if category.synonyms.present?
                 i " (#{category.synonyms.join(", ")})", class: "synonyms"
@@ -17,9 +17,11 @@ ActiveAdmin.register_page "Category Tree" do
               text_node " -> "
               # Link to edit the category
               text_node link_to("View", admin_category_path(category), class: "edit-link")
+              text_node "  --------  "
+              text_node category.category_type
               # Recursively render children
               if category.children.any?
-                render_category_tree(category.children)
+                render_category_tree(category.children, depth + 1)
               end
             end
           end

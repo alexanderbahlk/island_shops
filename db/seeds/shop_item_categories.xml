@@ -4,111 +4,178 @@
         <categories>
             <category>
                 <title>Food &amp; Drinks</title>
-                <types>
-                    <type>
-                        <name>Crackers</name>
-                    </type>
-                    <type>
-                        <name>Fruit Snacks</name>
-                    </type>
-                    <type>
-                        <name>Teething Biscuits</name>
-                    </type>
-                    <type>
-                        <name>Vegetable Snacks</name>
-                    </type>
-                    <type>
-                        <name>Baby Juice</name>
-                    </type>
-                    <type>
-                        <name>Cereal</name>
-                    </type>
-                    <type>
-                        <name>Puffs</name>
-                    </type>
-                </types>
+                <categories>
+                    <category>
+                        <title>Baby Formula</title>
+                        <types>
+                            <type>
+                                <name>Poweder</name>
+                            </type>
+                            <type>
+                                <name>Infant Formula</name>
+                            </type>
+                            <type>
+                                <name>Follow-On Formula</name>
+                            </type>
+                            <type>
+                                <name>Toddler Formula</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Baby Snacks</title>
+                        <types>
+                            <type>
+                                <name>Crackers</name>
+                            </type>
+                            <type>
+                                <name>Fruit Snacks</name>
+                            </type>
+                            <type>
+                                <name>Teething Biscuits</name>
+                            </type>
+                            <type>
+                                <name>Vegetable Snacks</name>
+                            </type>
+                            <type>
+                                <name>Cereal</name>
+                            </type>
+                            <type>
+                                <name>Puffs</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Drinks</title>
+                        <types>
+                            <type>
+                                <name>Baby Juice</name>
+                            </type>
+                            <type>
+                                <name>Tea</name>
+                            </type>
+                            <type>
+                                <name>Milk Powder</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
             </category>
             <category>
-                <title>Baby Formula</title>
-                <types>
-                    <type>
-                        <name>Poweder</name>
-                    </type>
-                    <type>
-                        <name>Infant Formula</name>
-                    </type>
-                    <type>
-                        <name>Follow-On Formula</name>
-                    </type>
-                    <type>
-                        <name>Toddler Formula</name>
-                    </type>
-                </types>
+                <title>
+                    Diapering &amp; Potty
+                </title>
+                <categories>
+                    <category>
+                        <title>Diapers &amp; Wipes</title>
+                        <types>
+                            <type>
+                                <name>Diapers</name>
+                            </type>
+                            <type>
+                                <name>Baby Wipes</name>
+                            </type>
+                            <type>
+                                <name>Changing Pads</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Potty Training</title>
+                        <types>
+                            <type>
+                                <name>Potty Chairs</name>
+                            </type>
+                            <type>
+                                <name>Training Pants</name>
+                            </type>
+                            <type>
+                                <name>Step Stools</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
             </category>
             <category>
-                <title>Diapers &amp; Wipes</title>
-                <types>
-                    <type>
-                        <name>Diapers</name>
-                    </type>
-                    <type>
-                        <name>Baby Wipes</name>
-                    </type>
-                    <type>
-                        <name>Changing Pads</name>
-                    </type>
-                </types>
-            </category>
-            <category>
-                <title>Feeding</title>
-                <types>
-                    <type>
-                        <name>Bottles</name>
-                    </type>
-                    <type>
-                        <name>Nipples</name>
-                    </type>
-                    <type>
-                        <name>Sippy Cups</name>
-                    </type>
-                    <type>
-                        <name>Breast Pumps</name>
-                    </type>
-                </types>
+                <title>Baby Equipment</title>
+                <categories>
+                    <category>
+                        <title>Feeding</title>
+                        <types>
+                            <type>
+                                <name>Bottles</name>
+                            </type>
+                            <type>
+                                <name>Nipples</name>
+                            </type>
+                            <type>
+                                <name>Sippy Cups</name>
+                            </type>
+                            <type>
+                                <name>Breast Pumps</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Baby Gear</title>
+                        <types>
+                            <type>
+                                <name>Strollers</name>
+                            </type>
+                            <type>
+                                <name>Car Seats</name>
+                            </type>
+                            <type>
+                                <name>Baby Carriers</name>
+                            </type>
+                            <type>
+                                <name>High Chairs</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
             </category>
             <category>
                 <title>Baby Care Essentials</title>
-                <types>
-                    <type>
-                        <name>Baby Lotion</name>
-                    </type>
-                    <type>
-                        <name>Baby Shampoo</name>
-                    </type>
-                    <type>
-                        <name>Diaper Rash Cream</name>
-                    </type>
-                    <type>
-                        <name>Baby Powder</name>
-                    </type>
-                </types>
-            </category>
-            <category>
-                <title>Baby Gear</title>
-                <types>
-                    <type>
-                        <name>Strollers</name>
-                    </type>
-                    <type>
-                        <name>Car Seats</name>
-                    </type>
-                    <type>
-                        <name>Baby Carriers</name>
-                    </type>
-                    <type>
-                        <name>High Chairs</name>
-                    </type>
-                </types>
+                <categories>
+                    <category>
+                        <title>Health &amp; Safety</title>
+                        <types>
+                            <type>
+                                <name>Baby Thermometers</name>
+                            </type>
+                            <type>
+                                <name>Nasal Aspirators</name>
+                            </type>
+                            <type>
+                                <name>Baby Monitors</name>
+                            </type>
+                            <type>
+                                <name>First Aid Kits</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Bath &amp; Skin Care</title>
+                        <types>
+                            <type>
+                                <name>Baby Wash</name>
+                            </type>
+                            <type>
+                                <name>Baby Lotion</name>
+                            </type>
+                            <type>
+                                <name>Baby Shampoo</name>
+                            </type>
+                            <type>
+                                <name>Diaper Rash Cream</name>
+                            </type>
+                            <type>
+                                <name>Baby Powder</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
             </category>
         </categories>
     </category>
