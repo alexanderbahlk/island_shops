@@ -35,9 +35,9 @@ class MassyResetShopItemsJob < ApplicationJob
           # Calculate price_per_unit using the smart calculator
           if PricePerUnitCalculator.should_calculate?(latest_update.price, shop_item.size, shop_item.unit)
             calculation_result = PricePerUnitCalculator.calculate_value_only(
-              @shop_item_update.price,
-              @shop_item.size,
-              @shop_item.unit
+              latest_update.price,
+              shop_item.size,
+              shop_item.unit
             )
 
             if calculation_result
