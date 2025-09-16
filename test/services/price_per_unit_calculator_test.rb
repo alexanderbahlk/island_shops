@@ -326,6 +326,11 @@ class PricePerUnitCalculatorTest < ActiveSupport::TestCase
     assert_in_delta 0.1, result[:display_value], 0.01
     assert_equal "100ml", result[:normalized_unit]
 
+    # 1 pint at $1.89 → ~$0.40 per 100ml
+    result = PricePerUnitCalculator.calculate(1.89, 1, "pt")
+    assert_in_delta 0.4, result[:display_value], 0.01
+    assert_equal "100ml", result[:normalized_unit]
+
     # 1 quart at $1.49 → ~$0.16 per 100ml
     result = PricePerUnitCalculator.calculate(1.49, 1, "qt")
     assert_in_delta 0.16, result[:display_value], 0.01

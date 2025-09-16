@@ -322,6 +322,34 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal "oz", builder.shop_item.unit
   end
 
+  test "extracts size and unit from title with pints" do
+    @shop_item_params[:title] = "Ice Cream Pint 1.5pints"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 1.5, builder.shop_item.size
+    assert_equal "pt", builder.shop_item.unit
+
+    first_shop_item_update = builder.shop_item.shop_item_updates.order(:created_at).first
+    assert_not first_shop_item_update.nil?
+    assert_equal @shop_item_update_params[:price], first_shop_item_update.price
+    assert_equal 4.23, first_shop_item_update.price_per_unit
+    assert_equal "100ml", first_shop_item_update.normalized_unit
+  end
+
+  test "extracts size and unit from title with pt" do
+    @shop_item_params[:title] = "Ice Cream Pint 1.5pt"
+    @shop_item_params[:size] = nil
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal 1.5, builder.shop_item.size
+    assert_equal "pt", builder.shop_item.unit
+  end
+
   test "extracts size and unit from title with fl (fluid ounces)" do
     @shop_item_params[:title] = "Bottle Water 16Fl"
     @shop_item_params[:size] = nil

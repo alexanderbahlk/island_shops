@@ -5,6 +5,7 @@ module UnitParser
     ct
     pc
     pk
+    pt
     each
     g
     kg
@@ -43,6 +44,10 @@ module UnitParser
     "whole" => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
     "kg_per" => /(?:(\d+(?:\.\d+)?)\s*)?\[per\s*kg\]/i,
     "unit" => /(?:(\d+(?:\.\d+)?)\s*)?unit\s*$/i,
+    "pt" => /(\d+(?:\.\d+)?)\s*pt\s*$/i,
+    "pts" => /(\d+(?:\.\d+)?)\s*pts\s*$/i,
+    "pint" => /(\d+(?:\.\d+)?)\s*pint?\s*$/i,
+    "pints" => /(\d+(?:\.\d+)?)\s*pints?\s*$/i,
   }.freeze
 
   # Extended aliases for fuzzy matching
@@ -64,6 +69,9 @@ module UnitParser
     "quart" => "qt",
     "gallon" => "gal",
     "gallons" => "gal",
+    "pint" => "pt",
+    "pints" => "pt",
+    "pts" => "pt",
     "lt" => "l",
     "liter" => "l",
     "liters" => "l",
