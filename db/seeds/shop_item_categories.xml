@@ -432,6 +432,39 @@
         <title>Food</title>
         <categories>
             <category>
+                <title>Breakfast</title>
+                <categories>
+                    <category>
+                        <title>Hot Cereal</title>
+                        <types>
+                            <type>
+                                <name>Oatmeal</name>
+                            </type>
+                            <type>
+                                <name>Porridge</name>
+                            </type>
+                            <type>
+                                <name>Rice Cereal</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Cold Cereal</title>
+                        <types>
+                            <type>
+                                <name>Granola</name>
+                            </type>
+                            <type>
+                                <name>Muesli</name>
+                            </type>
+                            <type>
+                                <name>Ready-to-Eat Cereal</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
                 <title>Bakery</title>
                 <categories>
                     <category>
