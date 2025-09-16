@@ -3,80 +3,100 @@
         <title>Baby Care</title>
         <categories>
             <category>
-                <title>Food &amp; Drinks</title>
+                <title>Baby Care Essentials</title>
                 <categories>
                     <category>
-                        <title>Baby Formula</title>
+                        <title>Bath &amp; Skin Care</title>
                         <types>
                             <type>
-                                <name>Poweder</name>
+                                <name>Baby Lotion</name>
                             </type>
                             <type>
-                                <name>Infant Formula</name>
+                                <name>Baby Powder</name>
                             </type>
                             <type>
-                                <name>Follow-On Formula</name>
+                                <name>Baby Shampoo</name>
                             </type>
                             <type>
-                                <name>Toddler Formula</name>
+                                <name>Baby Wash</name>
+                            </type>
+                            <type>
+                                <name>Diaper Rash Cream</name>
                             </type>
                         </types>
                     </category>
                     <category>
-                        <title>Baby Snacks</title>
+                        <title>Health &amp; Safety</title>
                         <types>
                             <type>
-                                <name>Crackers</name>
+                                <name>Baby Monitors</name>
                             </type>
                             <type>
-                                <name>Fruit Snacks</name>
+                                <name>Baby Thermometers</name>
                             </type>
                             <type>
-                                <name>Teething Biscuits</name>
+                                <name>First Aid Kits</name>
                             </type>
                             <type>
-                                <name>Vegetable Snacks</name>
-                            </type>
-                            <type>
-                                <name>Cereal</name>
-                            </type>
-                            <type>
-                                <name>Puffs</name>
-                            </type>
-                        </types>
-                    </category>
-                    <category>
-                        <title>Drinks</title>
-                        <types>
-                            <type>
-                                <name>Baby Juice</name>
-                            </type>
-                            <type>
-                                <name>Tea</name>
-                            </type>
-                            <type>
-                                <name>Milk Powder</name>
+                                <name>Nasal Aspirators</name>
                             </type>
                         </types>
                     </category>
                 </categories>
             </category>
             <category>
-                <title>
-                    Diapering &amp; Potty
-                </title>
+                <title>Baby Equipment</title>
+                <categories>
+                    <category>
+                        <title>Baby Gear</title>
+                        <types>
+                            <type>
+                                <name>Baby Carriers</name>
+                            </type>
+                            <type>
+                                <name>Car Seats</name>
+                            </type>
+                            <type>
+                                <name>High Chairs</name>
+                            </type>
+                            <type>
+                                <name>Strollers</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Feeding</title>
+                        <types>
+                            <type>
+                                <name>Bottles</name>
+                            </type>
+                            <type>
+                                <name>Breast Pumps</name>
+                            </type>
+                            <type>
+                                <name>Nipples</name>
+                            </type>
+                            <type>
+                                <name>Sippy Cups</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
+                <title>Diapering &amp; Potty</title>
                 <categories>
                     <category>
                         <title>Diapers &amp; Wipes</title>
                         <types>
                             <type>
-                                <name>Diapers</name>
-                            </type>
-                            <type>
                                 <name>Baby Wipes</name>
                             </type>
                             <type>
                                 <name>Changing Pads</name>
+                            </type>
+                            <type>
+                                <name>Diapers</name>
                             </type>
                         </types>
                     </category>
@@ -87,91 +107,75 @@
                                 <name>Potty Chairs</name>
                             </type>
                             <type>
-                                <name>Training Pants</name>
-                            </type>
-                            <type>
                                 <name>Step Stools</name>
                             </type>
-                        </types>
-                    </category>
-                </categories>
-            </category>
-            <category>
-                <title>Baby Equipment</title>
-                <categories>
-                    <category>
-                        <title>Feeding</title>
-                        <types>
                             <type>
-                                <name>Bottles</name>
-                            </type>
-                            <type>
-                                <name>Nipples</name>
-                            </type>
-                            <type>
-                                <name>Sippy Cups</name>
-                            </type>
-                            <type>
-                                <name>Breast Pumps</name>
-                            </type>
-                        </types>
-                    </category>
-                    <category>
-                        <title>Baby Gear</title>
-                        <types>
-                            <type>
-                                <name>Strollers</name>
-                            </type>
-                            <type>
-                                <name>Car Seats</name>
-                            </type>
-                            <type>
-                                <name>Baby Carriers</name>
-                            </type>
-                            <type>
-                                <name>High Chairs</name>
+                                <name>Training Pants</name>
                             </type>
                         </types>
                     </category>
                 </categories>
             </category>
             <category>
-                <title>Baby Care Essentials</title>
+                <title>Food &amp; Drinks</title>
                 <categories>
                     <category>
-                        <title>Health &amp; Safety</title>
+                        <title>Baby Formula</title>
                         <types>
                             <type>
-                                <name>Baby Thermometers</name>
+                                <name>Follow-On Formula</name>
                             </type>
                             <type>
-                                <name>Nasal Aspirators</name>
+                                <name>Infant Formula</name>
                             </type>
                             <type>
-                                <name>Baby Monitors</name>
+                                <name>Poweder</name>
                             </type>
                             <type>
-                                <name>First Aid Kits</name>
+                                <name>Toddler Formula</name>
                             </type>
                         </types>
                     </category>
                     <category>
-                        <title>Bath &amp; Skin Care</title>
+                        <title>Baby Snacks</title>
                         <types>
                             <type>
-                                <name>Baby Wash</name>
+                                <name>Cereal</name>
                             </type>
                             <type>
-                                <name>Baby Lotion</name>
+                                <name>Crackers</name>
                             </type>
                             <type>
-                                <name>Baby Shampoo</name>
+                                <name>Fruit Snacks</name>
                             </type>
                             <type>
-                                <name>Diaper Rash Cream</name>
+                                <name>Puffs</name>
                             </type>
                             <type>
-                                <name>Baby Powder</name>
+                                <name>Teething Biscuits</name>
+                            </type>
+                            <type>
+                                <name>Vegetable Snacks</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Drinks</title>
+                        <types>
+                            <type>
+                                <name>Baby Juice</name>
+                            </type>
+                            <type>
+                                <name>Milk Powder</name>
+                            </type>
+                            <type>
+                                <name>Shake</name>
+                            </type>
+                            <type>
+                                <name>Tea</name>
+                            </type>
+                            <type>
+                                <name>Water</name>
                             </type>
                         </types>
                     </category>
@@ -856,6 +860,20 @@
                         </types>
                     </category>
                     <category>
+                        <title>Seafood</title>
+                        <types>
+                            <type>
+                                <name>Mackerel</name>
+                                <synonyms>
+                                    <synonym>Jack Mack</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Sardines</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
                         <title>Soups &amp; Broths</title>
                         <types>
                             <type>
@@ -886,6 +904,9 @@
                             </type>
                             <type>
                                 <name>Asparagus</name>
+                            </type>
+                            <type>
+                                <name>Baked Beans</name>
                             </type>
                             <type>
                                 <name>Bean</name>
@@ -1076,6 +1097,32 @@
                         </types>
                     </category>
                     <category>
+                        <title>Packaged Meals</title>
+                        <types>
+                            <type>
+                                <name>Knorr</name>
+                            </type>
+                            <type>
+                                <name>Macaroni &amp; Cheese</name>
+                            </type>
+                            <type>
+                                <name>Instant Noodles</name>
+                            </type>
+                            <type>
+                                <name>Ramen Noodles</name>
+                            </type>
+                            <type>
+                                <name>Rice Mixes</name>
+                            </type>
+                            <type>
+                                <name>Stuffing Mix</name>
+                            </type>
+                            <type>
+                                <name>Mashed Potatoes</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
                         <title>Sauces</title>
                         <types>
                             <type>
@@ -1130,6 +1177,9 @@
                                 <name>Mustard</name>
                             </type>
                             <type>
+                                <name>Pasta Sauce</name>
+                            </type>
+                            <type>
                                 <name>Pesto</name>
                             </type>
                             <type>
@@ -1158,6 +1208,12 @@
                             </type>
                             <type>
                                 <name>Teriyaki Sauce</name>
+                            </type>
+                            <type>
+                                <name>Tomato Paste</name>
+                            </type>
+                            <type>
+                                <name>Tomato Sauce</name>
                             </type>
                             <type>
                                 <name>Vinaigrette</name>
@@ -1382,6 +1438,9 @@
                             </type>
                             <type>
                                 <name>Creamer</name>
+                            </type>
+                            <type>
+                                <name>Goat Milk</name>
                             </type>
                             <type>
                                 <name>Oat Milk</name>
@@ -2144,9 +2203,14 @@
                             </type>
                             <type>
                                 <name>Tomato</name>
-                            </type>
-                            <type>
-                                <name>Tomatoes Vine</name>
+                                <synonyms>
+                                    <synonym>Cherry Tomatoes</synonym>
+                                    <synonym>Cocktail Tomatoes</synonym>
+                                    <synonym>Grape Tomatoes</synonym>
+                                    <synonym>Pear Tomato</synonym>
+                                    <synonym>Plum Tomato</synonym>
+                                    <synonym>Tomatoes Vine</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Turmeric</name>
@@ -2260,6 +2324,9 @@
                             </type>
                             <type>
                                 <name>Fries</name>
+                                <synonyms>
+                                    <synonym>Potato Fries</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Lasagna</name>
@@ -2293,6 +2360,9 @@
                             </type>
                             <type>
                                 <name>Spring Rolls</name>
+                            </type>
+                            <type>
+                                <name>Sweet Potato Fries</name>
                             </type>
                             <type>
                                 <name>Vegetable Mix</name>
@@ -2657,6 +2727,9 @@
                             </type>
                             <type>
                                 <name>Pork Chops</name>
+                            </type>
+                            <type>
+                                <name>Rips</name>
                             </type>
                         </types>
                     </category>
