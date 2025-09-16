@@ -19,7 +19,7 @@ class MassyResetShopItemsJob < ApplicationJob
           if best_match
             shop_item.update!(category: best_match)
             matched_count += 1
-            Rails.logger.info "Assigned '#{best_match.title}' to '#{match_title}'"
+            Rails.logger.info "Assigned '#{best_match.title}' to '#{shop_item.title}'"
           end
 
           parsed_data = UnitParser.parse_from_title(shop_item.title)
