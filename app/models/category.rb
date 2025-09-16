@@ -37,8 +37,6 @@ class Category < ApplicationRecord
   belongs_to :parent, class_name: "Category", optional: true
   has_many :children, class_name: "Category", foreign_key: "parent_id", dependent: :destroy
 
-  serialize :synonyms, Array unless columns_hash["synonyms"].array
-
   enum category_type: {
     root: 0,           # Food, Health & Beauty, etc.
     category: 1,        # Fresh Food, Dairy, etc.
