@@ -1,6 +1,6 @@
 <category>
   <title><%= CGI.escapeHTML(category.title.to_s) %></title>
-  <% product_children = category.children.select(&:product?) %>
+  <% product_children = category.children.select(&:product?).sort_by { |c| c.title.downcase } %>
   <% if product_children.any? %>
     <types>
       <% product_children.each do |product| %>
@@ -8,7 +8,7 @@
           <name><%= CGI.escapeHTML(product.title.to_s) %></name>
           <% if product.synonyms.present? %>
             <synonyms>
-              <% product.synonyms.each do |syn| %>
+              <% product.synonyms.sort_by { |c| c.downcase }.each do |syn| %>
                 <synonym><%= CGI.escapeHTML(syn) %></synonym>
               <% end %>
             </synonyms>
@@ -17,7 +17,7 @@
       <% end %>
     </types>
   <% end %>
-  <% non_product_children = category.children.reject(&:product?) %>
+  <% non_product_children = category.children.sort_by { |c| c.title.downcase }.reject(&:product?) %>
   <% if non_product_children.any? %>
     <categories>
       <% non_product_children.each do |child| %>
