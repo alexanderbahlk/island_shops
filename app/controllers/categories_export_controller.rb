@@ -7,7 +7,7 @@ class CategoriesExportController < ApplicationController
       render plain: "Unauthorized", status: :unauthorized and return
     end
 
-    @categories = Category.where(parent_id: nil).includes(children: :children)
+    @categories = Category.where(parent_id: nil).includes(children: :children).order(:title)
     respond_to do |format|
       format.xml
     end

@@ -213,6 +213,7 @@ ActiveAdmin.register ShopItem do
                  [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
                end
              }, include_blank: "Any"
+  filter :missing_category
   filter :created_at
 
   # Configure the form for create/edit
