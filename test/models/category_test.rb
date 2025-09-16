@@ -10,6 +10,7 @@
 #  rgt           :integer          not null
 #  slug          :string           not null
 #  sort_order    :integer          default(0)
+#  synonyms      :text             default([]), is an Array
 #  title         :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

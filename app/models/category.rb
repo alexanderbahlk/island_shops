@@ -10,6 +10,7 @@
 #  rgt           :integer          not null
 #  slug          :string           not null
 #  sort_order    :integer          default(0)
+#  synonyms      :text             default([]), is an Array
 #  title         :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -36,6 +37,8 @@ class Category < ApplicationRecord
   belongs_to :parent, class_name: "Category", optional: true
   has_many :children, class_name: "Category", foreign_key: "parent_id", dependent: :destroy
 
+  serialize :synonyms, Array unless columns_hash["synonyms"].array
+
   enum category_type: {
     root: 0,           # Food, Health & Beauty, etc.
     category: 1,        # Fresh Food, Dairy, etc.
@@ -50,6 +53,15 @@ class Category < ApplicationRecord
 
   before_validation :generate_slug, :set_category_type, :build_path
   after_save :update_children_paths, if: :saved_change_to_path?
+  before_save do
+    if synonyms.is_a?(String)
+      self.synonyms = synonyms.split(",").map(&:strip)
+    elsif synonyms.is_a?(Array) && synonyms.length == 1 && synonyms.first.is_a?(String) && synonyms.first.include?(",")
+      self.synonyms = synonyms.first.split(",").map(&:strip)
+    else
+      self.synonyms = synonyms
+    end
+  end
 
   # Add this callback to handle shop item references before deletion
   around_destroy :clear_all_references_around_destroy

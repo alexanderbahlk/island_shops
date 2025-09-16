@@ -98,12 +98,27 @@ class CategoryImporter
     puts "#{" " * (parent_category.depth * 2)}   🛍️  Processing #{types.count} products..."
 
     types.each_with_index do |type_element, index|
-      type_title = type_element.text.strip
+      type_title = type_element.at("name")&.text&.strip || type_element.text.strip
       next if type_title.blank?
 
+      synonyms = type_element.xpath("synonyms/synonym").map { |s| s.text.strip }.reject(&:blank?)
+
       # Check for duplicates within this parent
-      if Category.exists?(title: type_title, parent: parent_category)
+      category = Category.find_by(title: type_title, parent: parent_category)
+      if category.present?
         puts "#{" " * (parent_category.depth * 2)}      ⚠️  SKIP: #{type_title} (duplicate)"
+        # at least see if you can update synonyms
+        if synonyms.any?
+          category.synonyms = (category.synonyms + synonyms).uniq
+          if category.changed?
+            begin
+              category.save!
+              puts "#{" " * (parent_category.depth * 2)}      🔄 Updated synonyms"
+            rescue => e
+              puts "#{" " * (parent_category.depth * 2)}      ❌ Failed to update synonyms: #{e.message}"
+            end
+          end
+        end
         next
       end
 
@@ -112,6 +127,7 @@ class CategoryImporter
           title: type_title,
           parent: parent_category,
           sort_order: index,
+          synonyms: synonyms,
         )
         puts "#{" " * (parent_category.depth * 2)}      ✅ #{product.title} (#{product.category_type})"
       rescue => e

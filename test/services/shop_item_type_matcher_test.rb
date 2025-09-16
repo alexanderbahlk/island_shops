@@ -106,6 +106,15 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
     assert_equal @organic_wine_category, result
   end
 
+  test "find_best_match handles synonyms" do
+    eggplantShopItem = ShopItem.new(title: "Aubergine", url: "www.example.com", shop: "Massy")
+    result = ShopItemCategoryMatcher.find_best_match(eggplantShopItem)
+    assert_equal categories(:eggplant), result
+    brinjalShopItem = ShopItem.new(title: "Brinjal", url: "www.example.com", shop: "Massy")
+    result = ShopItemCategoryMatcher.find_best_match(brinjalShopItem)
+    assert_equal categories(:eggplant), result
+  end
+
   test "find_best_match returns nil when no match found" do
     noMatchShopItem = ShopItem.new(title: "Nonexistent Product Category", url: "www.example.com", shop: "Massy")
     result = ShopItemCategoryMatcher.find_best_match(noMatchShopItem)

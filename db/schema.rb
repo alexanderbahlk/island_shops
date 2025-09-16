@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_07_145758) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_15_233211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_07_145758) do
     t.integer "rgt", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "synonyms", default: [], array: true
     t.index ["category_type"], name: "index_categories_on_category_type"
     t.index ["lft", "rgt"], name: "index_categories_on_lft_and_rgt"
     t.index ["parent_id", "slug"], name: "index_categories_on_parent_id_and_slug", unique: true

@@ -31,16 +31,24 @@ class CategoryShopItemSearch
 
     sanitized_query = ActiveRecord::Base.connection.quote(query.downcase)
     sql = <<~SQL
-      SELECT categories.*, 
+      SELECT categories.*,
              GREATEST(
                similarity(categories.title, #{sanitized_query}),
-               similarity(categories.path, #{sanitized_query})
+               similarity(categories.path, #{sanitized_query}),
+               COALESCE((
+                 SELECT MAX(similarity(syn, #{sanitized_query}))
+                 FROM unnest(categories.synonyms) AS syn
+               ), 0)
              ) as sim_score
       FROM categories
       WHERE category_type = #{Category.category_types[:product]}
         AND (
           similarity(categories.title, #{sanitized_query}) > #{SIMILARITY_THRESHOLD}
           OR similarity(categories.path, #{sanitized_query}) > #{SIMILARITY_THRESHOLD}
+          OR EXISTS (
+            SELECT 1 FROM unnest(categories.synonyms) AS syn
+            WHERE similarity(syn, #{sanitized_query}) > #{SIMILARITY_THRESHOLD}
+          )
         )
       ORDER BY sim_score DESC
       LIMIT #{limit.to_i}

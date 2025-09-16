@@ -10,6 +10,7 @@
 #  rgt           :integer          not null
 #  slug          :string           not null
 #  sort_order    :integer          default(0)
+#  synonyms      :text             default([]), is an Array
 #  title         :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -273,6 +274,18 @@ tomatoes_fresh:
   depth: 3
   slug: "tomatoes-fresh"  # Made unique
   path: "food/fresh-food/fresh-vegetables/tomatoes"
+  sort_order: 1
+  lft: 14
+  rgt: 15
+
+eggplant:
+  title: "Eggplant"
+  synonyms: ["Aubergine", "Brinjal"]
+  parent: fresh_vegetables
+  category_type: 3  # product
+  depth: 3
+  slug: "eggplant"  # Made unique
+  path: "food/fresh-food/fresh-vegetables/eggplant"
   sort_order: 1
   lft: 14
   rgt: 15

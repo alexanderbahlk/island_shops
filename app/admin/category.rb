@@ -1,6 +1,6 @@
 ActiveAdmin.register Category do
   # Permit parameters for create/update actions
-  permit_params :title, :slug, :category_type, :sort_order, :parent_id
+  permit_params :title, :slug, :category_type, :sort_order, :parent_id, synonyms: []
 
   controller do
     def create
@@ -16,6 +16,11 @@ ActiveAdmin.register Category do
         render :new
       end
     end
+
+    def update
+      params[:category][:synonyms] = params[:category][:synonyms].to_s.split(",").map(&:strip) if params[:category][:synonyms]
+      super
+    end
   end
 
   # Configure the index page
@@ -26,6 +31,9 @@ ActiveAdmin.register Category do
       # Indent based on depth to show hierarchy
       indent = "&nbsp;" * (category.depth * 4)
       raw "#{indent}#{category.title}"
+    end
+    column :synonyms do |cat|
+      cat.synonyms&.join(", ")
     end
     column :category_type do |category|
       status_tag category.category_type, class: case category.category_type
@@ -60,6 +68,7 @@ ActiveAdmin.register Category do
   form do |f|
     f.inputs "Category Details" do
       f.input :title
+      f.input :synonyms, as: :string, input_html: { value: f.object.synonyms&.join(", ") }, hint: "Comma-separated synonyms"
       f.input :parent, as: :select,
                        collection: Category.parent_options_for_select,
                        include_blank: "None (Root Category)",
@@ -74,6 +83,9 @@ ActiveAdmin.register Category do
     attributes_table do
       row :id
       row :title
+      row :synonyms do |cat|
+        cat.synonyms&.join(", ")
+      end
       row :category_type do |category|
         status_tag category.category_type, class: case category.category_type
                                            when "root" then "blue"

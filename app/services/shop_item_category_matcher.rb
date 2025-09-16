@@ -39,19 +39,20 @@ class ShopItemCategoryMatcher
     begin
       # Extract the last part of the path (product name) and also try full path matching
       # e.g.: "groceries coffee & tea freeze dried instant coffee"
-      #
-
-      #
       sanitized_shop_item_text = ActiveRecord::Base.connection.quote(shop_item_text)
 
       #look for categories.path
       #e.g.: food/beverages/hot-beverages/coffee
       sql = <<~SQL
-        SELECT categories.*, 
+        SELECT categories.*,
                GREATEST(
                  similarity(categories.path, #{sanitized_shop_item_text}),
                  similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_shop_item_text}),
-                 similarity(categories.title, #{sanitized_shop_item_text})
+                 similarity(categories.title, #{sanitized_shop_item_text}),
+                 COALESCE((
+                   SELECT MAX(similarity(syn, #{sanitized_shop_item_text}))
+                   FROM unnest(categories.synonyms) AS syn
+                 ), 0)
                ) as sim_score
         FROM categories
         WHERE category_type = #{Category.category_types[:product]}
@@ -59,6 +60,10 @@ class ShopItemCategoryMatcher
             similarity(categories.path, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
             OR similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
             OR similarity(categories.title, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
+            OR EXISTS (
+              SELECT 1 FROM unnest(categories.synonyms) AS syn
+              WHERE similarity(syn, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
+            )
           )
         ORDER BY sim_score DESC
         LIMIT 1

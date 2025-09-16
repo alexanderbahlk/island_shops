@@ -17,6 +17,12 @@ class CategoryShopItemSearchTest < ActiveSupport::TestCase
     assert results.first[:shop_items].is_a?(Array) if results.any?
   end
 
+  test "returns eggplant category for synonym query" do
+    service = CategoryShopItemSearch.new(query: "Aubergine")
+    results = service.results
+    assert results.any? { |cat| cat[:title] == "Eggplant" }
+  end
+
   test "respects hide_out_of_stock param" do
     service = CategoryShopItemSearch.new(query: @query, hide_out_of_stock: true)
     results = service.results

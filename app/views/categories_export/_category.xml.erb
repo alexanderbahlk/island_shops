@@ -1,17 +1,26 @@
 <category>
   <title><%= CGI.escapeHTML(category.title.to_s) %></title>
-  <% leaf_children = category.children.select { |c| c.children.empty? } %>
-  <% if leaf_children.any? %>
+  <% product_children = category.children.select(&:product?) %>
+  <% if product_children.any? %>
     <types>
-      <% leaf_children.each do |leaf| %>
-        <type><%= CGI.escapeHTML(leaf.title.to_s) %></type>
+      <% product_children.each do |product| %>
+        <type>
+          <name><%= CGI.escapeHTML(product.title.to_s) %></name>
+          <% if product.synonyms.present? %>
+            <synonyms>
+              <% product.synonyms.each do |syn| %>
+                <synonym><%= CGI.escapeHTML(syn) %></synonym>
+              <% end %>
+            </synonyms>
+          <% end %>
+        </type>
       <% end %>
     </types>
   <% end %>
-  <% non_leaf_children = category.children.reject { |c| c.children.empty? } %>
-  <% if non_leaf_children.any? %>
+  <% non_product_children = category.children.reject(&:product?) %>
+  <% if non_product_children.any? %>
     <categories>
-      <% non_leaf_children.each do |child| %>
+      <% non_product_children.each do |child| %>
         <%= render partial: "category", locals: { category: child } %>
       <% end %>
     </categories>

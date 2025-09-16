@@ -10,8 +10,11 @@ ActiveAdmin.register_page "Category Tree" do
           categories.each do |category|
             li do
               span best_in_place(category, :title, as: :input, url: [:admin, category]), class: "editable-title"
-              text_node " (#{category.category_type})"
-              text_node " - "
+              if category.synonyms.present?
+                i " (#{category.synonyms.join(", ")})", class: "synonyms"
+              end
+              #text_node " (#{category.category_type})"
+              text_node " -> "
               # Link to edit the category
               text_node link_to("View", admin_category_path(category), class: "edit-link")
               # Recursively render children
