@@ -62,10 +62,10 @@
                         <title>Outerwear</title>
                         <types>
                             <type>
-                                <name>Coats</name>
+                                <name>Suits</name>
                             </type>
                             <type>
-                                <name>Suits</name>
+                                <name>Coats</name>
                             </type>
                             <type>
                                 <name>Jackets</name>
@@ -123,10 +123,10 @@
                         <title>Tops</title>
                         <types>
                             <type>
-                                <name>Blouses</name>
+                                <name>T-Shirts</name>
                             </type>
                             <type>
-                                <name>T-Shirts</name>
+                                <name>Blouses</name>
                             </type>
                             <type>
                                 <name>Sweaters</name>
@@ -161,10 +161,10 @@
                         <title>TV &amp; Entertainment</title>
                         <types>
                             <type>
-                                <name>Streaming Devices</name>
+                                <name>Televisions</name>
                             </type>
                             <type>
-                                <name>Televisions</name>
+                                <name>Streaming Devices</name>
                             </type>
                             <type>
                                 <name>Gaming Consoles</name>
@@ -194,10 +194,10 @@
                         <title>Laptops &amp; Desktops</title>
                         <types>
                             <type>
-                                <name>Tablets</name>
+                                <name>Desktops</name>
                             </type>
                             <type>
-                                <name>Desktops</name>
+                                <name>Tablets</name>
                             </type>
                             <type>
                                 <name>Laptops</name>
@@ -230,13 +230,13 @@
                         <title>Smartphones</title>
                         <types>
                             <type>
+                                <name>iPhone</name>
+                            </type>
+                            <type>
                                 <name>Android Phones</name>
                             </type>
                             <type>
                                 <name>Feature Phones</name>
-                            </type>
-                            <type>
-                                <name>iPhone</name>
                             </type>
                         </types>
                     </category>
@@ -257,7 +257,11 @@
                                 <name>Wraps</name>
                             </type>
                             <type>
-                                <name>Buns</name>
+                                <name>Rolls</name>
+                                <synonyms>
+                                    <synonym>Buns</synonym>
+                                    <synonym>Boule</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Bagels</name>
@@ -267,12 +271,6 @@
                             </type>
                             <type>
                                 <name>Wheat Bread</name>
-                            </type>
-                            <type>
-                                <name>Boule</name>
-                            </type>
-                            <type>
-                                <name>Rolls</name>
                             </type>
                             <type>
                                 <name>Specialty Breads</name>
@@ -292,9 +290,6 @@
                         <title>Pastries</title>
                         <types>
                             <type>
-                                <name>Cheesecake</name>
-                            </type>
-                            <type>
                                 <name>Chocolate Cakes</name>
                             </type>
                             <type>
@@ -308,6 +303,9 @@
                             </type>
                             <type>
                                 <name>Donuts</name>
+                            </type>
+                            <type>
+                                <name>Cheesecake</name>
                             </type>
                             <type>
                                 <name>Tarts</name>
@@ -386,19 +384,19 @@
                         <title>Alcoholic</title>
                         <types>
                             <type>
+                                <name>Cider</name>
+                            </type>
+                            <type>
+                                <name>Gin</name>
+                            </type>
+                            <type>
                                 <name>Whiskey</name>
                             </type>
                             <type>
                                 <name>Tequila</name>
                             </type>
                             <type>
-                                <name>Gin</name>
-                            </type>
-                            <type>
                                 <name>Shandy</name>
-                            </type>
-                            <type>
-                                <name>Cider</name>
                             </type>
                             <type>
                                 <name>Red Wine</name>
@@ -439,16 +437,19 @@
                                 <name>Matcha</name>
                             </type>
                             <type>
-                                <name>Other Tea</name>
+                                <name>Chai Tea</name>
                             </type>
                             <type>
                                 <name>Tea</name>
                             </type>
                             <type>
-                                <name>Chai Tea</name>
+                                <name>Black Tea</name>
                             </type>
                             <type>
-                                <name>Black Tea</name>
+                                <name>Hot Chocolate</name>
+                            </type>
+                            <type>
+                                <name>Other Tea</name>
                             </type>
                             <type>
                                 <name>Green Tea</name>
@@ -465,55 +466,22 @@
                             <type>
                                 <name>Coffee</name>
                             </type>
-                            <type>
-                                <name>Hot Chocolate</name>
-                            </type>
                         </types>
                     </category>
                     <category>
                         <title>Non-Alcoholic</title>
                         <types>
                             <type>
-                                <name>Powdered Drink Mixes</name>
-                            </type>
-                            <type>
-                                <name>Coconut Water</name>
-                            </type>
-                            <type>
-                                <name>Energy Drinks</name>
-                            </type>
-                            <type>
-                                <name>Diet Pepsi</name>
-                            </type>
-                            <type>
                                 <name>Lemon-Lime Soda</name>
                             </type>
                             <type>
-                                <name>Coke Light</name>
-                            </type>
-                            <type>
                                 <name>Kombucha</name>
-                            </type>
-                            <type>
-                                <name>Cranberry Juice</name>
-                            </type>
-                            <type>
-                                <name>Cran-Apple Juice</name>
                             </type>
                             <type>
                                 <name>Fruit Soda</name>
                             </type>
                             <type>
                                 <name>Non-Alcoholic Beer</name>
-                            </type>
-                            <type>
-                                <name>Ginger Ale</name>
-                            </type>
-                            <type>
-                                <name>Pineapple Juice</name>
-                            </type>
-                            <type>
-                                <name>Mango Juice</name>
                             </type>
                             <type>
                                 <name>Ginger Beer</name>
@@ -528,6 +496,36 @@
                                 <name>Powdered Milk</name>
                             </type>
                             <type>
+                                <name>Fruit Juice</name>
+                            </type>
+                            <type>
+                                <name>Iced Tea</name>
+                            </type>
+                            <type>
+                                <name>Apple Juice</name>
+                            </type>
+                            <type>
+                                <name>Energy Drinks</name>
+                            </type>
+                            <type>
+                                <name>Powdered Drink Mixes</name>
+                            </type>
+                            <type>
+                                <name>Coconut Water</name>
+                            </type>
+                            <type>
+                                <name>Cranberry Juice</name>
+                            </type>
+                            <type>
+                                <name>Cran-Apple Juice</name>
+                            </type>
+                            <type>
+                                <name>Ginger Ale</name>
+                            </type>
+                            <type>
+                                <name>Pineapple Juice</name>
+                            </type>
+                            <type>
                                 <name>Grape Juice</name>
                             </type>
                             <type>
@@ -537,19 +535,13 @@
                                 <name>Club Soda</name>
                             </type>
                             <type>
-                                <name>Fruit Juice</name>
+                                <name>Sports Drinks</name>
                             </type>
                             <type>
-                                <name>Iced Tea</name>
-                            </type>
-                            <type>
-                                <name>Pepsi</name>
+                                <name>Mango Juice</name>
                             </type>
                             <type>
                                 <name>Evaporated Milk</name>
-                            </type>
-                            <type>
-                                <name>Apple Juice</name>
                             </type>
                             <type>
                                 <name>Sprite</name>
@@ -558,10 +550,10 @@
                                 <name>Vegetable Juice</name>
                             </type>
                             <type>
-                                <name>Lemon Juice</name>
+                                <name>Barista Milk</name>
                             </type>
                             <type>
-                                <name>Barista Milk</name>
+                                <name>Lemon Juice</name>
                             </type>
                             <type>
                                 <name>Non-Alcoholic Wine</name>
@@ -586,15 +578,20 @@
                             </type>
                             <type>
                                 <name>Diet Coke</name>
-                            </type>
-                            <type>
-                                <name>Tomato Juice</name>
+                                <synonyms>
+                                    <synonym>Diet Pepsi</synonym>
+                                    <synonym>Coke Light</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Coke</name>
+                                <synonyms>
+                                    <synonym>Cola</synonym>
+                                    <synonym>Pepsi</synonym>
+                                </synonyms>
                             </type>
                             <type>
-                                <name>Sports Drinks</name>
+                                <name>Tomato Juice</name>
                             </type>
                             <type>
                                 <name>Flavored Water</name>
@@ -742,12 +739,6 @@
                         <title>Baking Supplies</title>
                         <types>
                             <type>
-                                <name>Confectioners&#39; Sugar</name>
-                            </type>
-                            <type>
-                                <name>Brown Sugar</name>
-                            </type>
-                            <type>
                                 <name>Ground Flaxseed</name>
                             </type>
                             <type>
@@ -755,18 +746,6 @@
                             </type>
                             <type>
                                 <name>Food Coloring</name>
-                            </type>
-                            <type>
-                                <name>Sorghum Flour</name>
-                            </type>
-                            <type>
-                                <name>Pie Crust</name>
-                            </type>
-                            <type>
-                                <name>Cornstarch</name>
-                            </type>
-                            <type>
-                                <name>Honey</name>
                             </type>
                             <type>
                                 <name>Vanilla Extract</name>
@@ -781,7 +760,7 @@
                                 <name>Powdered Sugar</name>
                             </type>
                             <type>
-                                <name>Quinoa Flour</name>
+                                <name>Cornmeal</name>
                             </type>
                             <type>
                                 <name>Coconut Flour</name>
@@ -794,6 +773,33 @@
                             </type>
                             <type>
                                 <name>Chia Seeds</name>
+                            </type>
+                            <type>
+                                <name>Confectioners&#39; Sugar</name>
+                            </type>
+                            <type>
+                                <name>Brown Sugar</name>
+                            </type>
+                            <type>
+                                <name>Sorghum Flour</name>
+                            </type>
+                            <type>
+                                <name>Pie Crust</name>
+                            </type>
+                            <type>
+                                <name>Cornstarch</name>
+                            </type>
+                            <type>
+                                <name>Honey</name>
+                            </type>
+                            <type>
+                                <name>Quinoa Flour</name>
+                            </type>
+                            <type>
+                                <name>Teff Flour</name>
+                            </type>
+                            <type>
+                                <name>Chocolate Chips</name>
                             </type>
                             <type>
                                 <name>Chickpea Flour</name>
@@ -839,6 +845,9 @@
                             </type>
                             <type>
                                 <name>Flour</name>
+                                <synonyms>
+                                    <synonym>White Flour</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Peanut Butter</name>
@@ -850,12 +859,6 @@
                                 <name>Baking Soda</name>
                             </type>
                             <type>
-                                <name>Teff Flour</name>
-                            </type>
-                            <type>
-                                <name>Chocolate Chips</name>
-                            </type>
-                            <type>
                                 <name>Cocoa Powder</name>
                             </type>
                         </types>
@@ -864,19 +867,19 @@
                         <title>Oils &amp; Vinegars</title>
                         <types>
                             <type>
+                                <name>Apple Cider Vinegar</name>
+                            </type>
+                            <type>
+                                <name>White Vinegar</name>
+                            </type>
+                            <type>
                                 <name>Olive Oil</name>
                             </type>
                             <type>
                                 <name>Canola Oil</name>
                             </type>
                             <type>
-                                <name>Apple Cider Vinegar</name>
-                            </type>
-                            <type>
                                 <name>Sunflower Oil</name>
-                            </type>
-                            <type>
-                                <name>White Vinegar</name>
                             </type>
                             <type>
                                 <name>Coconut Oil</name>
@@ -899,19 +902,16 @@
                                 <name>Tapenade</name>
                             </type>
                             <type>
-                                <name>Sweet and Sour Sauce</name>
+                                <name>Barbecue Sauce</name>
                             </type>
                             <type>
-                                <name>Salsa</name>
+                                <name>Fish Sauce</name>
                             </type>
                             <type>
                                 <name>Alfredo Sauce</name>
                             </type>
                             <type>
                                 <name>Mustard</name>
-                            </type>
-                            <type>
-                                <name>Soy Sauce</name>
                             </type>
                             <type>
                                 <name>Buffalo Sauce</name>
@@ -921,18 +921,6 @@
                             </type>
                             <type>
                                 <name>Gravy</name>
-                            </type>
-                            <type>
-                                <name>Stuffing Mix</name>
-                            </type>
-                            <type>
-                                <name>Ketchup</name>
-                            </type>
-                            <type>
-                                <name>Chimichurri Sauce</name>
-                            </type>
-                            <type>
-                                <name>Barbecue Sauce</name>
                             </type>
                             <type>
                                 <name>BBC Sauce</name>
@@ -950,10 +938,25 @@
                                 <name>Mayonnaise</name>
                             </type>
                             <type>
-                                <name>Fish Sauce</name>
+                                <name>Soy Sauce</name>
                             </type>
                             <type>
                                 <name>Pesto</name>
+                            </type>
+                            <type>
+                                <name>Sweet and Sour Sauce</name>
+                            </type>
+                            <type>
+                                <name>Salsa</name>
+                            </type>
+                            <type>
+                                <name>Stuffing Mix</name>
+                            </type>
+                            <type>
+                                <name>Ketchup</name>
+                            </type>
+                            <type>
+                                <name>Chimichurri Sauce</name>
                             </type>
                             <type>
                                 <name>Chili Sauce</name>
@@ -988,28 +991,10 @@
                         <title>Spices &amp; Seasonings</title>
                         <types>
                             <type>
-                                <name>Chili Seasoning</name>
-                            </type>
-                            <type>
-                                <name>Mustard Seeds</name>
-                            </type>
-                            <type>
-                                <name>Sumac</name>
-                            </type>
-                            <type>
                                 <name>Lime Pepper Seasoning</name>
                             </type>
                             <type>
                                 <name>Fennel Seeds</name>
-                            </type>
-                            <type>
-                                <name>Caraway Seeds</name>
-                            </type>
-                            <type>
-                                <name>Oregano Flakes</name>
-                            </type>
-                            <type>
-                                <name>Ground Pakrika</name>
                             </type>
                             <type>
                                 <name>Five-Spice Powder</name>
@@ -1024,31 +1009,7 @@
                                 <name>Bay Leaves</name>
                             </type>
                             <type>
-                                <name>Ranch Seasoning</name>
-                            </type>
-                            <type>
-                                <name>Ground Black Pepper</name>
-                            </type>
-                            <type>
-                                <name>Thyme Flakes</name>
-                            </type>
-                            <type>
-                                <name>Pepper Corn</name>
-                            </type>
-                            <type>
-                                <name>Jerk Seasoning</name>
-                            </type>
-                            <type>
                                 <name>Onion Powder</name>
-                            </type>
-                            <type>
-                                <name>Ginger</name>
-                            </type>
-                            <type>
-                                <name>Chili Powder</name>
-                            </type>
-                            <type>
-                                <name>Cardamom</name>
                             </type>
                             <type>
                                 <name>Citrus Blend</name>
@@ -1061,9 +1022,6 @@
                             </type>
                             <type>
                                 <name>Basil Leaves</name>
-                            </type>
-                            <type>
-                                <name>Saffron</name>
                             </type>
                             <type>
                                 <name>Italian Seasoning</name>
@@ -1087,10 +1045,64 @@
                                 <name>Nutmeg</name>
                             </type>
                             <type>
+                                <name>Saffron</name>
+                            </type>
+                            <type>
+                                <name>Caraway Seeds</name>
+                            </type>
+                            <type>
+                                <name>Oregano Flakes</name>
+                            </type>
+                            <type>
+                                <name>Ground Pakrika</name>
+                            </type>
+                            <type>
+                                <name>Ranch Seasoning</name>
+                            </type>
+                            <type>
+                                <name>Ground Black Pepper</name>
+                            </type>
+                            <type>
+                                <name>Thyme Flakes</name>
+                            </type>
+                            <type>
+                                <name>Chili Powder</name>
+                            </type>
+                            <type>
+                                <name>Cardamom</name>
+                            </type>
+                            <type>
                                 <name>Parsley Flakes</name>
                             </type>
                             <type>
                                 <name>Curry Powder</name>
+                            </type>
+                            <type>
+                                <name>Cajun Seasoning</name>
+                            </type>
+                            <type>
+                                <name>Chinese Five Spice</name>
+                            </type>
+                            <type>
+                                <name>Ginger</name>
+                            </type>
+                            <type>
+                                <name>Chili Seasoning</name>
+                            </type>
+                            <type>
+                                <name>Mustard Seeds</name>
+                            </type>
+                            <type>
+                                <name>Sumac</name>
+                            </type>
+                            <type>
+                                <name>Pepper Corn</name>
+                            </type>
+                            <type>
+                                <name>Jerk Seasoning</name>
+                            </type>
+                            <type>
+                                <name>Allspice</name>
                             </type>
                             <type>
                                 <name>Turmeric</name>
@@ -1140,15 +1152,6 @@
                             <type>
                                 <name>Salt</name>
                             </type>
-                            <type>
-                                <name>Cajun Seasoning</name>
-                            </type>
-                            <type>
-                                <name>Chinese Five Spice</name>
-                            </type>
-                            <type>
-                                <name>Allspice</name>
-                            </type>
                         </types>
                     </category>
                 </categories>
@@ -1188,6 +1191,9 @@
                     <category>
                         <title>Milk</title>
                         <types>
+                            <type>
+                                <name>Creamer</name>
+                            </type>
                             <type>
                                 <name>Soy Milk</name>
                             </type>
@@ -1275,19 +1281,19 @@
                         <title>Jelly</title>
                         <types>
                             <type>
-                                <name>Fruit Jelly</name>
+                                <name>Lemon Curd</name>
                             </type>
                             <type>
                                 <name>Apple Jelly</name>
                             </type>
                             <type>
-                                <name>Raspberry Jelly</name>
-                            </type>
-                            <type>
                                 <name>Grape Jelly</name>
                             </type>
                             <type>
-                                <name>Lemon Curd</name>
+                                <name>Fruit Jelly</name>
+                            </type>
+                            <type>
+                                <name>Raspberry Jelly</name>
                             </type>
                             <type>
                                 <name>Strawberry Jelly</name>
@@ -2786,10 +2792,10 @@
                         <title>Hair Color</title>
                         <types>
                             <type>
-                                <name>Hair Bleach</name>
+                                <name>Permanent Color</name>
                             </type>
                             <type>
-                                <name>Permanent Color</name>
+                                <name>Hair Bleach</name>
                             </type>
                             <type>
                                 <name>Temporary Color</name>
@@ -2817,10 +2823,10 @@
                                 <name>Hair Masks</name>
                             </type>
                             <type>
-                                <name>Shampoo</name>
+                                <name>Conditioner</name>
                             </type>
                             <type>
-                                <name>Conditioner</name>
+                                <name>Shampoo</name>
                             </type>
                         </types>
                     </category>
@@ -2927,6 +2933,22 @@
                         </types>
                     </category>
                     <category>
+                        <title>Clothing</title>
+                        <types>
+                            <type>
+                                <name>Fabric Dye</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>General Cleaning</title>
+                        <types>
+                            <type>
+                                <name>Vinegar</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
                         <title>Kitchen Cleaning</title>
                         <types>
                             <type>
@@ -2969,16 +2991,19 @@
                         <title>Cooking</title>
                         <types>
                             <type>
+                                <name>Roasting Pan</name>
+                            </type>
+                            <type>
+                                <name>Loaf Pans</name>
+                            </type>
+                            <type>
+                                <name>Disposable Cups</name>
+                            </type>
+                            <type>
                                 <name>Grill Pan</name>
                             </type>
                             <type>
                                 <name>Baking Pan</name>
-                            </type>
-                            <type>
-                                <name>Aluminum Pans</name>
-                            </type>
-                            <type>
-                                <name>Loaf Pans</name>
                             </type>
                             <type>
                                 <name>Disposable Cutlery</name>
@@ -2987,10 +3012,7 @@
                                 <name>Cornstarch Forks</name>
                             </type>
                             <type>
-                                <name>Roasting Pan</name>
-                            </type>
-                            <type>
-                                <name>Disposable Cups</name>
+                                <name>Aluminum Pans</name>
                             </type>
                             <type>
                                 <name>Cornstarch Knives</name>
@@ -3049,10 +3071,10 @@
                         <title>Laundry</title>
                         <types>
                             <type>
-                                <name>Stain Remover</name>
+                                <name>Detergent</name>
                             </type>
                             <type>
-                                <name>Detergent</name>
+                                <name>Stain Remover</name>
                             </type>
                             <type>
                                 <name>Fabric Softener</name>
@@ -3063,10 +3085,10 @@
                         <title>Storage</title>
                         <types>
                             <type>
-                                <name>Storage Bags</name>
+                                <name>Food Containers</name>
                             </type>
                             <type>
-                                <name>Food Containers</name>
+                                <name>Storage Bags</name>
                             </type>
                             <type>
                                 <name>Storage Boxes</name>
@@ -3093,13 +3115,13 @@
                         <title>Kitchen Paper</title>
                         <types>
                             <type>
-                                <name>Napkins</name>
-                            </type>
-                            <type>
                                 <name>Paper Plates</name>
                             </type>
                             <type>
                                 <name>Paper Towels</name>
+                            </type>
+                            <type>
+                                <name>Napkins</name>
                             </type>
                         </types>
                     </category>
@@ -3311,10 +3333,10 @@
                                 <name>Backpacks</name>
                             </type>
                             <type>
-                                <name>Hiking Boots</name>
+                                <name>Hiking Poles</name>
                             </type>
                             <type>
-                                <name>Hiking Poles</name>
+                                <name>Hiking Boots</name>
                             </type>
                         </types>
                     </category>
@@ -3330,10 +3352,10 @@
                                 <name>Tennis</name>
                             </type>
                             <type>
-                                <name>Running</name>
+                                <name>Golf</name>
                             </type>
                             <type>
-                                <name>Golf</name>
+                                <name>Running</name>
                             </type>
                         </types>
                     </category>
@@ -3341,10 +3363,10 @@
                         <title>Team Sports</title>
                         <types>
                             <type>
-                                <name>Baseball</name>
+                                <name>Basketball</name>
                             </type>
                             <type>
-                                <name>Basketball</name>
+                                <name>Baseball</name>
                             </type>
                             <type>
                                 <name>Football</name>
