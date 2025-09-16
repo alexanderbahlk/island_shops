@@ -435,6 +435,20 @@
                 <title>Breakfast</title>
                 <categories>
                     <category>
+                        <title>Hot Meals</title>
+                        <types>
+                            <type>
+                                <name>Hash Browns</name>
+                            </type>
+                            <type>
+                                <name>Pancakes &amp; Waffles</name>
+                            </type>
+                            <type>
+                                <name>Omelets</name>    
+                            </type>
+                        </types>
+                    </category>
+                    <category>
                         <title>Hot Cereal</title>
                         <types>
                             <type>
