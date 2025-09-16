@@ -54,7 +54,7 @@ class MassyResetShopItemsJob < ApplicationJob
           end
 
           # Optional: Sleep briefly to avoid overwhelming the database
-          sleep(0.01) if processed_count % 50 == 0
+          sleep(0.01) if matched_count % 50 == 0
         rescue => e
           error_count += 1
           Rails.logger.error "Error processing ShopItem #{shop_item.id}: #{e.message}"
