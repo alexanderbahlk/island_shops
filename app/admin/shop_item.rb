@@ -144,7 +144,7 @@ ActiveAdmin.register ShopItem do
       best_in_place shop_item, :unit,
                     as: :select,
                     url: admin_shop_item_path(shop_item),
-                    collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
+                    collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] },
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
     end
@@ -226,7 +226,7 @@ ActiveAdmin.register ShopItem do
       f.input :category, :label => "Product", as: :select, collection: Category.only_products, include_blank: true, input_html: { id: "category_select" }
       f.input :image_url, placeholder: "https://example.com/image.jpg"
       f.input :size
-      f.input :unit, as: :select, collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] }, include_blank: false
+      f.input :unit, as: :select, collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] }, include_blank: false
       f.input :location
       f.input :product_id
       f.input :approved, as: :boolean, hint: "Check to approve this item for public listing"
@@ -280,7 +280,7 @@ ActiveAdmin.register ShopItem do
         best_in_place shop_item, :unit,
                       as: :select,
                       url: admin_shop_item_path(shop_item),
-                      collection: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
+                      collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] },
                       html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                       class: "bip-select-unit"
       end
@@ -394,7 +394,7 @@ ActiveAdmin.register ShopItem do
 
   batch_action :set_unit, form: -> {
                             {
-                              unit: UnitParser::VALID_UNITS.map { |unit| [unit, unit] },
+                              unit: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] },
                             }
                           } do |ids, inputs|
     store_selected_items(ids)

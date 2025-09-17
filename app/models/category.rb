@@ -96,7 +96,9 @@ class Category < ApplicationRecord
   end
 
   def self.only_products
-    products.includes(:parent).map { |cat| [cat.breadcrumbs.map(&:full_path).join(" > "), cat.id] }
+    products.includes(:parent).map { |cat|
+      [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
+    }.sort_by { |breadcrumb, _id| breadcrumb }
   end
 
   def full_path

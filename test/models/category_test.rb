@@ -61,6 +61,7 @@ class CategoryTest < ActiveSupport::TestCase
     @category.update!(title: "Updated Fresh Food")
     @subcategory.reload
     assert_not_equal old_path, @subcategory.path
+    assert_equal "food/updated-fresh-food/dairy", @subcategory.path
   end
 
   test "clears all nested references when deleting root category" do
