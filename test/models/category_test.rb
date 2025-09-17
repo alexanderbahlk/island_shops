@@ -56,6 +56,13 @@ class CategoryTest < ActiveSupport::TestCase
     assert_not @shop_item2.approved
   end
 
+  test "should update subcategory and paths of children when parent title changes" do
+    old_path = @subcategory.path
+    @category.update!(title: "Updated Fresh Food")
+    @subcategory.reload
+    assert_not_equal old_path, @subcategory.path
+  end
+
   test "clears all nested references when deleting root category" do
     total_items = ShopItem.joins(:category)
       .where(categories: { id: @root_category.self_and_descendants.pluck(:id) })

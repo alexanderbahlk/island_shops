@@ -170,6 +170,12 @@ class Category < ApplicationRecord
     end
   end
 
+  def build_path_string
+    return slug if parent.nil?
+
+    "#{parent.full_path}/#{slug}"
+  end
+
   private
 
   # Remove the old clear_shop_item_references method and replace with this:
@@ -213,12 +219,6 @@ class Category < ApplicationRecord
 
   def build_path
     self.path = build_path_string
-  end
-
-  def build_path_string
-    return slug if parent.nil?
-
-    "#{parent.full_path}/#{slug}"
   end
 
   def update_children_paths
