@@ -98,7 +98,7 @@ class ShopItem < ApplicationRecord
   end
 
   def latest_price_per_unified_unit
-    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    latest_update = newest_shop_item_updates
     if latest_update&.price_per_unit && latest_update&.price_per_unit.is_a?(Numeric)
       "$" + sprintf("%.2f", latest_update.price_per_unit).to_s + " per " + latest_update.normalized_unit.to_s
     else
@@ -107,17 +107,21 @@ class ShopItem < ApplicationRecord
   end
 
   def latest_stock_status
-    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    latest_update = newest_shop_item_updates
     latest_update&.normalized_stock_status || "N/A"
   end
 
   def latest_price_per_unit
-    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    latest_update = newest_shop_item_updates
     if latest_update&.price && self.unit.present?
       self.size.to_s + self.unit.to_s + " for $" + latest_update.price.to_s
     else
       "N/A"
     end
+  end
+
+  def newest_shop_item_updates
+    self.shop_item_updates.order(created_at: :desc).first
   end
 
   def category_hierarchy

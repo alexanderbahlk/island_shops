@@ -15,6 +15,14 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
       price: 29.99,
       stock_status: "in_stock",
     }
+    @shop_item_update_lower_price_params = {
+      price: 24.99,
+      stock_status: "limited",
+    }
+    @shop_item_update_ou_of_stock_params = {
+      price: 29.99,
+      stock_status: "out_of_stock",
+    }
   end
 
   test "creates new shop item with update when item doesn't exist" do
@@ -30,6 +38,25 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     assert_equal @shop_item_params[:shop], builder.shop_item.shop
     assert_equal @shop_item_update_params[:price], builder.shop_item_update.price
     assert_equal @shop_item_update_params[:stock_status], builder.shop_item_update.stock_status
+  end
+
+  test "creates ShopItemUpdate after the initial creation" do
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder.build
+
+    assert_equal builder.shop_item.shop_item_updates.size, 1
+
+    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_lower_price_params)
+    builder.build
+
+    assert_equal builder.shop_item.shop_item_updates.size, 2
+
+    builder.shop_item.shop_item_updates.reload
+
+    newest_shop_item_updates = builder.shop_item.newest_shop_item_updates
+    assert_not newest_shop_item_updates.nil?
+    assert_equal 24.99, newest_shop_item_updates.price
+    assert_equal "limited", builder.shop_item.latest_stock_status
   end
 
   test "creates update for existing item when data changes" do
