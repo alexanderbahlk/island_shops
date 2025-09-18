@@ -207,6 +207,7 @@ ActiveAdmin.register ShopItem do
   filter :shop, as: :select, collection: Shop::ALLOWED, include_blank: "N/A"
   filter :approved
   filter :needs_another_review
+  filter :unit, as: :select, collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] }
   filter :no_price_per_unified_unit, as: :boolean, label: "Missing Price per Unified Unit"
   filter :category, as: :select, collection: proc {
                Category.products.includes(:parent).map do |cat|
