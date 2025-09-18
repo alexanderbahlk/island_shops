@@ -22,6 +22,17 @@ body>div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-
 
 .category-tree-item {
     margin-left: 20px;
+    .associated-products-false {
+        font-weight: normal;
+        color: #721c24;
+        font-size: 14px;
+    }
+
+    .associated-products-true {
+        font-weight: bold;
+        color: #2d6a2d;
+        font-size: 14px;
+    }
 }
 
 .category-tree-level-1>.category-tree-item {

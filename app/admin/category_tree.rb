@@ -19,6 +19,12 @@ ActiveAdmin.register_page "Category Tree" do
               text_node link_to("View", admin_category_path(category), class: "edit-link")
               text_node "  --------  "
               text_node category.category_type
+
+              numberOfAssociatedProducts = category.shop_items.count
+              if category.product?
+                text_node "  --------  "
+                text_node "<span class='associated-products-#{numberOfAssociatedProducts > 0}'>#{numberOfAssociatedProducts.to_s}</span>".html_safe
+              end
               # Recursively render children
               if category.children.any?
                 render_category_tree(category.children, depth + 1)
