@@ -116,7 +116,7 @@ ActiveAdmin.register Category do
     end
 
     panel "Child Categories (#{category.children.count})" do
-      table_for category.children.order(:sort_order) do
+      table_for category.children.order(:title) do
         column :title do |child|
           link_to child.title, admin_category_path(child)
         end
@@ -162,7 +162,23 @@ ActiveAdmin.register Category do
     # Show associated shop items if this is a product category
     if category.product?
       panel "Associated Shop Items (#{category.shop_items.count})" do
-        table_for category.shop_items.limit(20) do
+        # --- Add this block for the move form ---
+        div style: "margin-bottom: 15px;" do
+          form action: move_shop_items_admin_category_path(category), method: :post do
+            input type: "hidden", name: "authenticity_token", value: form_authenticity_token
+            span "Move all to: "
+            select name: "new_category_id" do
+              Category.only_products.each do |breadcrumb, id|
+                option value: id, selected: (id == category.id) do
+                  text_node breadcrumb
+                end
+              end
+            end
+            input type: "submit", value: "Move All", class: "button", data: { confirm: "Are you sure you want to move all associated shop items to the selected category?" }
+          end
+        end
+        # --- End move form block ---
+        table_for category.shop_items.order(:title).limit(20) do
           column :title do |item|
             link_to item.title, admin_shop_item_path(item)
           end
@@ -258,6 +274,17 @@ ActiveAdmin.register Category do
     else
       redirect_to admin_category_path(resource),
                   alert: "No shop item specified for removal"
+    end
+  end
+
+  member_action :move_shop_items, method: :post do
+    new_category_id = params[:new_category_id]
+    if new_category_id.present?
+      new_category = Category.find(new_category_id)
+      resource.shop_items.update_all(category_id: new_category.id)
+      redirect_to admin_category_path(resource), notice: "All shop items moved to '#{new_category.title}'."
+    else
+      redirect_to admin_category_path(resource), alert: "No category selected."
     end
   end
 
