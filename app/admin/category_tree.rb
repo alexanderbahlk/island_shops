@@ -7,7 +7,7 @@ ActiveAdmin.register_page "Category Tree" do
 
       def render_category_tree(categories, depth = 0)
         ul class: "category-tree-level-#{depth}" do
-          categories.each do |category|
+          categories.order(:title).each do |category|
             li class: "category-tree-item" do
               span best_in_place(category, :title, as: :input, url: [:admin, category]), class: "editable-title"
               if category.synonyms.present?
