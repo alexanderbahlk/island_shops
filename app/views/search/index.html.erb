@@ -609,8 +609,8 @@
             renderShopItem(item) {
                 const imageUrl = item.image_url || 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
                 const price = item.latest_price ? `$${item.latest_price}` : 'N/A';
-                const pricePerUnit = item.latest_price_per_unit !== 'N/A' ? `(${item.latest_price_per_unit})` : 'N/A';
-                const pricePerUnifiedUnit = item.latest_price_per_unified_unit !== 'N/A' ? `${item.latest_price_per_unified_unit}` : 'N/A';
+                const pricePerUnit = item.latest_price_per_unit_with_unit !== 'N/A' ? `(${item.latest_price_per_unit_with_unit})` : 'N/A';
+                const pricePerUnifiedUnit = item.latest_price_per_normalized_unit_with_unit !== 'N/A' ? `${item.latest_price_per_normalized_unit_with_unit}` : 'N/A';
                 const stockStatus = item.stock_status || 'N/A';
 
                 return `

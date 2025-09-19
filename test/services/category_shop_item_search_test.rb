@@ -37,7 +37,20 @@ class CategoryShopItemSearchTest < ActiveSupport::TestCase
     service = CategoryShopItemSearch.new(query: @query, limit: 2)
     results = service.results
     results.each do |cat|
-      assert cat[:shop_items].size <= 2
+      assert cat[:shop_items].size == 2
     end
+  end
+
+  test "sort shop_items by price" do
+    service = CategoryShopItemSearch.new(query: @query)
+    results = service.results
+    milk_category = results.first
+    assert_equal milk_category[:path], categories(:milk).path
+    milk = milk_category[:shop_items].first
+    assert_equal "Goat Milk", milk[:title]
+    assert_equal 1.79, milk[:latest_price_per_normalized_unit]
+    goat_milk = milk_category[:shop_items].second
+    assert_equal "Organic Milk", goat_milk[:title]
+    assert_equal 1.99, goat_milk[:latest_price_per_normalized_unit]
   end
 end

@@ -148,9 +148,9 @@ ActiveAdmin.register ShopItem do
                     html_attrs: { style: "cursor: pointer; min-width: 30px;" },
                     class: "bip-select-unit"
     end
-    column :latest_price_per_unified_unit do |shop_item|
-      if shop_item.latest_price_per_unified_unit != "N/A"
-        shop_item.latest_price_per_unified_unit
+    column :latest_price_per_normalized_unit_with_unit do |shop_item|
+      if shop_item.latest_price_per_normalized_unit_with_unit != "N/A"
+        shop_item.latest_price_per_normalized_unit_with_unit
       else
         content_tag(:span, "N/A", style: "color: red; font-size: 11px;")
       end
@@ -293,8 +293,8 @@ ActiveAdmin.register ShopItem do
           "N/A"
         end
       end
-      row :latest_price_per_unified_unit do |shop_item|
-        shop_item.latest_price_per_unified_unit
+      row :latest_price_per_normalized_unit_with_unit do |shop_item|
+        shop_item.latest_price_per_normalized_unit_with_unit
       end
       row :location
       row :product_id
@@ -772,7 +772,7 @@ ActiveAdmin.register ShopItem do
                   shop_item_id: resource.id,
                   price_per_unit: number_to_currency(calculation_result[:price_per_unit]),
                   normalized_unit: calculation_result[:normalized_unit],
-                  latest_price_per_unified_unit: resource.reload.latest_price_per_unified_unit,
+                  latest_price_per_normalized_unit_with_unit: resource.reload.latest_price_per_normalized_unit_with_unit,
                 }
               }
             end

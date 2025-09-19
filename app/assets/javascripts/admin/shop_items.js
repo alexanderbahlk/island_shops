@@ -253,12 +253,12 @@ function handleCalculatePriceSuccess(data, shopItemId) {
         var $titleLink = $('a[data-shop-item-id="' + shopItemId + '"]');
         var $row = $titleLink.closest('tr');
 
-        // Update the latest_price_per_unified_unit column (column index 6)
-        // instead of the index find prioceCell by class 'col-latest_price_per_unified_unit'
-        var $priceCell = $row.find('td.col-latest_price_per_unified_unit')
+        // Update the latest_price_per_normalized_unit_with_unit column (column index 6)
+        // instead of the index find prioceCell by class 'col-latest_price_per_normalized_unit_with_unit'
+        var $priceCell = $row.find('td.col-latest_price_per_normalized_unit_with_unit')
 
-        if (data.latest_price_per_unified_unit && data.latest_price_per_unified_unit !== 'N/A') {
-            $priceCell.html(data.latest_price_per_unified_unit);
+        if (data.latest_price_per_normalized_unit_with_unit && data.latest_price_per_normalized_unit_with_unit !== 'N/A') {
+            $priceCell.html(data.latest_price_per_normalized_unit_with_unit);
             $priceCell.find('span[style*="color: red"]').remove();
         }
 

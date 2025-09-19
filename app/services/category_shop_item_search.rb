@@ -67,27 +67,35 @@ class CategoryShopItemSearch
   end
 
   def fetch_shop_items(category)
-    items = category.shop_items.approved.includes(:shop_item_updates)
-    items = items.select do |item|
-      latest_update = item.shop_item_updates.order(created_at: :desc).first
-      !(hide_out_of_stock && (!latest_update || latest_update.out_of_stock?))
-    end
+    approved_items_with_updates = category.shop_items.approved.includes(:shop_item_updates)
 
-    items = items.sort_by { |item| item.latest_price_per_unified_unit || Float::INFINITY }
-    items.first(limit).map do |item|
-      latest_update = item.shop_item_updates.order(created_at: :desc).first
-      {
-        title: item.display_title.presence || item.title,
-        shop: item.shop,
-        image_url: item.image_url,
-        unit: item.unit || "N/A",
-        stock_status: latest_update&.normalized_stock_status || "N/A",
-        latest_price: latest_update&.price || "N/A",
-        latest_price_per_unified_unit: item.latest_price_per_unified_unit,
-        latest_price_per_unit: item.latest_price_per_unit,
-        url: item.url,
-      }
+    shop_items = []
+
+    approved_items_with_updates.select do |item|
+      if !(hide_out_of_stock && item.latest_stock_status_out_of_stock?)
+        latest_shop_item_update = item.latest_shop_item_update
+
+        shop_item = {
+          title: item.display_title.presence || item.title,
+          shop: item.shop,
+          image_url: item.image_url,
+          unit: item.unit || "N/A",
+          stock_status: latest_shop_item_update&.normalized_stock_status || "N/A",
+          latest_price: latest_shop_item_update&.price || "N/A",
+          latest_price_per_normalized_unit: item.latest_price_per_normalized_unit || "N/A",
+          latest_price_per_normalized_unit_with_unit: item.latest_price_per_normalized_unit_with_unit,
+          latest_price_per_unit_with_unit: item.latest_price_per_unit_with_unit,
+          url: item.url,
+        }
+
+        shop_items << shop_item
+      end
     end
+    # Sort by latest_price_per_normalized_unit, placing items without a valid price at the end
+    shop_items = shop_items.sort_by { |item| item[:latest_price_per_normalized_unit].to_f.nonzero? || Float::INFINITY }
+    # Only take the first 'limit' items
+    shop_items = shop_items.first(limit)
+    shop_items
   end
 
   def build_breadcrumb(category)

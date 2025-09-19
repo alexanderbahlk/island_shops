@@ -53,9 +53,9 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
     builder.shop_item.shop_item_updates.reload
 
-    newest_shop_item_updates = builder.shop_item.newest_shop_item_updates
-    assert_not newest_shop_item_updates.nil?
-    assert_equal 24.99, newest_shop_item_updates.price
+    latest_shop_item_update = builder.shop_item.latest_shop_item_update
+    assert_not latest_shop_item_update.nil?
+    assert_equal 24.99, latest_shop_item_update.price
     assert_equal "limited", builder.shop_item.latest_stock_status
   end
 

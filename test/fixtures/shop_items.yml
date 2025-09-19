@@ -32,6 +32,7 @@
 
 shop_item_one:
   url: "https://example.com/existing-item_1"
+  approved: true
   category: milk  # References the milk category
   shop: "Massy"
   title: "Organic Milk"
@@ -59,6 +60,7 @@ shop_item_without_category:
 
 shop_item_four:
   url: "https://example.com/existing-item_2"
+  approved: true
   category: milk  # References the milk category
   shop: "Massy"
   title: "Goat Milk"

@@ -23,13 +23,31 @@
 shop_item_update_one:
   shop_item: shop_item_one
   price: 19.99
-  stock_status: "in_stock"
+  price_per_unit: 1.99
+  stock_status: "in stock"
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
 
 shop_item_update_two:
   shop_item: shop_item_two
   price: 39.99
-  stock_status: "out_of_stock"
+  price_per_unit: 9.99
+  stock_status: "out of stock"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+shop_item_update_three:
+  shop_item: shop_item_four
+  price: 18.99
+  price_per_unit: 1.89
+  stock_status: "in stock"
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
+
+shop_item_update_four:
+  shop_item: shop_item_four
+  price: 17.99
+  price_per_unit: 1.79
+  stock_status: "in stock"
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
