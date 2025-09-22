@@ -14,15 +14,15 @@ Rails.application.routes.draw do
   # root "posts#index"
   #
   # Defines the root path route ("/")
-  root "search#index"
-  get "/search", to: "search#index"
-  get "/search/products_with_shop_items", to: "search#products_with_shop_items"
-  get "/search/products", to: "search#products"
+  root "api/v1/search#index"
+  get "/search", to: "api/v1/search#index"
   #
   #
   namespace :api do
     namespace :v1 do
       resources :shop_items, only: [:create]
+      get "/search/products", to: "search#products", defaults: { format: :json }
+      get "/search/products_with_shop_items", to: "search#products_with_shop_items", defaults: { format: :json }
     end
   end
 end

@@ -561,7 +561,7 @@
                         params.append('out_of_stock', 'true');
                     }
 
-                    const response = await fetch(`/search/products_with_shop_items?${params}`);
+                    const response = await fetch(`api/v1/search/products_with_shop_items?${params}`);
                     const categories = await response.json();
 
                     this.hideLoading();

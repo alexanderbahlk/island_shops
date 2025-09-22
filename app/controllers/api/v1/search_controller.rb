@@ -1,9 +1,10 @@
-class SearchController < ApplicationController
+class Api::V1::SearchController < ApplicationController
   # Simple hash to secure the products endpoint
   SECURE_HASH = ENV.fetch("CATEGORIES_API_HASH", "gfh5haf_y6").freeze
 
   def index
     @initial_query = params[:q]&.strip
+    render "search/index"
   end
 
   def products_with_shop_items
