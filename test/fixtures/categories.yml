@@ -12,6 +12,7 @@
 #  sort_order    :integer          default(0)
 #  synonyms      :text             default([]), is an Array
 #  title         :string           not null
+#  uuid          :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  parent_id     :bigint
@@ -30,6 +31,7 @@
 #  fk_rails_...  (parent_id => categories.id)
 #
 food_root:
+  uuid: <%= SecureRandom.uuid %>
   title: "Food"
   category_type: 0  # root
   depth: 0
@@ -41,6 +43,7 @@ food_root:
 
 # Level 1 categories - fix lft/rgt values
 fresh_food:
+  uuid: <%= SecureRandom.uuid %>
   title: "Fresh Food"
   parent: food_root
   category_type: 1  # category
@@ -52,6 +55,7 @@ fresh_food:
   rgt: 35
 
 beverages:
+  uuid: <%= SecureRandom.uuid %>
   title: "Beverages"
   parent: food_root
   category_type: 1  # category
@@ -63,6 +67,7 @@ beverages:
   rgt: 70
 
 canned_food:
+  uuid: <%= SecureRandom.uuid %>
   title: "Canned Food"
   parent: food_root
   category_type: 1  # category
@@ -75,6 +80,7 @@ canned_food:
 
 # Level 2 subcategories - fix parent relationships and lft/rgt
 dairy:
+  uuid: <%= SecureRandom.uuid %>
   title: "Dairy"
   parent: fresh_food
   category_type: 2  # subcategory
@@ -86,6 +92,7 @@ dairy:
   rgt: 12
 
 fresh_vegetables:
+  uuid: <%= SecureRandom.uuid %>
   title: "Fresh Vegetables"
   parent: fresh_food
   category_type: 2  # subcategory
@@ -97,6 +104,7 @@ fresh_vegetables:
   rgt: 18
 
 bakery:
+  uuid: <%= SecureRandom.uuid %>
   title: "Bakery"
   parent: fresh_food
   category_type: 2  # subcategory
@@ -109,6 +117,7 @@ bakery:
 
 # Fix beverages subcategories
 hot_beverages:
+  uuid: <%= SecureRandom.uuid %>
   title: "Hot Beverages"
   parent: beverages
   category_type: 2  # subcategory
@@ -120,6 +129,7 @@ hot_beverages:
   rgt: 42
 
 alcoholic:
+  uuid: <%= SecureRandom.uuid %>
   title: "Alcoholic"
   parent: beverages
   category_type: 2  # subcategory
@@ -131,6 +141,7 @@ alcoholic:
   rgt: 58
 
 non_alcoholic:
+  uuid: <%= SecureRandom.uuid %>
   title: "Non-Alcoholic"
   parent: beverages
   category_type: 2  # subcategory
@@ -142,6 +153,7 @@ non_alcoholic:
   rgt: 64
 
 canned_vegetables:
+  uuid: <%= SecureRandom.uuid %>
   title: "Canned Vegetables"
   parent: canned_food
   category_type: 2  # subcategory
@@ -154,6 +166,7 @@ canned_vegetables:
 
 # Level 3 products - fix parents and lft/rgt values
 milk:
+  uuid: <%= SecureRandom.uuid %>
   title: "Milk"
   parent: dairy
   category_type: 3  # product
@@ -165,6 +178,7 @@ milk:
   rgt: 5
 
 organic_milk:
+  uuid: <%= SecureRandom.uuid %>
   title: "Organic Milk"
   parent: dairy
   category_type: 3  # product
@@ -176,6 +190,7 @@ organic_milk:
   rgt: 7
 
 cheese:
+  uuid: <%= SecureRandom.uuid %>
   title: "Cheese"
   parent: dairy
   category_type: 3  # product
@@ -187,6 +202,7 @@ cheese:
   rgt: 9
 
 yogurt:
+  uuid: <%= SecureRandom.uuid %>
   title: "Yogurt"
   parent: dairy
   category_type: 3  # product
@@ -199,6 +215,7 @@ yogurt:
 
 # Coffee - CORRECTED
 coffee:
+  uuid: <%= SecureRandom.uuid %>
   title: "Coffee"
   parent: hot_beverages  # This is correct
   category_type: 3  # product
@@ -211,6 +228,7 @@ coffee:
 
 # Fix alcoholic beverages - they should have alcoholic as parent, not beverages
 wine:
+  uuid: <%= SecureRandom.uuid %>
   title: "Wine"
   parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
@@ -222,6 +240,7 @@ wine:
   rgt: 45
 
 beer:
+  uuid: <%= SecureRandom.uuid %>
   title: "Beer"
   parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
@@ -233,6 +252,7 @@ beer:
   rgt: 47
 
 red_wine:
+
   title: "Red Wine"
   parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
@@ -244,6 +264,7 @@ red_wine:
   rgt: 49
 
 organic_wine:
+  uuid: <%= SecureRandom.uuid %>
   title: "Organic Wine"
   parent: alcoholic  # FIXED: was "beverages"
   category_type: 3  # product
@@ -256,6 +277,7 @@ organic_wine:
 
 # Non-alcoholic beverages
 evaporated_milk:
+  uuid: <%= SecureRandom.uuid %>
   title: "Evaporated Milk"
   parent: non_alcoholic
   category_type: 3  # product
@@ -268,6 +290,7 @@ evaporated_milk:
 
 # Fresh vegetables
 tomatoes_fresh:
+  uuid: <%= SecureRandom.uuid %>
   title: "Tomatoes"
   parent: fresh_vegetables
   category_type: 3  # product
@@ -279,6 +302,7 @@ tomatoes_fresh:
   rgt: 15
 
 eggplant:
+  uuid: <%= SecureRandom.uuid %>
   title: "Eggplant"
   synonyms: ["Aubergine", "Brinjal"]
   parent: fresh_vegetables
@@ -292,6 +316,7 @@ eggplant:
 
 # Bakery
 bread:
+  uuid: <%= SecureRandom.uuid %>
   title: "Bread"
   parent: bakery
   category_type: 3  # product
@@ -304,6 +329,7 @@ bread:
 
 # Canned vegetables
 tomatoes_canned:
+  uuid: <%= SecureRandom.uuid %>
   title: "Tomatoes"
   parent: canned_vegetables
   category_type: 3  # product

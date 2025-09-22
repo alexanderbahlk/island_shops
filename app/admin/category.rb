@@ -82,6 +82,7 @@ ActiveAdmin.register Category do
   show do
     attributes_table do
       row :id
+      row :uuid
       row :title
       row :synonyms do |cat|
         cat.synonyms&.join(", ")

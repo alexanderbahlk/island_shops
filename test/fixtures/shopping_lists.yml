@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: shopping_lists
+#
+#  id            :bigint           not null, primary key
+#  products_temp :jsonb
+#  slug          :string           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+# Indexes
+#
+#  index_shopping_lists_on_slug  (slug) UNIQUE
+#
+
+one:
+  slug: ABC123
+  products_temp: 
+
+two:
+  slug: CDE456
+  products_temp: 

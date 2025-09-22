@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_15_233211) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_22_203839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -54,12 +54,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_15_233211) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "synonyms", default: [], array: true
+    t.uuid "uuid"
     t.index ["category_type"], name: "index_categories_on_category_type"
     t.index ["lft", "rgt"], name: "index_categories_on_lft_and_rgt"
     t.index ["parent_id", "slug"], name: "index_categories_on_parent_id_and_slug", unique: true
     t.index ["parent_id", "sort_order"], name: "index_categories_on_parent_id_and_sort_order"
     t.index ["parent_id"], name: "index_categories_on_parent_id"
     t.index ["path"], name: "index_categories_on_path"
+  end
+
+  create_table "categories_shopping_lists", id: false, force: :cascade do |t|
+    t.bigint "shopping_list_id", null: false
+    t.bigint "category_id", null: false
+    t.index ["category_id", "shopping_list_id"], name: "index_shopping_lists_categories_on_category_and_list"
+    t.index ["shopping_list_id", "category_id"], name: "index_shopping_lists_categories_on_list_and_category", unique: true
   end
 
   create_table "shop_item_updates", force: :cascade do |t|
@@ -92,6 +100,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_15_233211) do
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
+  end
+
+  create_table "shopping_lists", force: :cascade do |t|
+    t.string "slug", null: false
+    t.jsonb "products_temp", default: []
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_shopping_lists_on_slug", unique: true
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"

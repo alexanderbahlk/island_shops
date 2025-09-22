@@ -12,6 +12,7 @@
 #  sort_order    :integer          default(0)
 #  synonyms      :text             default([]), is an Array
 #  title         :string           not null
+#  uuid          :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  parent_id     :bigint

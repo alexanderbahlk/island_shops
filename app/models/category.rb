@@ -12,6 +12,7 @@
 #  sort_order    :integer          default(0)
 #  synonyms      :text             default([]), is an Array
 #  title         :string           not null
+#  uuid          :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  parent_id     :bigint
@@ -30,6 +31,8 @@
 #  fk_rails_...  (parent_id => categories.id)
 #
 class Category < ApplicationRecord
+  has_and_belongs_to_many :shopping_lists
+
   # Use acts_as_nested_set for efficient tree operations
   acts_as_nested_set order_column: :sort_order
 
@@ -45,11 +48,15 @@ class Category < ApplicationRecord
   }
 
   validates :title, presence: true
+  validates :uuid, presence: true, uniqueness: true
+
   validates :slug, presence: true, uniqueness: { scope: :parent_id }
   validates :category_type, presence: true
   validate :validate_hierarchy_depth
 
   before_validation :generate_slug, :set_category_type, :build_path
+  before_validation :generate_uuid, on: :create
+
   after_save :update_children_paths, if: :saved_change_to_path?
   before_save do
     if synonyms.is_a?(String)
@@ -179,6 +186,10 @@ class Category < ApplicationRecord
   end
 
   private
+
+  def generate_uuid
+    self.uuid ||= SecureRandom.uuid
+  end
 
   # Remove the old clear_shop_item_references method and replace with this:
   def clear_all_references_around_destroy
