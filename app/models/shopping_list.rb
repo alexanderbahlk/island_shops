@@ -13,7 +13,7 @@
 #  index_shopping_lists_on_slug  (slug) UNIQUE
 #
 class ShoppingList < ApplicationRecord
-  has_many :categories, -> { where(category_type: :product) }, class_name: "Category"
+  has_and_belongs_to_many :categories, -> { where(category_type: :product) }, class_name: "Category"
 
   validates :slug, presence: true, uniqueness: true
   validates :products_temp, presence: true
