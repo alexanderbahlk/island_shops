@@ -20,7 +20,6 @@ class Api::V1::SearchController < ApplicationController
     return head :unauthorized unless params[:hash] == SECURE_HASH
     service = ProductSearch.new(
       query: params[:q],
-      hide_out_of_stock: params[:out_of_stock] == "true",
       limit: 10,
     )
     render json: service.results
