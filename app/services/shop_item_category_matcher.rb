@@ -1,16 +1,22 @@
 class ShopItemCategoryMatcher
+  include PgSearchChecker
+  include TitleNormalizer
+
   SIMILARITY_THRESHOLD = 0.22 # Adjust this value between 0.0 and 1.0
 
-  def self.find_best_match(shop_item)
+  attr_reader :shop_item
+
+  def initialize(shop_item:)
+    @shop_item = shop_item
+  end
+
+  def find_best_match()
     if shop_item.blank?
       Rails.logger.warn "No shop item provided for category matching."
       return nil
     end
 
-    if !pg_trgm_available?
-      Rails.logger.warn "pg_trgm extension is not available in the database. Cannot perform fuzzy matching."
-      return nil
-    end
+    return nil unless pg_trgm_available?
 
     category = find_category_by_breadcrumb(shop_item.breadcrumb)
 
@@ -23,19 +29,19 @@ class ShopItemCategoryMatcher
 
   private
 
-  def self.find_category_by_breadcrumb(breadcrumb)
+  def find_category_by_breadcrumb(breadcrumb)
     # Clean and normalize the breadcrumb
     normalized_breadcrumb = normalize_title(breadcrumb)
     find_fuzzy_match(normalized_breadcrumb)
   end
 
-  def self.find_category_by_title(title)
+  def find_category_by_title(title)
     # Clean and normalize the title
     normalized_title = normalize_title(title)
     find_fuzzy_match(normalized_title)
   end
 
-  def self.find_fuzzy_match(shop_item_text)
+  def find_fuzzy_match(shop_item_text)
     begin
       # Extract the last part of the path (product name) and also try full path matching
       # e.g.: "groceries coffee & tea freeze dried instant coffee"
@@ -82,80 +88,5 @@ class ShopItemCategoryMatcher
       Rails.logger.error "Error in find_fuzzy_match: #{e.message}"
       nil
     end
-  end
-
-  def self.pg_trgm_available?
-    @pg_trgm_available ||= begin
-        result = ActiveRecord::Base.connection.execute("SELECT 1 FROM pg_extension WHERE extname = 'pg_trgm'")
-        result.any?
-      rescue => e
-        Rails.logger.warn "pg_trgm extension check failed: #{e.message}"
-        false
-      end
-  end
-
-  def self.normalize_title(title)
-    return "" if title.blank?
-
-    # Handle the specific format: "Shop / Grocery / Canned Goods, Soups, & Broths / Canned Vegetables / Hunts Tomatoes Diced 8 14.5"
-    normalized = title.dup
-
-    if normalized.count(">") > 1
-      parts = normalized.split(/\s*\>\s+/)
-    elsif normalized.count("/") > 1
-      parts = normalized.split(/\s*\/\s+/)
-    else
-      parts = nil
-    end
-
-    if parts && parts.length > 1
-      # Skip "Shop" and "Grocery" if they exist at the beginning
-      # Skip Brand names like "Member's Selection"
-      relevant_parts = parts.drop_while { |part| part.downcase.match?(/^(pricesmart|home|shop|grocery)$/) }
-
-      # Take the last 2-3 parts which are most likely to contain category and product info
-      if relevant_parts.length > 2
-        relevant_parts = relevant_parts.last(3)
-      end
-
-      # Join back with "/" to match the path format
-      normalized = relevant_parts.join(">")
-    end
-
-    # Remove brand names and size information from the last part (product name)
-    if normalized.include?(">")
-      path_parts = normalized.split(">")
-      product_part = path_parts.last
-
-      # Clean the product part
-      product_part = clean_product_name(product_part)
-
-      # Reconstruct
-      path_parts[-1] = product_part
-      normalized = path_parts.join(" ")
-    else
-      # If no path structure, just clean the whole string
-      normalized = clean_product_name(normalized)
-    end
-
-    # Convert to lowercase to match path format
-    normalized.downcase.strip
-  end
-
-  def self.clean_product_name(product_name)
-    cleaned = product_name.dup
-
-    # Remove size patterns (e.g., "500ml", "2kg", "12 pack", "8 14.5")
-    cleaned.gsub!(/\b\d+\.?\d*\s*(ml|l|g|kg|oz|lb|pack|count|ct|pieces?)\b/i, "")
-    cleaned.gsub!(/\b(member's\s+selection|great\s+value|kirkland|store\s+brand?)\b/i, "")
-    cleaned.gsub!(/\b(luxury|premium?)\b/i, "")
-    cleaned.gsub!(/\b\d+\s+\d+\.?\d*\b/, "") # Remove patterns like "8 14.5"
-    #remove / and - which are common in titles
-    cleaned.gsub!(/[\/\-]/, " ")
-
-    # Remove extra whitespace and punctuation
-    cleaned.gsub!(/[,&]/, " ")
-    cleaned.gsub!(/\s+/, " ")
-    cleaned.strip
   end
 end

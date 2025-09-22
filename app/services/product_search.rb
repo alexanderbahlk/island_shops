@@ -1,4 +1,6 @@
 class ProductSearch
+  include PgSearchChecker
+
   SIMILARITY_THRESHOLD = 0.3
 
   attr_reader :query, :limit
@@ -18,7 +20,7 @@ class ProductSearch
   private
 
   def find_similar_categories
-    return [] unless ShopItemCategoryMatcher.send(:pg_trgm_available?)
+    return [] unless pg_trgm_available?
 
     sanitized_query = ActiveRecord::Base.connection.quote(query.downcase)
     sql = <<~SQL

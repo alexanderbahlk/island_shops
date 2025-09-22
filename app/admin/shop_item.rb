@@ -671,7 +671,7 @@ ActiveAdmin.register ShopItem do
       original_category = resource.category
 
       # Use the category matcher to find the best match
-      best_match = ShopItemCategoryMatcher.find_best_match(resource)
+      best_match = ShopItemCategoryMatcher.new(shop_item: resource).find_best_match()
 
       if best_match
         resource.update!(category: best_match)

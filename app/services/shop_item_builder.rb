@@ -90,7 +90,7 @@ class ShopItemBuilder
     return if @shop_item.title.blank?
 
     # Try to find the best matching category
-    best_match = ShopItemCategoryMatcher.find_best_match(@shop_item)
+    best_match = ShopItemCategoryMatcher.new(shop_item: @shop_item).find_best_match()
 
     if best_match
       @shop_item.category = best_match
