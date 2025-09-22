@@ -16,7 +16,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "search#index"
   get "/search", to: "search#index"
-  get "/search/categories", to: "search#categories"
+  get "/search/products_with_shop_items", to: "search#products_with_shop_items"
+  get "/search/products", to: "search#products"
   #
   #
   namespace :api do
