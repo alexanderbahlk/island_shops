@@ -2,21 +2,21 @@
 #
 # Table name: shopping_lists
 #
-#  id            :bigint           not null, primary key
-#  products_temp :jsonb
-#  slug          :string           not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id           :bigint           not null, primary key
+#  display_name :string           not null
+#  slug         :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 # Indexes
 #
 #  index_shopping_lists_on_slug  (slug) UNIQUE
 #
 
-one:
+shopping_list_abc:
   slug: ABC123
-  products_temp: 
+  display_name: "Shopping List One"
 
-two:
+shopping_list_cde:
   slug: CDE456
-  products_temp: 
+  display_name: "Shopping List Two"

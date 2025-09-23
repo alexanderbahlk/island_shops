@@ -2,30 +2,36 @@
 #
 # Table name: shopping_lists
 #
-#  id            :bigint           not null, primary key
-#  products_temp :jsonb
-#  slug          :string           not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id           :bigint           not null, primary key
+#  display_name :string           not null
+#  slug         :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 # Indexes
 #
 #  index_shopping_lists_on_slug  (slug) UNIQUE
 #
 class ShoppingList < ApplicationRecord
-  has_and_belongs_to_many :categories, -> { where(category_type: :product) }, class_name: "Category"
+  has_many :shopping_list_items, dependent: :destroy
 
   validates :slug, presence: true, uniqueness: true
-  validates :products_temp, presence: true
+  validates :display_name, presence: true, length: { minimum: 3 }
 
-  before_validation :generate_slug, on: :create
+  before_validation :slugify, on: :create
+
+  def slugify
+    self.slug = generate_slug
+  end
 
   private
 
+  #kill rails server: kill -9 10234
+
   def generate_slug
-    self.slug ||= loop do
-      random_slug = SecureRandom.alphanumeric(8).upcase
-      break random_slug unless self.class.exists?(slug: random_slug)
+    loop do
+      slug = SecureRandom.hex(4).upcase # Generates an 8-character slug
+      return slug unless ShoppingList.exists?(slug: slug)
     end
   end
 end

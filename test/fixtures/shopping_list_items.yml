@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: shopping_list_items
+#
+#  id               :bigint           not null, primary key
+#  title            :string           not null
+#  uuid             :uuid             not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  category_id      :bigint
+#  shopping_list_id :bigint           not null
+#
+# Indexes
+#
+#  index_shopping_list_items_on_category_id  (category_id)
+#  index_shopping_list_items_on_uuid         (uuid) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (shopping_list_id => shopping_lists.id)
+#
+
+shopping_list_item_milk:
+  title: Milk
+  category: milk
+  shopping_list: shopping_list_abc
+
+shopping_list_item_cheese:
+  title: Cheese
+  category: cheese
+  shopping_list: shopping_list_abc

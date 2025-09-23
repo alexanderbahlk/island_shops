@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_22_203839) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_23_165956) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -102,15 +102,27 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_22_203839) do
     t.index ["url"], name: "index_shop_items_on_url", unique: true
   end
 
-  create_table "shopping_lists", force: :cascade do |t|
-    t.string "slug", null: false
-    t.jsonb "products_temp", default: []
+  create_table "shopping_list_items", force: :cascade do |t|
+    t.string "title", null: false
+    t.bigint "category_id"
+    t.bigint "shopping_list_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.index ["category_id"], name: "index_shopping_list_items_on_category_id"
+    t.index ["uuid"], name: "index_shopping_list_items_on_uuid", unique: true
+  end
+
+  create_table "shopping_lists", force: :cascade do |t|
+    t.string "slug", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "display_name", null: false
     t.index ["slug"], name: "index_shopping_lists_on_slug", unique: true
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
+  add_foreign_key "shopping_list_items", "shopping_lists"
 end

@@ -31,7 +31,6 @@
 #  fk_rails_...  (parent_id => categories.id)
 #
 class Category < ApplicationRecord
-  has_and_belongs_to_many :shopping_lists
 
   # Use acts_as_nested_set for efficient tree operations
   acts_as_nested_set order_column: :sort_order
@@ -39,6 +38,8 @@ class Category < ApplicationRecord
   has_many :shop_items, dependent: :nullify
   belongs_to :parent, class_name: "Category", optional: true
   has_many :children, class_name: "Category", foreign_key: "parent_id", dependent: :destroy
+
+  has_many :shopping_list_items, dependent: :nullify
 
   enum category_type: {
     root: 0,           # Food, Health & Beauty, etc.
@@ -197,8 +198,12 @@ class Category < ApplicationRecord
     descendant_ids = self_and_descendants.pluck(:id)
 
     # Clear all shop item references for this category and all descendants
-    cleared_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
-    Rails.logger.info "Cleared #{cleared_count} shop item references for category '#{title}' and its descendants"
+    cleared_shop_item_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
+    Rails.logger.info "Cleared #{cleared_shop_item_count} shop item references for category '#{title}' and its descendants"
+
+    #Clear ShoppingListItem references
+    cleared_shopping_list_item_count = ShoppingListItem.where(category_id: descendant_ids).update_all(category_id: nil)
+    Rails.logger.info "Cleared #{cleared_shopping_list_item_count} shopping list item references for category '#{title}' and its descendants"
 
     # Now proceed with the actual destruction
     yield
