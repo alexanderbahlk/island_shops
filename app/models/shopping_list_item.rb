@@ -3,6 +3,7 @@
 # Table name: shopping_list_items
 #
 #  id               :bigint           not null, primary key
+#  purchased        :boolean          default(FALSE), not null
 #  title            :string           not null
 #  uuid             :uuid             not null
 #  created_at       :datetime         not null

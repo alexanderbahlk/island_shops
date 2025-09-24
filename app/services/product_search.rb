@@ -55,7 +55,7 @@ class ProductSearch
       # Directly map the SQL results to the desired structure and sort by title
       ActiveRecord::Base.connection.exec_query(sql).map do |result|
         { uuid: result["uuid"], title: result["title"] }
-      end.sort_by { |category| category[:title] }
+      end
     end
   end
 end

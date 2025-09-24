@@ -24,8 +24,8 @@ class ProductSearchTest < ActiveSupport::TestCase
 
     # Ensure all results have a uuid
     results.each do |category|
-      assert category.respond_to?(:uuid), "Category does not have a uuid"
-      assert_not_nil category.uuid, "Category uuid is nil"
+      assert category.key?(:uuid), "Category does not have a uuid"
+      assert_not_nil category[:uuid], "Category uuid is nil"
     end
   end
 end

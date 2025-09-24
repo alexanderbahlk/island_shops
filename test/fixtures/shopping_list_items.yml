@@ -3,6 +3,7 @@
 # Table name: shopping_list_items
 #
 #  id               :bigint           not null, primary key
+#  purchased        :boolean          default(FALSE), not null
 #  title            :string           not null
 #  uuid             :uuid             not null
 #  created_at       :datetime         not null
@@ -24,8 +25,12 @@ shopping_list_item_milk:
   title: Milk
   category: milk
   shopping_list: shopping_list_abc
+  purchased: false
+
 
 shopping_list_item_cheese:
   title: Cheese
   category: cheese
   shopping_list: shopping_list_abc
+  purchased: true
+

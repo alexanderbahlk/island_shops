@@ -6,7 +6,7 @@ module Api
       SECURE_HASH = ENV.fetch("CATEGORIES_API_HASH", "gfh5haf_y6").freeze
 
       before_action :find_shopping_list, only: [:create]
-      before_action :find_shopping_list_item_by_uuid, only: [:destroy]
+      before_action :find_shopping_list_item_by_uuid, only: [:destroy, :update]
 
       # POST /api/v1/shopping_lists/:shopping_list_slug/shopping_list_items
       def create
@@ -44,6 +44,21 @@ module Api
         end
       end
 
+      def update
+        Rails.logger.info("Received params: #{params.inspect}")
+        return head :unauthorized unless params[:hash] == SECURE_HASH
+
+        if @shopping_list_item.update(purchased: shopping_list_item_params[:purchased])
+          render json: {
+                   uuid: @shopping_list_item.uuid,
+                   title: @shopping_list_item.title,
+                   purchased: @shopping_list_item.purchased,
+                 }, status: :ok
+        else
+          render json: { errors: @shopping_list_item.errors.full_messages }, status: :unprocessable_content
+        end
+      end
+
       private
 
       def find_shopping_list
@@ -59,7 +74,7 @@ module Api
       end
 
       def shopping_list_item_params
-        params.require(:shopping_list_item).permit(:title, :category_uuid)
+        params.require(:shopping_list_item).permit(:title, :category_uuid, :purchased)
       end
     end
   end

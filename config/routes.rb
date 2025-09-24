@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :shop_items, only: [:create]
       resources :shopping_lists, param: :slug, only: [:create, :show, :update, :destroy] do
-        resources :shopping_list_items, only: [:create, :destroy], shallow: true
+        resources :shopping_list_items, only: [:create, :destroy, :update], shallow: true
       end
       get "/search/products", to: "search#products", defaults: { format: :json }
       get "/search/products_with_shop_items", to: "search#products_with_shop_items", defaults: { format: :json }
