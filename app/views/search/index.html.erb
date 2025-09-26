@@ -561,7 +561,17 @@
                         params.append('out_of_stock', 'true');
                     }
 
-                    const response = await fetch(`api/v1/search/products_with_shop_items?${params}`);
+                    const response = await fetch(`api/v1/search/products_with_shop_items?${params}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-SECURE-HASH': 'gfh5haf_y6' // Replace with the actual secure hash from your environment
+                        }
+                    });
+
+                    console.log('Headers being sent:', headers);
+
+
                     const categories = await response.json();
 
                     this.hideLoading();

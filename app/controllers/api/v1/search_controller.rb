@@ -1,4 +1,4 @@
-class Api::V1::SearchController < SecureAppController
+class Api::V1::SearchController < Api::V1::SecureAppController
   def index
     @initial_query = params[:q]&.strip
     render "search/index"

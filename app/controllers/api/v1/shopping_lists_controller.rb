@@ -1,6 +1,6 @@
 module Api
   module V1
-    class ShoppingListsController < SecureAppController
+    class ShoppingListsController < Api::V1::SecureAppController
       before_action :find_shopping_list, only: [:show, :update, :destroy]
 
       # GET /api/v1/shopping_lists/:slug

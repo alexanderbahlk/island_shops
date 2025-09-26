@@ -1,6 +1,6 @@
 module Api
   module V1
-    class ShoppingListItemsController < SecureAppController
+    class ShoppingListItemsController < Api::V1::SecureAppController
       include CategoryBreadcrumbHelper
 
       before_action :find_shopping_list, only: [:create]
