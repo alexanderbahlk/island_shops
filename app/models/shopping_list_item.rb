@@ -4,6 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  purchased        :boolean          default(FALSE), not null
+#  quantity         :integer          default(1), not null
 #  title            :string           not null
 #  uuid             :uuid             not null
 #  created_at       :datetime         not null
@@ -28,6 +29,8 @@ class ShoppingListItem < ApplicationRecord
   validate :category_must_be_product, if: -> { category.present? }
 
   validates :title, presence: true
+  validates :quantity, numericality: { greater_than: 0, only_integer: true }
+
   before_validation :set_title_from_category, if: -> { category.present? }, on: :create
 
   private

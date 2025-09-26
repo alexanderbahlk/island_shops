@@ -4,6 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  purchased        :boolean          default(FALSE), not null
+#  quantity         :integer          default(1), not null
 #  title            :string           not null
 #  uuid             :uuid             not null
 #  created_at       :datetime         not null
@@ -25,6 +26,7 @@ shopping_list_item_milk:
   title: Milk
   category: milk
   shopping_list: shopping_list_abc
+  quantity: 2
   purchased: false
 
 
@@ -32,5 +34,13 @@ shopping_list_item_cheese:
   title: Cheese
   category: cheese
   shopping_list: shopping_list_abc
+  quantity: 1
+  purchased: false
+
+shopping_list_item_goat_cheese:
+  title: Goat Cheese
+  category: cheese
+  shopping_list: shopping_list_abc
+  quantity: 1
   purchased: true
 

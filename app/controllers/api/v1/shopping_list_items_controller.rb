@@ -1,6 +1,7 @@
 module Api
   module V1
     class ShoppingListItemsController < ApplicationController
+      include CategoryBreadcrumbHelper
       protect_from_forgery with: :null_session
 
       SECURE_HASH = ENV.fetch("CATEGORIES_API_HASH", "gfh5haf_y6").freeze
@@ -26,10 +27,12 @@ module Api
           render json: {
             uuid: item.uuid,
             title: item.title,
-            category_uuid: item.category&.uuid,
+            purchased: item.purchased,
+            quantity: item.quantity,
+            breadcrumb: item.category.present? ? build_breadcrumb(item.category) : [],
           }, status: :created
         else
-          render json: { errors: item.errors.full_messages }, status: :unprocessable_content
+          render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -48,14 +51,16 @@ module Api
         Rails.logger.info("Received params: #{params.inspect}")
         return head :unauthorized unless params[:hash] == SECURE_HASH
 
-        if @shopping_list_item.update(purchased: shopping_list_item_params[:purchased])
+        if @shopping_list_item.update(shopping_list_item_params)
           render json: {
-                   uuid: @shopping_list_item.uuid,
-                   title: @shopping_list_item.title,
-                   purchased: @shopping_list_item.purchased,
-                 }, status: :ok
+            uuid: @shopping_list_item.uuid,
+            title: @shopping_list_item.title,
+            purchased: @shopping_list_item.purchased,
+            quantity: @shopping_list_item.quantity,
+            breadcrumb: @shopping_list_item.category.present? ? build_breadcrumb(@shopping_list_item.category) : [],
+          }, status: :ok
         else
-          render json: { errors: @shopping_list_item.errors.full_messages }, status: :unprocessable_content
+          render json: { errors: @shopping_list_item.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -74,7 +79,7 @@ module Api
       end
 
       def shopping_list_item_params
-        params.require(:shopping_list_item).permit(:title, :category_uuid, :purchased)
+        params.require(:shopping_list_item).permit(:title, :category_uuid, :purchased, :quantity)
       end
     end
   end

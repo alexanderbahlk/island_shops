@@ -4,6 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  purchased        :boolean          default(FALSE), not null
+#  quantity         :integer          default(1), not null
 #  title            :string           not null
 #  uuid             :uuid             not null
 #  created_at       :datetime         not null
@@ -72,5 +73,21 @@ class ShoppingListItemTest < ActiveSupport::TestCase
   test "should allow purchased to be updated" do
     @shopping_list_item.update!(purchased: true)
     assert @shopping_list_item.purchased
+  end
+
+  test "should have quantity default to 1" do
+    new_item = ShoppingListItem.new(title: "Eggs", shopping_list: shopping_lists(:shopping_list_abc))
+    assert_equal 1, new_item.quantity
+  end
+
+  test "should not allow quantity less than 1" do
+    @shopping_list_item.quantity = 0
+    assert_not @shopping_list_item.valid?
+    assert_includes @shopping_list_item.errors[:quantity], "must be greater than 0"
+  end
+
+  test "should allow quantity to be updated" do
+    @shopping_list_item.update!(quantity: 5)
+    assert_equal 5, @shopping_list_item.quantity
   end
 end

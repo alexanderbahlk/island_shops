@@ -31,6 +31,7 @@ class ShoppingList < ApplicationRecord
         uuid: item.uuid,
         title: item.title,
         purchased: item.purchased,
+        quantity: item.quantity,
         breadcrumb: item.category.present? ? build_breadcrumb(item.category) : [],
       }
     end.sort_by { |item| [item[:purchased] ? 1 : 0, item[:title]] }
