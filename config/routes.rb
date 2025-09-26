@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       end
       get "/search/products", to: "search#products", defaults: { format: :json }
       get "/search/products_with_shop_items", to: "search#products_with_shop_items", defaults: { format: :json }
+      get "categories/:category_uuid/shop_items", to: "categories#shop_items"
     end
   end
 end

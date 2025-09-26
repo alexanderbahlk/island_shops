@@ -186,6 +186,15 @@ class Category < ApplicationRecord
     "#{parent.full_path}/#{slug}"
   end
 
+  # Cached count of approved shop items
+  # Only count if category is a product
+  def approved_cached_shop_items_count
+    Rails.cache.fetch("category/#{id}/approved_cached_shop_items_count", expires_in: 5.minutes) do
+      return 0 unless product?
+      shop_items.approved.count
+    end
+  end
+
   private
 
   def generate_uuid

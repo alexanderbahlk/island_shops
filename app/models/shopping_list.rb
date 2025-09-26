@@ -29,6 +29,8 @@ class ShoppingList < ApplicationRecord
     self.shopping_list_items.includes(:category).map do |item|
       {
         uuid: item.uuid,
+        category_uuid: item.category&.uuid,
+        shop_item_count: item.category&.approved_cached_shop_items_count || 0,
         title: item.title,
         purchased: item.purchased,
         quantity: item.quantity,

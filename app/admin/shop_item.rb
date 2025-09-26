@@ -243,6 +243,7 @@ ActiveAdmin.register ShopItem do
       row :shop
       row :title
       row :breadcrumb
+      row :latest_stock_status
       row :display_title do |shop_item|
         best_in_place shop_item, :display_title,
                       as: :input,
