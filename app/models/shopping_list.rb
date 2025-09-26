@@ -13,6 +13,7 @@
 #  index_shopping_lists_on_slug  (slug) UNIQUE
 #
 class ShoppingList < ApplicationRecord
+  include CategoryBreadcrumbHelper
   has_many :shopping_list_items, dependent: :destroy
 
   validates :slug, presence: true, uniqueness: true
@@ -22,6 +23,17 @@ class ShoppingList < ApplicationRecord
 
   def slugify
     self.slug = generate_slug
+  end
+
+  def shopping_list_items_for_view_list
+    self.shopping_list_items.includes(:category).map do |item|
+      {
+        uuid: item.uuid,
+        title: item.title,
+        purchased: item.purchased,
+        breadcrumb: item.category.present? ? build_breadcrumb(item.category) : [],
+      }
+    end.sort_by { |item| [item[:purchased] ? 1 : 0, item[:title]] }
   end
 
   private

@@ -19,6 +19,44 @@ class ShoppingListTest < ActiveSupport::TestCase
     @shopping_list = ShoppingList.new(
       display_name: "Weekly Groceries",
     )
+    @shopping_list_with_items = shopping_lists(:shopping_list_abc) # Assuming a fixture exists
+  end
+
+  test "shopping_list_items_for_view_list returns items sorted by title" do
+    result = @shopping_list_with_items.shopping_list_items_for_view_list
+
+    # Ensure the result is sorted by title
+    assert_equal ["Cheese", "Milk"], result.map { |item| item[:title] }
+  end
+
+  test "shopping_list_items_for_view_list includes uuid, title, and purchased fields" do
+    result = @shopping_list_with_items.shopping_list_items_for_view_list
+
+    # Ensure each item includes the required fields
+    result.each do |item|
+      assert item.key?(:uuid), "Item is missing uuid"
+      assert item.key?(:title), "Item is missing title"
+      assert item.key?(:purchased), "Item is missing purchased"
+    end
+  end
+
+  test "shopping_list_items_for_view_list generates correct breadcrumbs" do
+    result = @shopping_list_with_items.shopping_list_items_for_view_list
+
+    # Ensure breadcrumbs are generated correctly
+    milk_item = result.find { |item| item[:title] == "Milk" }
+    cheese_item = result.find { |item| item[:title] == "Cheese" }
+
+    assert_equal ["Food", "Fresh Food", "Dairy"], milk_item[:breadcrumb], "Breadcrumb for Milk is incorrect"
+    assert_equal ["Food", "Fresh Food", "Dairy"], cheese_item[:breadcrumb], "Breadcrumb for Cheese is incorrect"
+  end
+
+  test "shopping_list_items_for_view_list handles empty shopping list" do
+    empty_list = ShoppingList.create!(display_name: "Empty List")
+    result = empty_list.shopping_list_items_for_view_list
+
+    # Ensure the result is an empty array
+    assert_equal [], result
   end
 
   test "should respond to attributes" do

@@ -13,7 +13,7 @@ module Api
         render json: {
           slug: @shopping_list.slug,
           display_name: @shopping_list.display_name,
-          shopping_list_items: @shopping_list.shopping_list_items.as_json(only: [:uuid, :title, :purchased]).sort_by { |item| item[:title] },
+          shopping_list_items: @shopping_list.shopping_list_items_for_view_list,
         }
       end
 
@@ -39,7 +39,7 @@ module Api
           render json: {
             slug: @shopping_list.slug,
             display_name: @shopping_list.display_name,
-            shopping_list_items: @shopping_list.shopping_list_items.as_json(only: [:uuid, :title, :purchased]).sort_by { |item| item[:title] },
+            shopping_list_items: @shopping_list.shopping_list_items_for_view_list,
           }
         else
           render json: { errors: @shopping_list.errors.full_messages }, status: :unprocessable_content

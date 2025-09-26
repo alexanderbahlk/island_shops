@@ -1,5 +1,6 @@
 class CategoryShopItemSearch
   include PgSearchChecker
+  include CategoryBreadcrumbHelper
   SIMILARITY_THRESHOLD = 0.4
 
   attr_reader :query, :hide_out_of_stock, :limit
@@ -97,18 +98,5 @@ class CategoryShopItemSearch
     # Only take the first 'limit' items
     shop_items = shop_items.first(limit)
     shop_items
-  end
-
-  def build_breadcrumb(category)
-    breadcrumb_parts = []
-    current_category = category
-    while current_category
-      breadcrumb_parts.unshift(current_category.title)
-      current_category = current_category.parent
-    end
-    breadcrumb_parts.pop
-    breadcrumb_parts
-  rescue
-    [category.title]
   end
 end

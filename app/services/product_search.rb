@@ -1,5 +1,6 @@
 class ProductSearch
   include PgSearchChecker
+  include CategoryBreadcrumbHelper
 
   SIMILARITY_THRESHOLD = 0.3
 
@@ -15,6 +16,9 @@ class ProductSearch
 
     categories = find_similar_categories
     Rails.logger.info "ProductSearch: Found #{categories.size} similar categories for query '#{query}'"
+    categories.each do |category|
+      Rails.logger.info " - #{category[:title]} (#{category[:uuid]}) => #{category[:breadcrumb].join(" > ")}"
+    end
     categories
   end
 
@@ -54,7 +58,9 @@ class ProductSearch
 
       # Directly map the SQL results to the desired structure and sort by title
       ActiveRecord::Base.connection.exec_query(sql).map do |result|
-        { uuid: result["uuid"], title: result["title"] }
+        { uuid: result["uuid"],
+          breadcrumb: build_breadcrumb_by_uuid(result["uuid"]), # Pass the uuid directly
+          title: result["title"] }
       end
     end
   end
