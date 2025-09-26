@@ -1,10 +1,7 @@
 module Api
   module V1
-    class ShoppingListItemsController < ApplicationController
+    class ShoppingListItemsController < SecureAppController
       include CategoryBreadcrumbHelper
-      protect_from_forgery with: :null_session
-
-      SECURE_HASH = ENV.fetch("CATEGORIES_API_HASH", "gfh5haf_y6").freeze
 
       before_action :find_shopping_list, only: [:create]
       before_action :find_shopping_list_item_by_uuid, only: [:destroy, :update]
@@ -12,7 +9,6 @@ module Api
       # POST /api/v1/shopping_lists/:shopping_list_slug/shopping_list_items
       def create
         Rails.logger.info("Received params: #{params.inspect}")
-        return head :unauthorized unless params[:hash] == SECURE_HASH
 
         # Resolve category_uuid to a Category record
         category = Category.find_by(uuid: shopping_list_item_params[:category_uuid])
@@ -39,7 +35,6 @@ module Api
       # DELETE /api/v1/shopping_list_items/:uuid
       def destroy
         Rails.logger.info("Received params: #{params.inspect}")
-        return head :unauthorized unless params[:hash] == SECURE_HASH
         if @shopping_list_item.destroy
           render json: { message: "ShoppingListItem deleted successfully" }, status: :ok
         else
@@ -49,7 +44,6 @@ module Api
 
       def update
         Rails.logger.info("Received params: #{params.inspect}")
-        return head :unauthorized unless params[:hash] == SECURE_HASH
 
         if @shopping_list_item.update(shopping_list_item_params)
           render json: {

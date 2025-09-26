@@ -1,15 +1,10 @@
 module Api
   module V1
-    class ShoppingListsController < ApplicationController
-      protect_from_forgery with: :null_session
-
-      SECURE_HASH = ENV.fetch("CATEGORIES_API_HASH", "gfh5haf_y6").freeze
-
+    class ShoppingListsController < SecureAppController
       before_action :find_shopping_list, only: [:show, :update, :destroy]
 
       # GET /api/v1/shopping_lists/:slug
       def show
-        return head :unauthorized unless params[:hash] == SECURE_HASH
         render json: {
           slug: @shopping_list.slug,
           display_name: @shopping_list.display_name,
@@ -20,8 +15,6 @@ module Api
       # POST /api/v1/shopping_lists
       def create
         Rails.logger.info("Received params: #{params.inspect}")
-        return head :unauthorized unless params[:hash] == SECURE_HASH
-
         shopping_list = ShoppingList.new(display_name: params[:display_name], shopping_list_items: [])
 
         if shopping_list.save
@@ -34,7 +27,6 @@ module Api
       # PATCH /api/v1/shopping_lists/:slug
       def update
         Rails.logger.info("Received params: #{params.inspect}")
-        return head :unauthorized unless params[:hash] == SECURE_HASH
         if @shopping_list.update(shopping_list_params)
           render json: {
             slug: @shopping_list.slug,
@@ -48,7 +40,6 @@ module Api
 
       def destroy
         Rails.logger.info("Received params: #{params.inspect}")
-        return head :unauthorized unless params[:hash] == SECURE_HASH
 
         if @shopping_list.destroy
           slug = @shopping_list.slug

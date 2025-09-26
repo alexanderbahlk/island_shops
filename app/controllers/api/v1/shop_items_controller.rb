@@ -1,6 +1,4 @@
-class Api::V1::ShopItemsController < ApplicationController
-  protect_from_forgery with: :null_session
-
+class Api::V1::ShopItemsController < SecureAppController
   def create
     #log params for debugging
     Rails.logger.debug("Received shop item params: #{params.inspect}")
