@@ -21,6 +21,10 @@ class ShoppingList < ApplicationRecord
 
   before_validation :slugify, on: :create
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "display_name", "id", "id_value", "slug", "updated_at"]
+  end
+
   def slugify
     self.slug = generate_slug
   end
