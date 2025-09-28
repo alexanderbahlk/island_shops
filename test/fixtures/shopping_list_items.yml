@@ -3,6 +3,7 @@
 # Table name: shopping_list_items
 #
 #  id               :bigint           not null, primary key
+#  priority         :boolean          default(FALSE), not null
 #  purchased        :boolean          default(FALSE), not null
 #  quantity         :integer          default(1), not null
 #  title            :string           not null
@@ -11,15 +12,18 @@
 #  updated_at       :datetime         not null
 #  category_id      :bigint
 #  shopping_list_id :bigint           not null
+#  user_id          :bigint           not null
 #
 # Indexes
 #
 #  index_shopping_list_items_on_category_id  (category_id)
+#  index_shopping_list_items_on_user_id      (user_id)
 #  index_shopping_list_items_on_uuid         (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (shopping_list_id => shopping_lists.id)
+#  fk_rails_...  (user_id => users.id)
 #
 
 shopping_list_item_milk:
@@ -28,6 +32,7 @@ shopping_list_item_milk:
   shopping_list: shopping_list_abc
   quantity: 2
   purchased: false
+  user: user_one
 
 
 shopping_list_item_cheese:
@@ -36,6 +41,7 @@ shopping_list_item_cheese:
   shopping_list: shopping_list_abc
   quantity: 1
   purchased: false
+  user: user_one
 
 shopping_list_item_goat_cheese:
   title: Goat Cheese
@@ -43,4 +49,5 @@ shopping_list_item_goat_cheese:
   shopping_list: shopping_list_abc
   quantity: 1
   purchased: true
+  user: user_one
 

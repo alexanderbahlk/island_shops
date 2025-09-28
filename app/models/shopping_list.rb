@@ -7,13 +7,21 @@
 #  slug         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  user_id      :bigint           not null
 #
 # Indexes
 #
-#  index_shopping_lists_on_slug  (slug) UNIQUE
+#  index_shopping_lists_on_slug     (slug) UNIQUE
+#  index_shopping_lists_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 class ShoppingList < ApplicationRecord
   include CategoryBreadcrumbHelper
+  belongs_to :user
+
   has_many :shopping_list_items, dependent: :destroy
 
   validates :slug, presence: true, uniqueness: true
@@ -38,9 +46,10 @@ class ShoppingList < ApplicationRecord
         title: item.title,
         purchased: item.purchased,
         quantity: item.quantity,
+        priority: item.priority,
         breadcrumb: item.category.present? ? build_breadcrumb(item.category) : [],
       }
-    end.sort_by { |item| [item[:purchased] ? 1 : 0, item[:title]] }
+    end.sort_by { |item| [item[:purchased] ? 1 : 0, item[:priority] ? 0 : 1, item[:title]] }
   end
 
   private

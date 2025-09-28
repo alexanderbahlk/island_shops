@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_26_161950) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_28_151223) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -111,7 +111,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_26_161950) do
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.boolean "purchased", default: false, null: false
     t.integer "quantity", default: 1, null: false
+    t.boolean "priority", default: false, null: false
+    t.bigint "user_id", null: false
     t.index ["category_id"], name: "index_shopping_list_items_on_category_id"
+    t.index ["user_id"], name: "index_shopping_list_items_on_user_id"
     t.index ["uuid"], name: "index_shopping_list_items_on_uuid", unique: true
   end
 
@@ -120,11 +123,21 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_26_161950) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "display_name", null: false
+    t.bigint "user_id", null: false
     t.index ["slug"], name: "index_shopping_lists_on_slug", unique: true
+    t.index ["user_id"], name: "index_shopping_lists_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "app_hash"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
   add_foreign_key "shopping_list_items", "shopping_lists"
+  add_foreign_key "shopping_list_items", "users"
+  add_foreign_key "shopping_lists", "users"
 end

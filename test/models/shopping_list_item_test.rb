@@ -3,6 +3,7 @@
 # Table name: shopping_list_items
 #
 #  id               :bigint           not null, primary key
+#  priority         :boolean          default(FALSE), not null
 #  purchased        :boolean          default(FALSE), not null
 #  quantity         :integer          default(1), not null
 #  title            :string           not null
@@ -11,15 +12,18 @@
 #  updated_at       :datetime         not null
 #  category_id      :bigint
 #  shopping_list_id :bigint           not null
+#  user_id          :bigint           not null
 #
 # Indexes
 #
 #  index_shopping_list_items_on_category_id  (category_id)
+#  index_shopping_list_items_on_user_id      (user_id)
 #  index_shopping_list_items_on_uuid         (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (shopping_list_id => shopping_lists.id)
+#  fk_rails_...  (user_id => users.id)
 #
 require "test_helper"
 
@@ -29,21 +33,22 @@ class ShoppingListItemTest < ActiveSupport::TestCase
     @category = categories(:milk) # Assuming a fixture exists for a product category
     @non_product_category = categories(:fresh_food) # Assuming a fixture exists for a non-product category
     @shopping_list_item = shopping_list_items(:shopping_list_item_milk) # Assuming a fixture exists for a shopping list item
+    @user = users(:user_one) # Assuming a fixture exists
   end
 
   test "should be valid with a title and shopping list" do
-    item = @shopping_list.shopping_list_items.build(title: "Milk")
+    item = @shopping_list.shopping_list_items.build(title: "Milk", user: @user)
     assert item.valid?
   end
 
   test "should set title from category if category exists" do
-    item = @shopping_list.shopping_list_items.build(category: @category)
+    item = @shopping_list.shopping_list_items.build(category: @category, user: @user)
     assert item.valid?, "Validation failed: #{item.errors.full_messages}"
     assert_equal @category.title, item.title
   end
 
   test "should overwrite title if already set" do
-    item = @shopping_list.shopping_list_items.build(title: "Custom Title", category: @category)
+    item = @shopping_list.shopping_list_items.build(title: "Custom Title", category: @category, user: @user)
     assert item.valid?
     assert_equal "Milk", item.title
   end
@@ -55,13 +60,13 @@ class ShoppingListItemTest < ActiveSupport::TestCase
   end
 
   test "should require category to be of type product" do
-    item = @shopping_list.shopping_list_items.build(category: @non_product_category)
+    item = @shopping_list.shopping_list_items.build(category: @non_product_category, user: @user)
     assert_not item.valid?
     assert_includes item.errors[:category], "must be a product category"
   end
 
   test "should allow category to be nil" do
-    item = @shopping_list.shopping_list_items.build(title: "Custom Title")
+    item = @shopping_list.shopping_list_items.build(title: "Custom Title", user: @user)
     assert item.valid?
   end
 

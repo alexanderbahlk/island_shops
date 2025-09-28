@@ -10,6 +10,11 @@ module Api
       def create
         Rails.logger.info("Received params: #{params.inspect}")
 
+        if !current_user
+          render json: { error: "Unauthorized - User not found" }, status: :unauthorized
+          return
+        end
+
         # Resolve category_uuid to a Category record
         category = Category.find_by(uuid: shopping_list_item_params[:category_uuid])
 
@@ -17,6 +22,7 @@ module Api
         item = @shopping_list.shopping_list_items.build(
           title: shopping_list_item_params[:title],
           category: category,
+          user: current_user,
         )
 
         if item.save
@@ -73,7 +79,7 @@ module Api
       end
 
       def shopping_list_item_params
-        params.require(:shopping_list_item).permit(:title, :category_uuid, :purchased, :quantity)
+        params.require(:shopping_list_item).permit(:title, :category_uuid, :purchased, :quantity, :priority)
       end
     end
   end

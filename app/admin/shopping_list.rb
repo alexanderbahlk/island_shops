@@ -8,6 +8,7 @@ ActiveAdmin.register ShoppingList do
     id_column
     column :display_name
     column :slug
+    column :user
     column :shopping_list_items_count do |shopping_list|
       shopping_list.shopping_list_items.size
     end

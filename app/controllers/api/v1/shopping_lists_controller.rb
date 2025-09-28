@@ -15,7 +15,13 @@ module Api
       # POST /api/v1/shopping_lists
       def create
         Rails.logger.info("Received params: #{params.inspect}")
-        shopping_list = ShoppingList.new(display_name: params[:display_name], shopping_list_items: [])
+
+        if !current_user
+          render json: { error: "Unauthorized - User not found" }, status: :unauthorized
+          return
+        end
+
+        shopping_list = ShoppingList.new(display_name: params[:display_name], user: current_user, shopping_list_items: [])
 
         if shopping_list.save
           render json: { slug: shopping_list.slug, display_name: shopping_list.display_name }, status: :created

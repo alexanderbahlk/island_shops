@@ -3,6 +3,7 @@
 # Table name: shopping_list_items
 #
 #  id               :bigint           not null, primary key
+#  priority         :boolean          default(FALSE), not null
 #  purchased        :boolean          default(FALSE), not null
 #  quantity         :integer          default(1), not null
 #  title            :string           not null
@@ -11,17 +12,21 @@
 #  updated_at       :datetime         not null
 #  category_id      :bigint
 #  shopping_list_id :bigint           not null
+#  user_id          :bigint           not null
 #
 # Indexes
 #
 #  index_shopping_list_items_on_category_id  (category_id)
+#  index_shopping_list_items_on_user_id      (user_id)
 #  index_shopping_list_items_on_uuid         (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (shopping_list_id => shopping_lists.id)
+#  fk_rails_...  (user_id => users.id)
 #
 class ShoppingListItem < ApplicationRecord
+  belongs_to :user
   belongs_to :shopping_list
   belongs_to :category, optional: true
 
