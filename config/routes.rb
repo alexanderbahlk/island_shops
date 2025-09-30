@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   get "/search", to: "api/v1/search#index"
   #
   #
+  namespace :admin do
+    post "categories/create_from_shopping_list_item", to: "categories#create_from_shopping_list_item", as: "create_category_from_shopping_list_item"
+  end
   namespace :api do
     namespace :v1 do
       resources :shop_items, only: [:create]

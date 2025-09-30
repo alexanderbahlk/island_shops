@@ -21,6 +21,26 @@ ActiveAdmin.register Category do
       params[:category][:synonyms] = params[:category][:synonyms].to_s.split(",").map(&:strip) if params[:category][:synonyms]
       super
     end
+
+    def create_from_shopping_list_item
+      Rails.logger.info("Received params: #{params.inspect}")
+      shopping_list_item = ShoppingListItem.find(params[:shopping_list_item_id])
+      parent_category = Category.find_by(id: params[:parent_id])
+
+      new_category = Category.create!(
+        title: params[:title],
+        parent: parent_category,
+        sort_order: (parent_category&.children&.maximum(:sort_order) || 0) + 1,
+      )
+
+      shopping_list_item.update(category: new_category)
+
+      if new_category.persisted?
+        redirect_to admin_shopping_list_item_path(params[:shopping_list_item_id]), notice: "Category successfully created."
+      else
+        redirect_to admin_shopping_list_item_path(params[:shopping_list_item_id]), alert: "Failed to create category."
+      end
+    end
   end
 
   # Configure the index page

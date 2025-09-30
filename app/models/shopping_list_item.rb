@@ -38,6 +38,16 @@ class ShoppingListItem < ApplicationRecord
 
   before_validation :set_title_from_category, if: -> { category.present? }, on: :create
 
+  scope :without_category, -> { where(category_id: nil) }
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["category_id", "created_at", "id", "id_value", "priority", "purchased", "quantity", "shopping_list_id", "title", "updated_at", "user_id", "uuid"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["category", "shopping_list", "user"]
+  end
+
   private
 
   def category_must_be_product

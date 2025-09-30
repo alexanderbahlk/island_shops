@@ -37,12 +37,17 @@ ActiveAdmin.register ShoppingList do
 
     panel "Shopping List Items" do
       table_for shopping_list.shopping_list_items do
-        column :uuid
+        column :uuid do |item|
+          link_to item.uuid, admin_shopping_list_item_path(item)
+        end
         column :title
         column :purchased
+        column :priority
         column :quantity
         column :category do |item|
-          item.category&.title
+          if item.category
+            link_to item.category.title, admin_category_path(item.category)
+          end
         end
       end
     end
