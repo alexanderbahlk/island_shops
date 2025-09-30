@@ -1,4 +1,4 @@
-class Api::V1::ShopItemsController < Api::V1::SecureAppController
+class Api::V1::ShopItemsController < Api::V1::SecureScrapeController
   def create
     #log params for debugging
     Rails.logger.debug("Received shop item params: #{params.inspect}")

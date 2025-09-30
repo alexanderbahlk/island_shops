@@ -8,6 +8,15 @@ Bundler.require(*Rails.groups)
 
 module IslandShops
   class Application < Rails::Application
+    config.middleware.use Rack::Attack
+
+    config.action_cable.allowed_request_origins = [
+      "http://10.0.2.2:3000", # Android emulator
+      /http:\/\/localhost:\d+/,
+      /http:\/\/127\.0\.0\.1:\d+/,
+      /https?:\/\/.*/, # Allow all other origins (use cautiously in production)
+    ]
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
