@@ -7,7 +7,7 @@ WORKDIR /rails
 
 # Install dependencies
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libpq-dev curl && \
+    apt-get install -y build-essential libpq-dev curl redis-server && \
     rm -rf /var/lib/apt/lists/*
 
 # Install gems
