@@ -29,13 +29,6 @@ module Api
           ActionCable.server.broadcast("notifications_#{@shopping_list.slug}", {
             type: "shopping_list_item_created",
             current_user_app_hash: current_user&.app_hash,
-            item: {
-              uuid: item.uuid,
-              title: item.title,
-              purchased: item.purchased,
-              quantity: item.quantity,
-              breadcrumb: item.category.present? ? build_breadcrumb(item.category) : [],
-            },
           })
           render json: {
             uuid: item.uuid,
@@ -53,13 +46,9 @@ module Api
       def destroy
         Rails.logger.info("Received params: #{params.inspect}")
         shopping_list_slug = @shopping_list_item.shopping_list.slug
-        shopping_list_item_uuid = @shopping_list_item.uuid
         if @shopping_list_item.destroy
           ActionCable.server.broadcast("notifications_#{shopping_list_slug}", {
             type: "shopping_list_deleted",
-            item: {
-              uuid: shopping_list_item_uuid,
-            },
             current_user_app_hash: current_user&.app_hash,
           })
           render json: { message: "ShoppingListItem deleted successfully" }, status: :ok
@@ -74,13 +63,6 @@ module Api
           ActionCable.server.broadcast("notifications_#{@shopping_list_item.shopping_list.slug}", {
             type: "shopping_list_item_updated",
             current_user_app_hash: current_user&.app_hash,
-            item: {
-              uuid: @shopping_list_item.uuid,
-              title: @shopping_list_item.title,
-              purchased: @shopping_list_item.purchased,
-              quantity: @shopping_list_item.quantity,
-              breadcrumb: @shopping_list_item.category.present? ? build_breadcrumb(@shopping_list_item.category) : [],
-            },
           })
           render json: {
             uuid: @shopping_list_item.uuid,
