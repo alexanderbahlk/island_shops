@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+echo "Starting Redis..."
+redis-server --daemonize yes
+sleep 2  # Give Redis a moment to start
+echo "Redis started."
+
 echo "Starting Rails application..."
 
 # Remove any existing server.pid
