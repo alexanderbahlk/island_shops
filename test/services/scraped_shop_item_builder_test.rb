@@ -7,7 +7,6 @@ class ScrapedShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params = {
       url: "https://example.com/item/123",
       location: "Massy",
-      shop: "Temp Massy",
       title: "Test Item",
       size: "M",
     }
@@ -36,7 +35,7 @@ class ScrapedShopItemBuilderTest < ActiveSupport::TestCase
 
     assert_equal @shop_item_params[:url], builder.shop_item.url
     assert_equal @shop_item_params[:title], builder.shop_item.title
-    assert_equal @shop_item_params[:shop], builder.shop_item.shop
+    assert_equal @shop_item_params[:location], builder.shop_item.location
     assert_equal @shop_item_update_params[:price], builder.shop_item_update.price
     assert_equal @shop_item_update_params[:stock_status], builder.shop_item_update.stock_status
   end

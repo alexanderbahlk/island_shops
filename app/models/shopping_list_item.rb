@@ -54,7 +54,7 @@ class ShoppingListItem < ApplicationRecord
     ["category", "shopping_list", "user"]
   end
 
-  #TODO depending of the user settings, group by shop or not
+  #TODO depending of the user settings, group by location or not
   #E.g. "Milk 2x from Tesco"
   #E.g. "Milk 2x"
   def title_with_quantity_and_shop
@@ -65,8 +65,8 @@ class ShoppingListItem < ApplicationRecord
     end
 
     if shop_item_id
-      if shop_item && shop_item.shop.present?
-        title_string += " from #{shop_item.shop}"
+      if shop_item && shop_item.location.present?
+        title_string += " from #{shop_item.location.title}"
       end
     end
 

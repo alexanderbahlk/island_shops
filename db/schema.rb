@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_02_211112) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_02_215609) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -94,7 +94,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_02_211112) do
   end
 
   create_table "shop_items", force: :cascade do |t|
-    t.string "shop", null: false
     t.string "url", null: false
     t.string "title", null: false
     t.string "display_title"

@@ -11,6 +11,8 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
     @beverages = categories(:beverages)
     @bakery = categories(:bakery)
 
+    @location = locations(:location_one)
+
     # Create product categories (the ones we'll match against)
     @tomatoes_canned = categories(:tomatoes_canned)
     @tomatoes_fresh = categories(:tomatoes_fresh)
@@ -28,97 +30,97 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
 
   # Tests for find_best_match method
   test "find_best_match returns nil for blank title" do
-    emptyTitleShopItem = ShopItem.new(title: "", url: "www.example.com", shop: "Massy")
+    emptyTitleShopItem = ShopItem.new(title: "", url: "www.example.com", location: @location)
     assert_nil ShopItemCategoryMatcher.new(shop_item: emptyTitleShopItem).find_best_match
-    nilTitleShopItem = ShopItem.new(title: nil, url: "www.example.com", shop: "Massy")
+    nilTitleShopItem = ShopItem.new(title: nil, url: "www.example.com", location: @location)
     assert_nil ShopItemCategoryMatcher.new(shop_item: nilTitleShopItem).find_best_match
-    spaceTitleShopItem = ShopItem.new(title: "   ", url: "www.example.com", shop: "Massy")
+    spaceTitleShopItem = ShopItem.new(title: "   ", url: "www.example.com", location: @location)
     assert_nil ShopItemCategoryMatcher.new(shop_item: spaceTitleShopItem).find_best_match
   end
 
   test "find_best_match returns exact match case insensitive title" do
-    lowerCaseTitleShopItem = ShopItem.new(title: "wine", url: "www.example.com", shop: "Massy")
+    lowerCaseTitleShopItem = ShopItem.new(title: "wine", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: lowerCaseTitleShopItem).find_best_match
     assert_equal @wine_category, result
 
-    upperCaseTitleShopItem = ShopItem.new(title: "WINE", url: "www.example.com", shop: "Massy")
+    upperCaseTitleShopItem = ShopItem.new(title: "WINE", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: upperCaseTitleShopItem).find_best_match
     assert_equal @wine_category, result
 
-    camelCaseTitleShopItem = ShopItem.new(title: "Wine", url: "www.example.com", shop: "Massy")
+    camelCaseTitleShopItem = ShopItem.new(title: "Wine", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: camelCaseTitleShopItem).find_best_match
     assert_equal @wine_category, result
   end
 
   test "find_best_match on realistic shop item title" do
-    relasticBreadcrumbShopItem = ShopItem.new(title: "Sungold Evaporated Milk", breadcrumb: "Shop > Grocery > Beverages > Milks , Evaporated, Condensed , Powdered, Shelf Stable > Sungold Evaporated Milk", url: "www.example.com", shop: "Massy")
+    relasticBreadcrumbShopItem = ShopItem.new(title: "Sungold Evaporated Milk", breadcrumb: "Shop > Grocery > Beverages > Milks , Evaporated, Condensed , Powdered, Shelf Stable > Sungold Evaporated Milk", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: relasticBreadcrumbShopItem).find_best_match
     assert_equal @evaporated_milk_category, result
   end
 
   test "find_best_match handles plural variations" do
-    pluralBreadcrumbShopItem = ShopItem.new(title: "Sungold Evaporated Milks", breadcrumb: "Shop > Grocery > Beverages > Milks , Evaporated, Condensed , Powdered, Shelf Stable > Sungold Evaporated Milk", url: "www.example.com", shop: "Massy")
+    pluralBreadcrumbShopItem = ShopItem.new(title: "Sungold Evaporated Milks", breadcrumb: "Shop > Grocery > Beverages > Milks , Evaporated, Condensed , Powdered, Shelf Stable > Sungold Evaporated Milk", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: pluralBreadcrumbShopItem).find_best_match
     assert_equal @evaporated_milk_category, result
   end
 
   test "find_best_match from breadcrump title" do
-    cannedTomatoesShopItem = ShopItem.new(title: "Hunts Tomatoes Diced 8 14.5", breadcrumb: "Shop > Grocery > Canned Goods, Soups, & Broths > Canned Vegetables > Hunts Tomatoes Diced 8 14.5", url: "www.example.com", shop: "Massy")
+    cannedTomatoesShopItem = ShopItem.new(title: "Hunts Tomatoes Diced 8 14.5", breadcrumb: "Shop > Grocery > Canned Goods, Soups, & Broths > Canned Vegetables > Hunts Tomatoes Diced 8 14.5", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: cannedTomatoesShopItem).find_best_match
     assert_equal @tomatoes_canned, result
 
-    freshTomatoesShopItem = ShopItem.new(title: "Tomato Large Red Per#", breadcrumb: "Shop > Produce > Fresh Vegetables > Tomatoes > Tomato Large Red Per#", url: "www.example.com", shop: "Massy")
+    freshTomatoesShopItem = ShopItem.new(title: "Tomato Large Red Per#", breadcrumb: "Shop > Produce > Fresh Vegetables > Tomatoes > Tomato Large Red Per#", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: freshTomatoesShopItem).find_best_match
     assert_equal @tomatoes_fresh, result
   end
 
   test "find_best_match from coffee breadcrump" do
-    coffeeBreadcrumbShopItem = ShopItem.new(title: "Member's Selection Freeze Dried Instant Coffee 320 g / 11.2 oz", breadcrumb: "PriceSmart > Groceries > Coffee & Tea > Member's Selection Freeze Dried Instant Coffee 320 g / 11.2 oz", url: "www.example.com", shop: "Massy")
+    coffeeBreadcrumbShopItem = ShopItem.new(title: "Member's Selection Freeze Dried Instant Coffee 320 g / 11.2 oz", breadcrumb: "PriceSmart > Groceries > Coffee & Tea > Member's Selection Freeze Dried Instant Coffee 320 g / 11.2 oz", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: coffeeBreadcrumbShopItem).find_best_match
     assert_equal @coffee_category, result
   end
 
   test "find_best_match ignores size and unit information from title" do
-    wineTitleShopItem = ShopItem.new(title: "Wine 750ml", url: "www.example.com", shop: "Massy")
+    wineTitleShopItem = ShopItem.new(title: "Wine 750ml", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: wineTitleShopItem).find_best_match
     assert_equal @wine_category, result
 
-    beerTitleShopItem = ShopItem.new(title: "Beer 12 pack", url: "www.example.com", shop: "Massy")
+    beerTitleShopItem = ShopItem.new(title: "Beer 12 pack", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: beerTitleShopItem).find_best_match
     assert_equal @beer_category, result
 
-    cheeseTitleShopItem = ShopItem.new(title: "Cheese 500g", url: "www.example.com", shop: "Massy")
+    cheeseTitleShopItem = ShopItem.new(title: "Cheese 500g", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: cheeseTitleShopItem).find_best_match
     assert_equal @cheese_category, result
   end
 
   test "find_best_match ignores brand indicators in title" do
-    premiumWineShopItem = ShopItem.new(title: "Premium Wine", url: "www.example.com", shop: "Massy")
+    premiumWineShopItem = ShopItem.new(title: "Premium Wine", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: premiumWineShopItem).find_best_match
     assert_equal @wine_category, result
 
-    freshBreadShopItem = ShopItem.new(title: "Fresh Bread", url: "www.example.com", shop: "Massy")
+    freshBreadShopItem = ShopItem.new(title: "Fresh Bread", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: freshBreadShopItem).find_best_match
     assert_equal @bread_category, result
   end
 
   test "find_best_match handles complex product titles" do
-    complexTitleShopItem = ShopItem.new(title: "Premium Organic Wine 750ml Select Grade A", url: "www.example.com", shop: "Massy")
+    complexTitleShopItem = ShopItem.new(title: "Premium Organic Wine 750ml Select Grade A", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: complexTitleShopItem).find_best_match
     assert_equal @organic_wine_category, result
   end
 
   test "find_best_match handles synonyms" do
-    eggplantShopItem = ShopItem.new(title: "Aubergine", url: "www.example.com", shop: "Massy")
+    eggplantShopItem = ShopItem.new(title: "Aubergine", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: eggplantShopItem).find_best_match
     assert_equal categories(:eggplant), result
-    brinjalShopItem = ShopItem.new(title: "Brinjal", url: "www.example.com", shop: "Massy")
+    brinjalShopItem = ShopItem.new(title: "Brinjal", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: brinjalShopItem).find_best_match
     assert_equal categories(:eggplant), result
   end
 
   test "find_best_match returns nil when no match found" do
-    noMatchShopItem = ShopItem.new(title: "Nonexistent Product Category", url: "www.example.com", shop: "Massy")
+    noMatchShopItem = ShopItem.new(title: "Nonexistent Product Category", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: noMatchShopItem).find_best_match
     assert_nil result
   end
@@ -126,7 +128,7 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
   test "find_best_match returns category with similarity score" do
     # Test the fuzzy match method directly
 
-    wineShopItem = ShopItem.new(title: "wines", url: "www.example.com", shop: "Massy")
+    wineShopItem = ShopItem.new(title: "wines", url: "www.example.com", location: @location)
     result = ShopItemCategoryMatcher.new(shop_item: wineShopItem).find_best_match
 
     if result
@@ -190,7 +192,7 @@ class ShopItemCategoryMatcherTest < ActiveSupport::TestCase
 
     # Measure time for find_best_match
     start_time = Time.current
-    testShopItem = ShopItem.new(title: "Test Product", url: "www.example.com", shop: "Massy")
+    testShopItem = ShopItem.new(title: "Test Product", url: "www.example.com", location: @location)
     ShopItemCategoryMatcher.new(shop_item: testShopItem).find_best_match()
     end_time = Time.current
 

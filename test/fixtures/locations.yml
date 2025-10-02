@@ -21,7 +21,7 @@ location_one:
   description: "Some description for Location One"
   is_online: true
 
-location_ two:
+location_two:
   title: "Location Two"
   description: "Some description for Location Two"
   is_online: false

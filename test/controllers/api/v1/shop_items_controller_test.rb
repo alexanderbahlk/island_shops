@@ -14,7 +14,6 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
         unit: "kg",
         location: "Massy",
         product_id: "12345",
-        shop: "Test Shop",
       },
       shop_item_update: {
         price: 9.99,
@@ -32,7 +31,6 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
         unit: "kg",
         location: "Massy",
         product_id: "12345",
-        shop: "Test Shop",
       },
       shop_item_update: {
         price: 9.99,

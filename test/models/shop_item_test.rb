@@ -8,7 +8,6 @@
 #  display_title        :string
 #  image_url            :string
 #  needs_another_review :boolean          default(FALSE)
-#  shop                 :string           not null
 #  size                 :decimal(10, 2)
 #  title                :string           not null
 #  unit                 :string
@@ -42,11 +41,11 @@ class ShopItemTest < ActiveSupport::TestCase
   #
   #
   test "should have uuid present and unique" do
-    shop_item = ShopItem.create!(title: "New Item", url: "http://example.com/new-item", shop: "Massy")
+    shop_item = ShopItem.create!(title: "New Item", url: "http://example.com/new-item")
     assert shop_item.uuid.present?
     assert shop_item.valid?
 
-    duplicate = ShopItem.new(title: "Duplicate Item", url: "http://example.com/duplicate-item", shop: "Massy", uuid: shop_item.uuid)
+    duplicate = ShopItem.new(title: "Duplicate Item", url: "http://example.com/duplicate-item", uuid: shop_item.uuid)
     assert_not duplicate.valid?
     assert_includes duplicate.errors[:uuid], "has already been taken"
   end

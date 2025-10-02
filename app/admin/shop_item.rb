@@ -1,6 +1,6 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
-  permit_params :location, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :category_id
+  permit_params :url, :title, :display_title, :image_url, :size, :unit, :location_id, :product_id, :approved, :needs_another_review, :category_id
 
   # Add the action at the top level of the resource
   action_item :assign_missing_categories, only: :index do
@@ -230,7 +230,6 @@ ActiveAdmin.register ShopItem do
       f.input :image_url, placeholder: "https://example.com/image.jpg"
       f.input :size
       f.input :unit, as: :select, collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] }, include_blank: false
-      f.input :location
       f.input :product_id
       f.input :approved, as: :boolean, hint: "Check to approve this item for public listing"
       f.input :needs_another_review, as: :boolean, hint: "Check if the item needs another review even if approved"

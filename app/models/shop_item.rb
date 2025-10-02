@@ -8,7 +8,6 @@
 #  display_title        :string
 #  image_url            :string
 #  needs_another_review :boolean          default(FALSE)
-#  shop                 :string           not null
 #  size                 :decimal(10, 2)
 #  title                :string           not null
 #  unit                 :string
@@ -42,6 +41,7 @@ class ShopItem < ApplicationRecord
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
   validates :category, presence: true, if: -> { category_id.present? }
+  validates :location, presence: true, if: -> { location_id.present? }
   validate :category_must_be_product, if: -> { category.present? }
   validates :uuid, uniqueness: true
 
@@ -91,7 +91,7 @@ class ShopItem < ApplicationRecord
 
   # For Ransack search
   def self.ransackable_attributes(auth_object = nil)
-    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "location", "product_id", "shop", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review", "breadcrumb"]
+    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "product_id", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review", "breadcrumb", "location_id"]
   end
 
   def self.ransackable_associations(auth_object = nil)
