@@ -54,6 +54,22 @@ class ShoppingListItem < ApplicationRecord
     ["category", "shopping_list", "user"]
   end
 
+  def title_with_quantity_and_shop
+    title_string = title
+
+    if quantity > 1
+      title_string = "#{title_string} #{quantity}x"
+    end
+
+    if shop_item_id
+      if shop_item && shop_item.shop.present?
+        title_string += " from #{shop_item.shop}"
+      end
+    end
+
+    title_string
+  end
+
   private
 
   def category_must_be_product

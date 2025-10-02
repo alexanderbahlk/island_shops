@@ -42,8 +42,10 @@ class ShoppingList < ApplicationRecord
       {
         uuid: item.uuid,
         category_uuid: item.category&.uuid,
+        shop_item_uuid: item.shop_item&.uuid,
+        shop_name: item.shop_item&.shop,
         shop_item_count: item.category&.approved_cached_shop_items_count || 0,
-        title: item.title,
+        title: item.title_with_quantity_and_shop,
         purchased: item.purchased,
         quantity: item.quantity,
         priority: item.priority,

@@ -16,26 +16,20 @@ module Api
         end
 
         # Build the ShoppingListItem
-        item = @shopping_list.shopping_list_items.build(
+        shopping_list_item = @shopping_list.shopping_list_items.build(
           title: shopping_list_item_params[:title],
           category: category || nil,
           user: current_user,
         )
 
-        if item.save
+        if shopping_list_item.save
           ActionCable.server.broadcast("notifications_#{@shopping_list.slug}", {
             type: "shopping_list_item_created",
             current_user_app_hash: current_user&.app_hash,
           })
-          render json: {
-            uuid: item.uuid,
-            title: item.title,
-            purchased: item.purchased,
-            quantity: item.quantity,
-            breadcrumb: item.category.present? ? build_breadcrumb(item.category) : [],
-          }, status: :created
+          render json: shopping_list_item_json_response(shopping_list_item), status: :created
         else
-          render json: { errors: item.errors.full_messages }, status: :unprocessable_entity
+          render json: { errors: shopping_list_item.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -59,11 +53,16 @@ module Api
 
         update_params = shopping_list_item_params
 
-        if params[:shop_item] && params[:shop_item][:uuid]
-          Rails.logger.info("Looking up ShopItem with UUID: #{params[:shop_item][:uuid]}")
+        if params[:shop_item] && params[:shop_item].key?(:uuid)
+          Rails.logger.info("Looking up ShopItem with UUID: #{params[:shop_item][:uuid].inspect}")
           shop_item = ShopItem.find_by(uuid: params[:shop_item][:uuid])
 
-          update_params.merge!(shop_item_id: shop_item.id) if shop_item
+          if shop_item
+            update_params.merge!(shop_item_id: shop_item.id)
+          else
+            # If the UUID is nil or invalid, explicitly set shop_item_id to nil
+            update_params.merge!(shop_item_id: nil)
+          end
         end
 
         if @shopping_list_item.update(update_params)
@@ -71,19 +70,23 @@ module Api
             type: "shopping_list_item_updated",
             current_user_app_hash: current_user&.app_hash,
           })
-          render json: {
-            uuid: @shopping_list_item.uuid,
-            title: @shopping_list_item.title,
-            purchased: @shopping_list_item.purchased,
-            quantity: @shopping_list_item.quantity,
-            breadcrumb: @shopping_list_item.category.present? ? build_breadcrumb(@shopping_list_item.category) : [],
-          }, status: :ok
+          render json: shopping_list_item_json_response(@shopping_list_item), status: :ok
         else
           render json: { errors: @shopping_list_item.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
       private
+
+      def shopping_list_item_json_response(shopping_list_item)
+        return {
+                 uuid: shopping_list_item.uuid,
+                 title: shopping_list_item.title_with_quantity_and_shop,
+                 purchased: shopping_list_item.purchased,
+                 quantity: shopping_list_item.quantity,
+                 breadcrumb: shopping_list_item.category.present? ? build_breadcrumb(shopping_list_item.category) : [],
+               }
+      end
 
       def find_shopping_list
         @shopping_list = ShoppingList.find_by!(slug: params[:shopping_list_slug])

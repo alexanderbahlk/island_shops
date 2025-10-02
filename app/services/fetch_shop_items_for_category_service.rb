@@ -20,6 +20,7 @@ class FetchShopItemsForCategoryService
 
           shop_item = {
             title: item.display_title.presence || item.title,
+            uuid: item.uuid,
             shop: item.shop,
             image_url: item.image_url,
             unit: item.unit || "N/A",
