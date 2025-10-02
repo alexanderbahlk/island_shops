@@ -54,6 +54,9 @@ class ShoppingListItem < ApplicationRecord
     ["category", "shopping_list", "user"]
   end
 
+  #TODO depending of the user settings, group by shop or not
+  #E.g. "Milk 2x from Tesco"
+  #E.g. "Milk 2x"
   def title_with_quantity_and_shop
     title_string = title
 
