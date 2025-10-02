@@ -1,6 +1,6 @@
 ActiveAdmin.register ShopItem do
   # Permit parameters for create/update actions
-  permit_params :shop, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :category_id
+  permit_params :location, :url, :title, :display_title, :image_url, :size, :unit, :location, :product_id, :approved, :needs_another_review, :category_id
 
   # Add the action at the top level of the resource
   action_item :assign_missing_categories, only: :index do
@@ -85,7 +85,9 @@ ActiveAdmin.register ShopItem do
   index do
     selectable_column
     id_column
-    column :shop
+    column :location do |location|
+      location&.title || "N/A"
+    end
     column :title do |shop_item|
       link_to shop_item.title, shop_item.url, target: "_blank", data: { shop_item_id: shop_item.id }
     end
@@ -204,7 +206,7 @@ ActiveAdmin.register ShopItem do
   # Configure filters for the index page
   filter :title
   filter :breadcrumb
-  filter :shop, as: :select, collection: Shop::ALLOWED, include_blank: "N/A"
+  filter :location, as: :select, collection: Location.all, include_blank: "N/A"
   filter :approved
   filter :needs_another_review
   filter :unit, as: :select, collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] }
@@ -220,7 +222,7 @@ ActiveAdmin.register ShopItem do
   # Configure the form for create/edit
   form do |f|
     f.inputs "Shop Item Details" do
-      f.input :shop, as: :select, collection: Shop::ALLOWED, include_blank: false
+      f.input :location, as: :select, collection: Location.all, include_blank: false
       f.input :url, placeholder: "https://example.com/product"
       f.input :title
       f.input :display_title, hint: "Optional: Custom display name for the item"
@@ -241,7 +243,7 @@ ActiveAdmin.register ShopItem do
     attributes_table do
       row :id
       row :uuid
-      row :shop
+      row :location
       row :title
       row :breadcrumb
       row :latest_stock_status

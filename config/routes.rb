@@ -25,7 +25,10 @@ Rails.application.routes.draw do
   end
   namespace :api do
     namespace :v1 do
-      resources :shop_items, only: [:create]
+      resources :shop_items do
+        post "create", on: :collection
+        post "create_by_scrape", on: :collection
+      end
       resources :shopping_lists, param: :slug, only: [:create, :show, :update, :destroy] do
         resources :shopping_list_items, only: [:create, :destroy, :update], shallow: true
       end

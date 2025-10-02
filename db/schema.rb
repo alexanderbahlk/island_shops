@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_02_201431) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_02_211112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -101,7 +101,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_02_201431) do
     t.string "image_url"
     t.decimal "size", precision: 10, scale: 2
     t.string "unit"
-    t.string "location"
     t.string "product_id"
     t.boolean "approved", default: false
     t.boolean "needs_another_review", default: false

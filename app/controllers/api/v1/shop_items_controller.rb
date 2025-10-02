@@ -1,8 +1,8 @@
 class Api::V1::ShopItemsController < Api::V1::SecureScrapeController
-  def create
+  def create_by_scrape
     #log params for debugging
     Rails.logger.debug("Received shop item params: #{params.inspect}")
-    builder = ShopItemBuilder.new(shop_item_params, shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(shop_item_params, shop_item_update_params)
 
     if builder.build
       render json: {
@@ -12,6 +12,9 @@ class Api::V1::ShopItemsController < Api::V1::SecureScrapeController
     else
       render json: { errors: builder.errors }, status: :unprocessable_content
     end
+  end
+
+  def create
   end
 
   private

@@ -1,5 +1,18 @@
-class ShopItemBuilder
+class ScrapedShopItemBuilder
   attr_reader :shop_item, :shop_item_update, :errors
+
+  MASSY = "Massy".freeze
+  COSTULESS = "Cost.U.Less".freeze
+  PRICESMART = "PriceSmart".freeze
+  AONE = "A1".freeze
+
+  # List of all traits
+  ALLOWED_SCRAPE_SHOPS = [
+    MASSY,
+    COSTULESS,
+    PRICESMART,
+    AONE,
+  ].freeze
 
   def initialize(shop_item_params, shop_item_update_params)
     @shop_item_params = shop_item_params
@@ -28,7 +41,7 @@ class ShopItemBuilder
   def create_shop_item_update_for_existing_shop_item(existing_item)
     @shop_item = existing_item
     # Avoid changing the ID, size, or unit of the existing item
-    @shop_item.assign_attributes(@shop_item_params.except(:id, :size, :unit))
+    @shop_item.assign_attributes(@shop_item_params.except(:id, :size, :unit, :location))
 
     # Auto-assign category if not already set
     auto_assign_shop_item_category() if @shop_item.category.nil?
@@ -67,6 +80,17 @@ class ShopItemBuilder
   end
 
   def create_new_shop_item_with_shop_item_update
+    location_string = @shop_item_params.delete(:location)
+
+    # stop if location_string is nill or not in ALLOWED_SCRAPE_SHOPS
+    if location_string && ALLOWED_SCRAPE_SHOPS.include?(location_string.strip)
+      location = Location.find_or_create_by(title: location_string.strip)
+      @shop_item_params[:location] = location
+    else
+      @errors << "Invalid or missing location"
+      return
+    end
+
     @shop_item = ShopItem.new(@shop_item_params)
 
     # Auto-assign category for new items

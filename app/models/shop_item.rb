@@ -7,7 +7,6 @@
 #  breadcrumb           :string
 #  display_title        :string
 #  image_url            :string
-#  location             :string
 #  needs_another_review :boolean          default(FALSE)
 #  shop                 :string           not null
 #  size                 :decimal(10, 2)
@@ -38,11 +37,10 @@ class ShopItem < ApplicationRecord
   has_many :shopping_list_items, dependent: :nullify
   has_many :shop_item_updates, dependent: :destroy
   belongs_to :category, optional: true
-  belongs_to :shop, optional: true # Optional for now to allow migration of existing data
+  belongs_to :location, optional: true # Optional for now to allow migration of existing data
 
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
-  validates :shop, presence: true, inclusion: { in: Shop::ALLOWED }
   validates :category, presence: true, if: -> { category_id.present? }
   validate :category_must_be_product, if: -> { category.present? }
   validates :uuid, uniqueness: true
@@ -59,7 +57,6 @@ class ShopItem < ApplicationRecord
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :needs_review, -> { where(needs_another_review: true) }
-  scope :by_shop, ->(shop_name) { where(shop: shop_name) if shop_name.present? }
   scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
   scope :in_category, ->(category) { where(category: category) }
   scope :missing_category, -> { where(category_id: nil) }

@@ -7,7 +7,6 @@
 #  breadcrumb           :string
 #  display_title        :string
 #  image_url            :string
-#  location             :string
 #  needs_another_review :boolean          default(FALSE)
 #  shop                 :string           not null
 #  size                 :decimal(10, 2)

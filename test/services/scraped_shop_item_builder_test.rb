@@ -2,11 +2,12 @@ require "test_helper"
 
 #run 'rails db:test:prepare' for missing migration
 
-class ShopItemBuilderTest < ActiveSupport::TestCase
+class ScrapedShopItemBuilderTest < ActiveSupport::TestCase
   def setup
     @shop_item_params = {
       url: "https://example.com/item/123",
-      shop: "Massy",
+      location: "Massy",
+      shop: "Temp Massy",
       title: "Test Item",
       size: "M",
     }
@@ -26,7 +27,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
   end
 
   test "creates new shop item with update when item doesn't exist" do
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
 
     assert_difference ["ShopItem.count", "ShopItemUpdate.count"], 1 do
       result = builder.build
@@ -41,12 +42,12 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
   end
 
   test "creates ShopItemUpdate after the initial creation" do
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal builder.shop_item.shop_item_updates.size, 1
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_lower_price_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_lower_price_params)
     builder.build
 
     assert_equal builder.shop_item.shop_item_updates.size, 2
@@ -63,7 +64,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     existing_item = shop_items(:shop_item_one)
     @shop_item_params[:url] = existing_item.url
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
 
     assert_difference "ShopItemUpdate.count", 1 do
       assert_no_difference "ShopItem.count" do
@@ -83,7 +84,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_update_params[:price] = last_update.price
     @shop_item_update_params[:stock_status] = last_update.stock_status
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
 
     assert_no_difference "ShopItemUpdate.count" do
       result = builder.build
@@ -96,7 +97,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
   test "handles validation errors for shop item" do
     @shop_item_params[:url] = nil # assuming url is required
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
 
     assert_no_difference ["ShopItem.count", "ShopItemUpdate.count"] do
       result = builder.build
@@ -109,7 +110,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
   test "handles validation errors for shop item update" do
     @shop_item_update_params[:price] = nil # assuming price is required
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
 
     assert_difference "ShopItem.count", 1 do
       assert_no_difference "ShopItemUpdate.count" do
@@ -122,7 +123,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
   end
 
   test "success? returns true when no errors" do
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert builder.success?
@@ -130,7 +131,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
 
   test "success? returns false when errors exist" do
     @shop_item_params[:url] = nil
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     refute builder.success?
@@ -141,7 +142,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Toufayan Bagels Blueberry 16 Ct"
     @shop_item_params[:size] = nil # Ensure size is blank to trigger extraction
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 16.0, builder.shop_item.size
@@ -153,7 +154,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:size] = 1 # Ensure size is blank to trigger extraction
     @shop_item_params[:unit] = "lt" # Ensure size is blank to trigger extraction
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.0, builder.shop_item.size
@@ -165,7 +166,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:size] = 12 # Ensure size is blank to trigger extraction
     @shop_item_params[:unit] = "pk" # Ensure size is blank to trigger extraction
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 12.0, builder.shop_item.size
@@ -176,7 +177,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Toufayan Bagels Blueberry 16Ct"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 16.0, builder.shop_item.size
@@ -187,7 +188,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Badia Garlic Powder 2lbs"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 2.0, builder.shop_item.size
@@ -198,7 +199,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Badia Garlic Powder 2 lb"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 2.0, builder.shop_item.size
@@ -209,7 +210,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Badia Garlic Powder 200 g"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 200.0, builder.shop_item.size
@@ -220,7 +221,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Badia Garlic Powder 200g"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 200.0, builder.shop_item.size
@@ -231,7 +232,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Badia Garlic Powder 200Gr"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 200.0, builder.shop_item.size
@@ -242,7 +243,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Rice Bag 5Kg"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 5.0, builder.shop_item.size
@@ -253,7 +254,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Cooking Oil 2L"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 2.0, builder.shop_item.size
@@ -270,7 +271,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "L/Flavor Icecream Coconut 1.5qt"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.5, builder.shop_item.size
@@ -287,7 +288,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "L/Flavor Icecream Coconut 1.5qt"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.5, builder.shop_item.size
@@ -304,7 +305,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "BB Icecream Pistachio Almond 45 fz"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 45, builder.shop_item.size
@@ -321,7 +322,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Vanilla Extract 250ml"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 250.0, builder.shop_item.size
@@ -331,7 +332,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Sweet Potatoes Stewing [per kg]"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 0.0, builder.shop_item.size
@@ -342,7 +343,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Cereal Box 12Oz"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 12.0, builder.shop_item.size
@@ -353,7 +354,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Ice Cream Pint 1.5pints"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.5, builder.shop_item.size
@@ -370,7 +371,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Ice Cream Pint 1.5pt"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.5, builder.shop_item.size
@@ -381,7 +382,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Bottle Water 16Fl"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 16.0, builder.shop_item.size
@@ -392,7 +393,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Chocolate Bars 6pack"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 6.0, builder.shop_item.size
@@ -403,7 +404,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Chicken Variety Pack Fresh Skinless"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.0, builder.shop_item.size
@@ -414,7 +415,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Chicken Wings 10pcs"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 10.0, builder.shop_item.size
@@ -425,7 +426,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Apple 1EACH"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.0, builder.shop_item.size
@@ -436,7 +437,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Golden Ridge Whole Turkey"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.0, builder.shop_item.size
@@ -453,7 +454,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Banana 1[EACH]"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 1.0, builder.shop_item.size
@@ -464,7 +465,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Bag of Tomatos"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_nil builder.shop_item.size
@@ -476,7 +477,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Milk Carton 2.5L"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 2.5, builder.shop_item.size
@@ -487,7 +488,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Generic Item 42"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 42.0, builder.shop_item.size
@@ -498,7 +499,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Test Item 5ct"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 5.0, builder.shop_item.size
@@ -509,7 +510,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Generic Product Name"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_nil builder.shop_item.size
@@ -520,7 +521,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = ""
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_nil builder.shop_item.size
@@ -532,7 +533,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:size] = 400.0 # Size already provided
     @shop_item_params[:unit] = "g" # Unit already provided
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 400.0, builder.shop_item.size # Original size preserved
@@ -543,7 +544,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Item 16 Ct"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 16.0, builder.shop_item.size
@@ -554,7 +555,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Product 2023 Edition 500g"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 500.0, builder.shop_item.size
@@ -565,7 +566,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Betty Crocker Mashed Potatoes Butter & Herb 4oz"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 4.0, builder.shop_item.size
@@ -576,7 +577,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:title] = "Iceberg Lettuce Unit"
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 0.0, builder.shop_item.size
@@ -588,7 +589,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_update_params[:price] = 14.49
     @shop_item_params[:size] = nil
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     assert_equal 24.0, builder.shop_item.size
@@ -607,7 +608,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:size] = 1 # Ensure size is blank to trigger extraction
     @shop_item_params[:unit] = "lt" # Ensure size is blank to trigger extraction
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     @evaporated_milk_category = categories(:evaporated_milk)
@@ -619,7 +620,7 @@ class ShopItemBuilderTest < ActiveSupport::TestCase
     @shop_item_params[:size] = 1 # Ensure size is blank to trigger extraction
     @shop_item_params[:unit] = "lt" # Ensure size is blank to trigger extraction
 
-    builder = ShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
     builder.build
 
     @milk_category = categories(:milk)

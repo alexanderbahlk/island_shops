@@ -29,7 +29,7 @@ module Api
           })
           render json: shopping_list_item_json_response(shopping_list_item), status: :created
         else
-          render json: { errors: shopping_list_item.errors.full_messages }, status: :unprocessable_entity
+          render json: { errors: shopping_list_item.errors.full_messages }, status: :unprocessable_content
         end
       end
 
@@ -72,7 +72,7 @@ module Api
           })
           render json: shopping_list_item_json_response(@shopping_list_item), status: :ok
         else
-          render json: { errors: @shopping_list_item.errors.full_messages }, status: :unprocessable_entity
+          render json: { errors: @shopping_list_item.errors.full_messages }, status: :unprocessable_content
         end
       end
 
