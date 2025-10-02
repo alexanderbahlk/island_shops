@@ -14,7 +14,7 @@
 #  title                :string           not null
 #  unit                 :string
 #  url                  :string           not null
-#  uuid                 :uuid
+#  uuid                 :uuid             not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  category_id          :bigint
@@ -25,6 +25,7 @@
 #  index_shop_items_on_breadcrumb   (breadcrumb)
 #  index_shop_items_on_category_id  (category_id)
 #  index_shop_items_on_url          (url) UNIQUE
+#  index_shop_items_on_uuid         (uuid) UNIQUE
 #
 # Foreign Keys
 #
@@ -36,4 +37,15 @@ class ShopItemTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
+  #
+  #
+  test "should have uuid present and unique" do
+    shop_item = ShopItem.create!(title: "New Item", url: "http://example.com/new-item", shop: "Massy")
+    assert shop_item.uuid.present?
+    assert shop_item.valid?
+
+    duplicate = ShopItem.new(title: "Duplicate Item", url: "http://example.com/duplicate-item", shop: "Massy", uuid: shop_item.uuid)
+    assert_not duplicate.valid?
+    assert_includes duplicate.errors[:uuid], "has already been taken"
+  end
 end

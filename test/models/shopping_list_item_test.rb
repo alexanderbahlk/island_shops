@@ -47,7 +47,21 @@ class ShoppingListItemTest < ActiveSupport::TestCase
   test "should set title from category if category exists" do
     item = @shopping_list.shopping_list_items.build(category: @category, user: @user)
     assert item.valid?, "Validation failed: #{item.errors.full_messages}"
+    item.save
+    assert item.uuid.present?, "UUID should be present"
     assert_equal @category.title, item.title
+  end
+
+  test "should have uuid present and unique" do
+    item = @shopping_list.shopping_list_items.build(title: "Milk", user: @user)
+    assert item.valid?
+    item.save
+    assert item.uuid.present?, "UUID should be present"
+
+    duplicate = @shopping_list.shopping_list_items.build(title: "Duplicate Milk", user: @user, uuid: item.uuid)
+    assert_not duplicate.valid?
+
+    assert_includes duplicate.errors[:uuid], "has already been taken"
   end
 
   test "should overwrite title if already set" do

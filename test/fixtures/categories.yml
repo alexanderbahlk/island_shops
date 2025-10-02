@@ -12,7 +12,7 @@
 #  sort_order    :integer          default(0)
 #  synonyms      :text             default([]), is an Array
 #  title         :string           not null
-#  uuid          :uuid
+#  uuid          :uuid             not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  parent_id     :bigint
@@ -25,6 +25,7 @@
 #  index_categories_on_parent_id_and_slug        (parent_id,slug) UNIQUE
 #  index_categories_on_parent_id_and_sort_order  (parent_id,sort_order)
 #  index_categories_on_path                      (path)
+#  index_categories_on_uuid                      (uuid) UNIQUE
 #
 # Foreign Keys
 #

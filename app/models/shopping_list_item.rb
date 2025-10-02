@@ -40,6 +40,8 @@ class ShoppingListItem < ApplicationRecord
   validates :title, presence: true
   validates :quantity, numericality: { greater_than: 0, only_integer: true }
 
+  validates :uuid, uniqueness: true
+
   before_validation :set_title_from_category, if: -> { category.present? }, on: :create
 
   scope :without_category, -> { where(category_id: nil) }

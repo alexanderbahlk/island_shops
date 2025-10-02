@@ -14,6 +14,7 @@
 #  title                :string           not null
 #  unit                 :string
 #  url                  :string           not null
+#  uuid                 :uuid             not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  category_id          :bigint
@@ -24,6 +25,7 @@
 #  index_shop_items_on_breadcrumb   (breadcrumb)
 #  index_shop_items_on_category_id  (category_id)
 #  index_shop_items_on_url          (url) UNIQUE
+#  index_shop_items_on_uuid         (uuid) UNIQUE
 #
 # Foreign Keys
 #
@@ -39,16 +41,15 @@ class ShopItem < ApplicationRecord
   validates :shop, presence: true, inclusion: { in: Shop::ALLOWED }
   validates :category, presence: true, if: -> { category_id.present? }
   validate :category_must_be_product, if: -> { category.present? }
+  validates :uuid, uniqueness: true
 
   # Optional validations
   validates :image_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }, allow_blank: true
-  validates :uuid, presence: true, uniqueness: true
 
   # Callbacks
   before_validation :parse_and_set_unit_from_title, if: :title_changed?
   #Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
-  before_validation :generate_uuid, on: :create
 
   # Scopes
   scope :approved, -> { where(approved: true) }
@@ -173,10 +174,6 @@ class ShopItem < ApplicationRecord
   end
 
   private
-
-  def generate_uuid
-    self.uuid ||= SecureRandom.uuid
-  end
 
   def category_must_be_product
     unless category.product?

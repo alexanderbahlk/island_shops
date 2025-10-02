@@ -12,7 +12,7 @@
 #  sort_order    :integer          default(0)
 #  synonyms      :text             default([]), is an Array
 #  title         :string           not null
-#  uuid          :uuid
+#  uuid          :uuid             not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  parent_id     :bigint
@@ -25,6 +25,7 @@
 #  index_categories_on_parent_id_and_slug        (parent_id,slug) UNIQUE
 #  index_categories_on_parent_id_and_sort_order  (parent_id,sort_order)
 #  index_categories_on_path                      (path)
+#  index_categories_on_uuid                      (uuid) UNIQUE
 #
 # Foreign Keys
 #
@@ -108,5 +109,15 @@ class CategoryTest < ActiveSupport::TestCase
 
     category_ids = ShopItem.where(id: [@shop_item1.id, @shop_item2.id]).pluck(:category_id)
     assert category_ids.all?(&:nil?)
+  end
+
+  test "should have uuid present and unique" do
+    category = Category.create!(title: "New Category", parent: @root_category)
+    assert category.uuid.present?
+    assert category.valid?
+
+    duplicate = Category.new(title: "Duplicate Category", parent: @root_category, uuid: category.uuid)
+    assert_not duplicate.valid?
+    assert_includes duplicate.errors[:uuid], "has already been taken"
   end
 end
