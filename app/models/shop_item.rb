@@ -38,6 +38,7 @@ class ShopItem < ApplicationRecord
   has_many :shopping_list_items, dependent: :nullify
   has_many :shop_item_updates, dependent: :destroy
   belongs_to :category, optional: true
+  belongs_to :shop, optional: true # Optional for now to allow migration of existing data
 
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
