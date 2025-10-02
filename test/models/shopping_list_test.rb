@@ -34,7 +34,7 @@ class ShoppingListTest < ActiveSupport::TestCase
     result = @shopping_list_with_items.shopping_list_items_for_view_list
 
     # Ensure the result is sorted by title
-    assert_equal ["Cheese", "Milk", "Goat Cheese"], result.map { |item| item[:title] }
+    assert_equal ["Cheese", "Milk 2x", "Goat Cheese"], result.map { |item| item[:title] }
   end
 
   test "shopping_list_items_for_view_list includes uuid, title, and purchased fields" do
@@ -52,7 +52,7 @@ class ShoppingListTest < ActiveSupport::TestCase
     result = @shopping_list_with_items.shopping_list_items_for_view_list
 
     # Ensure breadcrumbs are generated correctly
-    milk_item = result.find { |item| item[:title] == "Milk" }
+    milk_item = result.find { |item| item[:title] == "Milk 2x" }
     cheese_item = result.find { |item| item[:title] == "Cheese" }
 
     assert_equal ["Food", "Fresh Food", "Dairy"], milk_item[:breadcrumb], "Breadcrumb for Milk is incorrect"
