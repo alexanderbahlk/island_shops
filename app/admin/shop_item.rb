@@ -240,6 +240,7 @@ ActiveAdmin.register ShopItem do
   show do
     attributes_table do
       row :id
+      row :uuid
       row :shop
       row :title
       row :breadcrumb

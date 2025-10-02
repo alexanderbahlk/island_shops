@@ -30,6 +30,7 @@
 #  fk_rails_...  (category_id => categories.id)
 #
 class ShopItem < ApplicationRecord
+  has_many :shopping_list_items, dependent: :nullify
   has_many :shop_item_updates, dependent: :destroy
   belongs_to :category, optional: true
 
@@ -41,11 +42,13 @@ class ShopItem < ApplicationRecord
 
   # Optional validations
   validates :image_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }, allow_blank: true
+  validates :uuid, presence: true, uniqueness: true
 
   # Callbacks
   before_validation :parse_and_set_unit_from_title, if: :title_changed?
   #Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
+  before_validation :generate_uuid, on: :create
 
   # Scopes
   scope :approved, -> { where(approved: true) }
@@ -170,6 +173,10 @@ class ShopItem < ApplicationRecord
   end
 
   private
+
+  def generate_uuid
+    self.uuid ||= SecureRandom.uuid
+  end
 
   def category_must_be_product
     unless category.product?

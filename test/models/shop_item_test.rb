@@ -14,6 +14,7 @@
 #  title                :string           not null
 #  unit                 :string
 #  url                  :string           not null
+#  uuid                 :uuid
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  category_id          :bigint

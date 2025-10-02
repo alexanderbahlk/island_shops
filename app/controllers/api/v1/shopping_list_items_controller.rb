@@ -10,18 +10,15 @@ module Api
       def create
         Rails.logger.info("Received params: #{params.inspect}")
 
-        if !current_user
-          render json: { error: "Unauthorized - User not found" }, status: :unauthorized
-          return
-        end
-
         # Resolve category_uuid to a Category record
-        category = Category.find_by(uuid: shopping_list_item_params[:category_uuid])
+        if shopping_list_item_params[:category_uuid]
+          category = Category.find_by(uuid: shopping_list_item_params[:category_uuid])
+        end
 
         # Build the ShoppingListItem
         item = @shopping_list.shopping_list_items.build(
           title: shopping_list_item_params[:title],
-          category: category,
+          category: category || nil,
           user: current_user,
         )
 
@@ -59,7 +56,17 @@ module Api
 
       def update
         Rails.logger.info("Received params update: #{params.inspect}")
-        if @shopping_list_item.update(shopping_list_item_params)
+
+        update_params = shopping_list_item_params
+
+        if params[:shop_item] && params[:shop_item][:uuid]
+          Rails.logger.info("Looking up ShopItem with UUID: #{params[:shop_item][:uuid]}")
+          shop_item = ShopItem.find_by(uuid: params[:shop_item][:uuid])
+
+          update_params.merge!(shop_item_id: shop_item.id) if shop_item
+        end
+
+        if @shopping_list_item.update(update_params)
           ActionCable.server.broadcast("notifications_#{@shopping_list_item.shopping_list.slug}", {
             type: "shopping_list_item_updated",
             current_user_app_hash: current_user&.app_hash,

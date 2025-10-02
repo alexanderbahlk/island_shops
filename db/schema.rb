@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_28_151223) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_02_151210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -97,6 +97,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_28_151223) do
     t.datetime "updated_at", null: false
     t.bigint "category_id"
     t.string "breadcrumb"
+    t.uuid "uuid"
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
@@ -113,7 +114,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_28_151223) do
     t.integer "quantity", default: 1, null: false
     t.boolean "priority", default: false, null: false
     t.bigint "user_id", null: false
+    t.bigint "shop_item_id"
     t.index ["category_id"], name: "index_shopping_list_items_on_category_id"
+    t.index ["shop_item_id"], name: "index_shopping_list_items_on_shop_item_id"
     t.index ["user_id"], name: "index_shopping_list_items_on_user_id"
     t.index ["uuid"], name: "index_shopping_list_items_on_uuid", unique: true
   end
@@ -137,6 +140,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_28_151223) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
+  add_foreign_key "shopping_list_items", "shop_items"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_list_items", "users"
   add_foreign_key "shopping_lists", "users"
