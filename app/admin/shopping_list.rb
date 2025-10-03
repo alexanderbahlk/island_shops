@@ -8,7 +8,9 @@ ActiveAdmin.register ShoppingList do
     id_column
     column :display_name
     column :slug
-    column :user
+    column :users do |shopping_list|
+      shopping_list.users.map(&:id).join(", ")
+    end
     column :shopping_list_items_count do |shopping_list|
       shopping_list.shopping_list_items.size
     end

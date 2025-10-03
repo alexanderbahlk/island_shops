@@ -10,8 +10,8 @@ class Api::V1::UsersController < Api::V1::SecureAppController
   def update_active_shopping_list
     shopping_list = ShoppingList.find_by(slug: params[:active_shopping_list_slug])
 
-    if shopping_list.nil?
-      render json: { error: "Shopping list not found" }, status: :not_found
+    if shopping_list.nil? || !@current_user.shopping_lists.include?(shopping_list)
+      render json: { error: "Shopping list not found or user does not have access" }, status: :not_found
       return
     end
 

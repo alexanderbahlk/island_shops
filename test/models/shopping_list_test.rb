@@ -7,16 +7,10 @@
 #  slug         :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  user_id      :bigint           not null
 #
 # Indexes
 #
-#  index_shopping_lists_on_slug     (slug) UNIQUE
-#  index_shopping_lists_on_user_id  (user_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users.id)
+#  index_shopping_lists_on_slug  (slug) UNIQUE
 #
 require "test_helper"
 
@@ -25,7 +19,6 @@ class ShoppingListTest < ActiveSupport::TestCase
     @user = users(:user_one) # Assuming a fixture exists
     @shopping_list = ShoppingList.new(
       display_name: "Weekly Groceries",
-      user: @user,
     )
     @shopping_list.users << @user
     @shopping_list_with_items = shopping_lists(:shopping_list_abc) # Assuming a fixture exists
@@ -61,9 +54,9 @@ class ShoppingListTest < ActiveSupport::TestCase
   end
 
   test "shopping_list_items_for_view_list handles empty shopping list" do
-    empty_list = ShoppingList.create!(display_name: "Empty List", user: @user)
+    empty_list = ShoppingList.create!(display_name: "Empty List")
+    empty_list.users << @user
     result = empty_list.shopping_list_items_for_view_list
-
     # Ensure the result is an empty array
     assert_equal [], result
   end
@@ -74,7 +67,7 @@ class ShoppingListTest < ActiveSupport::TestCase
   end
 
   test "should create a new shopping list with only display_name" do
-    shopping_list = ShoppingList.new(display_name: "New List", user: @user)
+    shopping_list = ShoppingList.new(display_name: "New List")
     shopping_list.users << @user
     assert shopping_list.valid?, "Validation failed: #{shopping_list.errors.full_messages}"
 
@@ -117,8 +110,8 @@ class ShoppingListTest < ActiveSupport::TestCase
     @shopping_list.save!
     another_list = ShoppingList.create!(
       display_name: "Another List",
-      user: @user,
     )
+    another_list.users << @user
     assert_not_equal @shopping_list.slug, another_list.slug
   end
 end

@@ -62,7 +62,20 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list not found", response_data["error"]
+    assert_equal "Shopping list not found or user does not have access", response_data["error"]
+    @user.reload
+    assert_nil @user.active_shopping_list_id
+  end
+
+  test "should not update active shopping list with shopping list not belonging to user" do
+    other_shopping_list = shopping_lists(:shopping_list_xyz) # Assuming this is a different list
+    patch update_active_shopping_list_api_v1_users_path,
+          params: { active_shopping_list_slug: other_shopping_list.slug }.to_json,
+          headers: @headers
+
+    assert_response :not_found
+    response_data = JSON.parse(response.body)
+    assert_equal "Shopping list not found or user does not have access", response_data["error"]
     @user.reload
     assert_nil @user.active_shopping_list_id
   end
