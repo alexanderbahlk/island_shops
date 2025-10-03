@@ -29,6 +29,8 @@ class ShoppingList < ApplicationRecord
 
   before_validation :slugify, on: :create
 
+  SHOPPING_LIST_SORTING_ORDERS = %w[priority location].freeze
+
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "display_name", "id", "id_value", "slug", "updated_at"]
   end

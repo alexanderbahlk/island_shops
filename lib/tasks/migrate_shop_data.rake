@@ -1,5 +1,6 @@
 namespace :migrate do
   desc "Migrate shop string data to Shop model"
+  #rails migrate:shop_data
   task shop_data: :environment do
     ShopItem.distinct.pluck(:shop).each do |shop_name|
       next if shop_name.blank?

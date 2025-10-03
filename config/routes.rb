@@ -32,6 +32,9 @@ Rails.application.routes.draw do
       resources :shopping_lists, param: :slug, only: [:create, :show, :update, :destroy] do
         resources :shopping_list_items, only: [:create, :destroy, :update], shallow: true
       end
+      resources :users, only: [] do
+        patch :update_sorting_order, on: :collection
+      end
       get "/search/products", to: "search#products", defaults: { format: :json }
       get "/search/products_with_shop_items", to: "search#products_with_shop_items", defaults: { format: :json }
       get "categories/:category_uuid/shop_items", to: "categories#shop_items"

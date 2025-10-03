@@ -2,14 +2,17 @@
 #
 # Table name: users
 #
-#  id         :bigint           not null, primary key
-#  app_hash   :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :bigint           not null, primary key
+#  app_hash      :string
+#  sorting_order :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 user_one:
   app_hash: 45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g
+  sorting_order: priority
 
 user_two:
   app_hash: 35ghg5g4g5g4g5g4g5g4g5g4g5g4g
+  sorting_order: location
