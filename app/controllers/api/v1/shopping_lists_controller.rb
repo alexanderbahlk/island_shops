@@ -17,9 +17,9 @@ module Api
         Rails.logger.info("Received params: #{params.inspect}")
 
         shopping_list = ShoppingList.new(display_name: params[:display_name], user: current_user, shopping_list_items: [])
-
+        shopping_list.users << current_user
         if shopping_list.save
-          render json: { slug: shopping_list.slug, sorting_order: current_user.sorting_order, display_name: shopping_list.display_name }, status: :created
+          render json: { slug: shopping_list.slug, group_shopping_lists_items_by: current_user.group_shopping_lists_items_by, display_name: shopping_list.display_name }, status: :created
         else
           render json: { errors: shopping_list.errors.full_messages }, status: :unprocessable_content
         end
@@ -31,7 +31,7 @@ module Api
         if @shopping_list.update(shopping_list_params)
           render json: {
             slug: @shopping_list.slug,
-            sorting_order: current_user.sorting_order,
+            group_shopping_lists_items_by: current_user.group_shopping_lists_items_by,
             display_name: @shopping_list.display_name,
             shopping_list_items: @shopping_list.shopping_list_items_for_view_list,
           }

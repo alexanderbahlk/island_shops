@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_03_153658) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_03_231020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -134,6 +134,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_03_153658) do
     t.index ["uuid"], name: "index_shopping_list_items_on_uuid", unique: true
   end
 
+  create_table "shopping_list_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "shopping_list_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shopping_list_id"], name: "index_shopping_list_users_on_shopping_list_id"
+    t.index ["user_id", "shopping_list_id"], name: "index_shopping_list_users_on_user_id_and_shopping_list_id", unique: true
+    t.index ["user_id"], name: "index_shopping_list_users_on_user_id"
+  end
+
   create_table "shopping_lists", force: :cascade do |t|
     t.string "slug", null: false
     t.datetime "created_at", null: false
@@ -148,7 +158,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_03_153658) do
     t.string "app_hash"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "sorting_order"
+    t.string "group_shopping_lists_items_by"
+    t.bigint "active_shopping_list_id"
+    t.index ["active_shopping_list_id"], name: "index_users_on_active_shopping_list_id"
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"
@@ -158,5 +170,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_03_153658) do
   add_foreign_key "shopping_list_items", "shop_items"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_list_items", "users"
+  add_foreign_key "shopping_list_users", "shopping_lists"
+  add_foreign_key "shopping_list_users", "users"
   add_foreign_key "shopping_lists", "users"
+  add_foreign_key "users", "shopping_lists", column: "active_shopping_list_id"
 end

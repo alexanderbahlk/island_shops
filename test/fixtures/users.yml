@@ -2,17 +2,26 @@
 #
 # Table name: users
 #
-#  id            :bigint           not null, primary key
-#  app_hash      :string
-#  sorting_order :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id                            :bigint           not null, primary key
+#  app_hash                      :string
+#  group_shopping_lists_items_by :string
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  active_shopping_list_id       :bigint
+#
+# Indexes
+#
+#  index_users_on_active_shopping_list_id  (active_shopping_list_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (active_shopping_list_id => shopping_lists.id)
 #
 
 user_one:
   app_hash: 45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g
-  sorting_order: priority
+  group_shopping_lists_items_by: priority
 
 user_two:
   app_hash: 35ghg5g4g5g4g5g4g5g4g5g4g5g4g
-  sorting_order: location
+  group_shopping_lists_items_by: location

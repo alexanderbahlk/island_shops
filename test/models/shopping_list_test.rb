@@ -27,6 +27,7 @@ class ShoppingListTest < ActiveSupport::TestCase
       display_name: "Weekly Groceries",
       user: @user,
     )
+    @shopping_list.users << @user
     @shopping_list_with_items = shopping_lists(:shopping_list_abc) # Assuming a fixture exists
   end
 
@@ -74,6 +75,7 @@ class ShoppingListTest < ActiveSupport::TestCase
 
   test "should create a new shopping list with only display_name" do
     shopping_list = ShoppingList.new(display_name: "New List", user: @user)
+    shopping_list.users << @user
     assert shopping_list.valid?, "Validation failed: #{shopping_list.errors.full_messages}"
 
     assert shopping_list.save

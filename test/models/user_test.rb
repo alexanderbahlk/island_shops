@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                            :bigint           not null, primary key
+#  app_hash                      :string
+#  group_shopping_lists_items_by :string
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  active_shopping_list_id       :bigint
+#
+# Indexes
+#
+#  index_users_on_active_shopping_list_id  (active_shopping_list_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (active_shopping_list_id => shopping_lists.id)
+#
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
@@ -20,26 +39,26 @@ class UserTest < ActiveSupport::TestCase
     assert_not duplicate_user.valid?
   end
 
-  test "sorting_order should allow valid values" do
-    valid_sorting_orders = ShoppingList::SHOPPING_LIST_SORTING_ORDERS
+  test "group_shopping_lists_items_by should allow valid values" do
+    valid_sorting_orders = ShoppingList::SHOPPING_LIST_GROUP_BY_ORDERS
     valid_sorting_orders.each do |valid_order|
-      @user_one.sorting_order = valid_order
+      @user_one.group_shopping_lists_items_by = valid_order
       assert @user_one.valid?, "#{valid_order.inspect} should be valid"
-      @user_two.sorting_order = valid_order
+      @user_two.group_shopping_lists_items_by = valid_order
       assert @user_two.valid?, "#{valid_order.inspect} should be valid"
     end
   end
 
-  test "sorting_order should reject invalid values" do
+  test "group_shopping_lists_items_by should reject invalid values" do
     invalid_sorting_orders = %w[ascending descending random nil_value]
     invalid_sorting_orders.each do |invalid_order|
-      @user_one.sorting_order = invalid_order
+      @user_one.group_shopping_lists_items_by = invalid_order
       assert_not @user_one.valid?, "#{invalid_order.inspect} should be invalid"
     end
   end
 
-  test "sorting_order should allow nil" do
-    @user_one.sorting_order = nil
+  test "group_shopping_lists_items_by should allow nil" do
+    @user_one.group_shopping_lists_items_by = nil
     assert @user_one.valid?
   end
 

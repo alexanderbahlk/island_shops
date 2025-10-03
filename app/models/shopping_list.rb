@@ -20,6 +20,8 @@
 #
 class ShoppingList < ApplicationRecord
   include CategoryBreadcrumbHelper
+  has_many :shopping_list_users, dependent: :destroy
+  has_many :users, through: :shopping_list_users
   belongs_to :user
 
   has_many :shopping_list_items, dependent: :destroy
@@ -29,7 +31,7 @@ class ShoppingList < ApplicationRecord
 
   before_validation :slugify, on: :create
 
-  SHOPPING_LIST_SORTING_ORDERS = %w[priority location].freeze
+  SHOPPING_LIST_GROUP_BY_ORDERS = %w[priority location].freeze
 
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "display_name", "id", "id_value", "slug", "updated_at"]

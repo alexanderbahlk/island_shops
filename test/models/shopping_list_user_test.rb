@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: shopping_list_users
+#
+#  id               :bigint           not null, primary key
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  shopping_list_id :bigint           not null
+#  user_id          :bigint           not null
+#
+# Indexes
+#
+#  index_shopping_list_users_on_shopping_list_id              (shopping_list_id)
+#  index_shopping_list_users_on_user_id                       (user_id)
+#  index_shopping_list_users_on_user_id_and_shopping_list_id  (user_id,shopping_list_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (shopping_list_id => shopping_lists.id)
+#  fk_rails_...  (user_id => users.id)
+#
+require "test_helper"
+
+class ShoppingListUserTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
+end
