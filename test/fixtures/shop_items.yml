@@ -75,3 +75,39 @@ shop_item_four:
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
   uuid: 123e4567-e89b-12d3-a456-426614174996
+
+shop_item_goat_cheese:
+  url: "https://example.com/shop_item_goat_cheese"
+  approved: true
+  category: cheese  # References the cheese category
+  location: location_one  # References the location fixture
+  title: "Goat Cheese"
+  size: 1.0
+  unit: "l"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+  uuid: 123e4567-e89b-12d3-a456-426614174995
+
+shop_item_cheese:
+  url: "https://example.com/shop_item_cheese"
+  approved: true
+  category: cheese  # References the cheese category
+  location: location_one  # References the location fixture
+  title: "Cheese"
+  size: 1.0
+  unit: "l"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+  uuid: 123e4567-e89b-12d3-a456-426614174994
+
+shop_item_milk:
+  url: "https://example.com/shop_item_milk"
+  approved: true
+  category: milk  # References the milk category
+  location: location_two  # References the location fixture
+  title: "Milk"
+  size: 1.0
+  unit: "l"
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+  uuid: 123e4567-e89b-12d3-a456-426614174993

@@ -20,8 +20,10 @@
 
 user_one:
   app_hash: 45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g
-  group_shopping_lists_items_by: priority
+  group_shopping_lists_items_by: null
+  active_shopping_list: null
 
 user_two:
   app_hash: 35ghg5g4g5g4g5g4g5g4g5g4g5g4g
   group_shopping_lists_items_by: location
+  active_shopping_list: null

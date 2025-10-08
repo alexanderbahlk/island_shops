@@ -33,6 +33,9 @@ ActiveAdmin.register ShoppingList do
       row :id
       row :display_name
       row :slug
+      row :users do |shopping_list|
+        shopping_list.users.map { |user| link_to user.id, admin_user_path(user) }.join(", ").html_safe
+      end
       row :created_at
       row :updated_at
     end

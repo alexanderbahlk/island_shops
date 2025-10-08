@@ -45,6 +45,10 @@ class ShoppingListItem < ApplicationRecord
   before_validation :set_title_from_category, if: -> { category.present? }, on: :create
 
   scope :without_category, -> { where(category_id: nil) }
+  scope :purchased, -> { where(purchased: true) }
+  scope :unbought, -> { where(purchased: false) }
+  scope :priority, -> { where(priority: true) }
+  scope :non_priority, -> { where(priority: false) }
 
   def self.ransackable_attributes(auth_object = nil)
     ["category_id", "created_at", "id", "id_value", "priority", "purchased", "quantity", "shopping_list_id", "title", "updated_at", "user_id", "uuid"]
@@ -54,26 +58,30 @@ class ShoppingListItem < ApplicationRecord
     ["category", "shopping_list", "user"]
   end
 
-  #TODO depending of the user settings, group by location or not
-  #E.g. "Milk 2x from Tesco"
-  #E.g. "Milk 2x"
-  def title_with_quantity_and_shop
+  def title_for_shopping_list_grouping(shopping_list_grouping = nil)
     title_string = title
-
     if quantity > 1
       title_string = "#{title_string} #{quantity}x"
     end
-
-    if shop_item_id
-      if shop_item && shop_item.location.present?
-        title_string += " from #{shop_item.location.title}"
+    case shopping_list_grouping
+    when nil
+    when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY
+      if shop_item_id
+        if shop_item && shop_item.location.present?
+          title_string += " from #{shop_item.location.title}"
+        end
       end
+    when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_LOCATION
+      title_string
     end
-
     title_string
   end
 
   private
+
+  def clear_shop_item_references
+    User.where(active_shopping_list_id: self.id).update_all(active_shopping_list_id: nil)
+  end
 
   def category_must_be_product
     unless category.product?

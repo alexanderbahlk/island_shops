@@ -53,6 +53,8 @@ class ShopItem < ApplicationRecord
   #Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
 
+  before_destroy :clear_shopping_list_item_references
+
   # Scopes
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
@@ -175,6 +177,10 @@ class ShopItem < ApplicationRecord
   end
 
   private
+
+  def clear_shopping_list_item_references
+    ShoppingListItem.where(shop_item_id: self.id).update_all(shop_item_id: nil)
+  end
 
   def category_must_be_product
     unless category.product?

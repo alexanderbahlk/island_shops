@@ -35,6 +35,8 @@ shopping_list_item_milk:
   shopping_list: shopping_list_abc
   quantity: 2
   purchased: false
+  priority: true
+  shop_item: shop_item_milk
   user: user_one
   uuid: 123e4567-e89b-12d3-a456-426614174000
 
@@ -45,6 +47,8 @@ shopping_list_item_cheese:
   shopping_list: shopping_list_abc
   quantity: 1
   purchased: false
+  priority: false
+  shop_item: shop_item_cheese
   user: user_one
   uuid: 123e4567-e89b-12d3-a456-426614174001
 
@@ -54,6 +58,8 @@ shopping_list_item_goat_cheese:
   shopping_list: shopping_list_abc
   quantity: 1
   purchased: true
+  priority: true
+  shop_item: shop_item_goat_cheese
   user: user_one
   uuid: 123e4567-e89b-12d3-a456-426614174002
 

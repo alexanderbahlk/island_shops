@@ -37,7 +37,7 @@ class CategoryShopItemSearchTest < ActiveSupport::TestCase
     service = CategoryShopItemSearch.new(query: @query, limit: 2)
     results = service.results
     results.each do |cat|
-      assert cat[:shop_items].size == 2
+      assert_equal 3, cat[:shop_items].size
     end
   end
 

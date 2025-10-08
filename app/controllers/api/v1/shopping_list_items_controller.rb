@@ -81,7 +81,7 @@ module Api
       def shopping_list_item_json_response(shopping_list_item)
         return {
                  uuid: shopping_list_item.uuid,
-                 title: shopping_list_item.title_with_quantity_and_shop,
+                 title: shopping_list_item.title_for_shopping_list_grouping(current_user.group_shopping_lists_items_by),
                  purchased: shopping_list_item.purchased,
                  quantity: shopping_list_item.quantity,
                  breadcrumb: shopping_list_item.category.present? ? build_breadcrumb(shopping_list_item.category) : [],

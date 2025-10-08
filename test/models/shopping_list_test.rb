@@ -24,21 +24,18 @@ class ShoppingListTest < ActiveSupport::TestCase
     @shopping_list_with_items = shopping_lists(:shopping_list_abc) # Assuming a fixture exists
   end
 
-  test "shopping_list_items_for_view_list returns items sorted by title" do
-    result = @shopping_list_with_items.shopping_list_items_for_view_list
-
-    # Ensure the result is sorted by title
-    assert_equal ["Cheese", "Milk 2x", "Goat Cheese"], result.map { |item| item[:title] }
-  end
-
   test "shopping_list_items_for_view_list includes uuid, title, and purchased fields" do
     result = @shopping_list_with_items.shopping_list_items_for_view_list
 
-    # Ensure each item includes the required fields
-    result.each do |item|
-      assert item.key?(:uuid), "Item is missing uuid"
-      assert item.key?(:title), "Item is missing title"
-      assert item.key?(:purchased), "Item is missing purchased"
+    # Ensure each item is a list and includes the required fields
+    assert_kind_of Hash, result
+    result.each do |hash_key, items|
+      items.each do |item|
+        assert item.is_a?(Hash), "Item is not a hash"
+        assert item.key?(:uuid), "Item is missing uuid"
+        assert item.key?(:title), "Item is missing title"
+        assert item.key?(:purchased), "Item is missing purchased"
+      end
     end
   end
 
@@ -46,8 +43,8 @@ class ShoppingListTest < ActiveSupport::TestCase
     result = @shopping_list_with_items.shopping_list_items_for_view_list
 
     # Ensure breadcrumbs are generated correctly
-    milk_item = result.find { |item| item[:title] == "Milk 2x" }
-    cheese_item = result.find { |item| item[:title] == "Cheese" }
+    milk_item = result[:unpurchased].find { |item| item[:title] == "Milk 2x" }
+    cheese_item = result[:unpurchased].find { |item| item[:title] == "Cheese" }
 
     assert_equal ["Food", "Fresh Food", "Dairy"], milk_item[:breadcrumb], "Breadcrumb for Milk is incorrect"
     assert_equal ["Food", "Fresh Food", "Dairy"], cheese_item[:breadcrumb], "Breadcrumb for Cheese is incorrect"
@@ -58,7 +55,7 @@ class ShoppingListTest < ActiveSupport::TestCase
     empty_list.users << @user
     result = empty_list.shopping_list_items_for_view_list
     # Ensure the result is an empty array
-    assert_equal [], result
+    assert_equal({ unpurchased: [], purchased: [] }, result)
   end
 
   test "should respond to attributes" do
@@ -113,5 +110,33 @@ class ShoppingListTest < ActiveSupport::TestCase
     )
     another_list.users << @user
     assert_not_equal @shopping_list.slug, another_list.slug
+  end
+
+  test "shopping_list_items_for_view_list returns items grouped into unpurchased and purchased" do
+    result = @shopping_list_with_items.shopping_list_items_for_view_list
+
+    # Ensure the result contains the correct keys
+    assert result.key?(:unpurchased), "Result is missing the 'unpurchased' key"
+    assert result.key?(:purchased), "Result is missing the 'purchased' key"
+
+    # Ensure the items are sorted by title within each group
+    assert_equal ["Cheese", "Milk 2x"], result[:unpurchased].map { |item| item[:title] }
+    assert_equal ["Goat Cheese"], result[:purchased].map { |item| item[:title] }
+  end
+
+  test "shopping_list_items_for_view_list returns items grouped by location" do
+    result = @shopping_list_with_items.shopping_list_items_for_view_list(ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_LOCATION)
+
+    # Ensure the result contains the correct keys
+    assert result.key?("Location One"), "Result is missing the 'Location One' key"
+    assert result.key?("Location Two"), "Result is missing the 'Location Two' key"
+    assert result.key?(:purchased), "Result is missing the 'purchased' key"
+
+    # Ensure the locations are grouped correctly
+    assert_equal ["Cheese"], result["Location One"].map { |item| item[:title] }
+    assert_equal ["Milk 2x"], result["Location Two"].map { |item| item[:title] }
+
+    # Ensure purchased items are sorted by title
+    assert_equal ["Goat Cheese"], result[:purchased].map { |item| item[:title] }
   end
 end

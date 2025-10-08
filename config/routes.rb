@@ -33,8 +33,12 @@ Rails.application.routes.draw do
         resources :shopping_list_items, only: [:create, :destroy, :update], shallow: true
       end
       resources :users, only: [] do
+        post :login_or_create, on: :collection
         patch :update_group_shopping_lists_items_by, on: :collection
         patch :update_active_shopping_list, on: :collection
+        post :add_shopping_list, on: :collection
+        post :remove_shopping_list, on: :collection
+        get :fetch_all_shopping_lists_slugs, on: :collection
       end
       get "/search/products", to: "search#products", defaults: { format: :json }
       get "/search/products_with_shop_items", to: "search#products_with_shop_items", defaults: { format: :json }
