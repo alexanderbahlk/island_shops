@@ -86,7 +86,7 @@ ActiveAdmin.register ShopItem do
     selectable_column
     id_column
     column :location do |location|
-      location&.title || "N/A"
+      location&.location || "N/A"
     end
     column :title do |shop_item|
       link_to shop_item.title, shop_item.url, target: "_blank", data: { shop_item_id: shop_item.id }

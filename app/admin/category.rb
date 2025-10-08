@@ -203,6 +203,7 @@ ActiveAdmin.register Category do
           column :title do |item|
             link_to item.title, admin_shop_item_path(item)
           end
+          column :approved
           column :sort_order
           column :created_at
           column :actions do |item|
