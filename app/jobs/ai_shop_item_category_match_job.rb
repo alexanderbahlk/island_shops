@@ -26,7 +26,7 @@ class AiShopItemCategoryMatchJob < ApplicationJob
     error_count = 0
 
     # Process ShopItems in batches
-    ShopItem.missing_category.find_in_batches(batch_size: batch_size) do |batch|
+    ShopItem.pending_approval.find_in_batches(batch_size: batch_size) do |batch|
       batch.each do |shop_item|
         begin
           # Generate embedding for the ShopItem
