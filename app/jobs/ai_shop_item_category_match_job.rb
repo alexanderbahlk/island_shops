@@ -16,8 +16,15 @@ class AiShopItemCategoryMatchJob < ApplicationJob
     categories = Category.products
     category_embeddings = {}
     categories.each do |category|
-      # Combine title and synonyms for matching
-      matching_context = [category.title, *category.synonyms].join(" ")
+
+      # The breadcrumbs method already returns an array of Category objects from root to self
+      # Create a string representation of the full path
+      breadcrumbs = category.breadcrumbs.map(&:title).join(" > ")
+
+      # Combine breadcrumbs, title, and synonyms for matching
+      matching_context = "#{breadcrumbs} > #{category.title} #{category.synonyms.join(" ")}"
+
+      # Generate and store the embedding
       category_embeddings[category.id] = model.call(matching_context) # Use `call` to generate embeddings
     end
 
