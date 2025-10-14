@@ -18,6 +18,8 @@ gem "redis", "~> 5.4", ">= 5.4.1"
 
 gem "rack-attack"
 
+gem "informers"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 

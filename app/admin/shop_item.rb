@@ -3,6 +3,18 @@ ActiveAdmin.register ShopItem do
   permit_params :url, :title, :display_title, :image_url, :size, :unit, :location_id, :product_id, :approved, :needs_another_review, :category_id
 
   # Add the action at the top level of the resource
+  #
+  action_item :ai_category_match, only: :index do
+    link_to "AI Category Match",
+            ai_category_match_admin_shop_items_path,
+            method: :post,
+            data: {
+              confirm: "This will start an AI job to suggest categories for items without a category. Continue?",
+              disable_with: "Starting...",
+            },
+            class: "button"
+  end
+
   action_item :assign_missing_categories, only: :index do
     link_to "Auto-assign Missing Categories",
             assign_missing_categories_admin_shop_items_path,
@@ -562,6 +574,14 @@ ActiveAdmin.register ShopItem do
     rescue => e
       redirect_to_collection_with_filters(:alert, "An error occurred: #{e.message}")
     end
+  end
+
+  # Placeholder for AI category match action
+  collection_action :ai_category_match, method: :post do
+    # Enqueue the job
+    AiShopItemCategoryMatchJob.perform_later
+
+    redirect_to_collection_with_filters(:notice, "AI category matching job started. Check back in a few minutes to see results.")
   end
 
   # Collection action for auto-assigning categories
