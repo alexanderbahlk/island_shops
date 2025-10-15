@@ -67,6 +67,7 @@ class ShopItem < ApplicationRecord
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :pending_approval_with_category, -> { where(approved: false).where.not(category_id: nil) }
+  scope :needs_ai_category_match, -> { where(approved: false).where.not(model_embedding: nil) }
   scope :needs_model_embedding_update, -> { where(needs_model_embedding_update: true).or(where(model_embedding: nil)) }
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }

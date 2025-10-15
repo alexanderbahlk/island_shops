@@ -33,12 +33,11 @@ class AiShopItemCategoryMatchJob < ApplicationJob
     error_count = 0
 
     # Process ShopItems in batches
-    ShopItem.pending_approval.find_in_batches(batch_size: batch_size) do |batch|
+    ShopItem.needs_ai_category_match.find_in_batches(batch_size: batch_size) do |batch|
       batch.each do |shop_item|
         begin
           # Generate embedding for the ShopItem
-          shop_item_text = "#{shop_item.title} #{shop_item.breadcrumb}"
-          shop_item_embedding = model.call(shop_item_text) # Use `call` to generate embeddings
+          shop_item_embedding = shop_item.model_embedding
 
           # Compute cosine similarity with all categories
           best_match = nil
@@ -70,7 +69,7 @@ class AiShopItemCategoryMatchJob < ApplicationJob
           processed_count += 1
 
           # Optional: Sleep briefly to avoid overwhelming the database
-          sleep(1.0)
+          sleep(0.2)
         rescue => e
           error_count += 1
           Rails.logger.error "Error processing ShopItem #{shop_item.id}: #{e.message}"

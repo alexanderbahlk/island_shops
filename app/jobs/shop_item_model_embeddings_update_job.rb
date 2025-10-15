@@ -26,6 +26,8 @@ class ShopItemModelEmbeddingsUpdateJob < ApplicationJob
 
           processed_count += 1
 
+          Rails.logger.info "Updated model embedding for ShopItem #{shop_item.id} (#{shop_item.title})"
+
           # Optional: Sleep briefly to avoid overwhelming the database
           sleep(0.2)
         rescue => e
