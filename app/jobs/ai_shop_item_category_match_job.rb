@@ -6,7 +6,7 @@ class AiShopItemCategoryMatchJob < ApplicationJob
   discard_on ArgumentError
   discard_on JSON::ParserError
 
-  def perform(batch_size: 10, similarity_threshold: 0.5)
+  def perform(batch_size: 10, similarity_threshold: 0.75)
     require "informers"
 
     # Load the Informers model
@@ -70,7 +70,7 @@ class AiShopItemCategoryMatchJob < ApplicationJob
           processed_count += 1
 
           # Optional: Sleep briefly to avoid overwhelming the database
-          sleep(1.0) if processed_count % 50 == 0
+          sleep(1.0)
         rescue => e
           error_count += 1
           Rails.logger.error "Error processing ShopItem #{shop_item.id}: #{e.message}"
