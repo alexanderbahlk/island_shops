@@ -186,7 +186,7 @@ ActiveAdmin.register ShopItem do
                     html_attrs: { style: "cursor: pointer;" },
                     class: "bip-checkbox-review"
     end
-    column :created_at
+    column :updated_at
     actions do |shop_item|
       item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
            method: :post,
@@ -727,13 +727,15 @@ ActiveAdmin.register ShopItem do
         end
       else
         error_message = "No suitable category found for '#{resource.title}'. You may need to create a new category or assign manually."
-
+        resource.update!(category: nil, approved: false)
         respond_to do |format|
           format.html { redirect_to_collection_with_filters(:alert, error_message) }
           format.json {
             render json: {
               status: "error",
               message: error_message,
+              category_id: nil,
+              approved: false,
               shop_item_id: resource.id,
             }
           }
