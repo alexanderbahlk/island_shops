@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_03_233707) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_15_163207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -109,9 +109,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_03_233707) do
     t.string "breadcrumb"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "location_id"
+    t.jsonb "model_embedding"
+    t.boolean "needs_model_embedding_update", default: false, null: false
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
     t.index ["location_id"], name: "index_shop_items_on_location_id"
+    t.index ["model_embedding"], name: "index_shop_items_on_model_embedding", using: :gin
     t.index ["url"], name: "index_shop_items_on_url", unique: true
     t.index ["uuid"], name: "index_shop_items_on_uuid", unique: true
   end

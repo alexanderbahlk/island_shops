@@ -327,6 +327,8 @@ ActiveAdmin.register ShopItem do
                       html_attrs: { style: "cursor: pointer;" },
                       class: "bip-checkbox-review"
       end
+      row :model_embedding
+      row :needs_model_embedding_update
       row :created_at
       row :updated_at
     end
