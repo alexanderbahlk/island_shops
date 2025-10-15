@@ -58,6 +58,9 @@ class AiShopItemCategoryMatchJob < ApplicationJob
               shop_item.update!(category_id: best_match)
               matched_count += 1
               Rails.logger.info "Assigned category #{best_match} to ShopItem #{shop_item.title}"
+            else
+              shop_item.update!(category_id: nil)
+              Rails.logger.info "No suitable category found for ShopItem #{shop_item.title} (highest similarity: #{highest_similarity.round(4)})"
             end
           else
             shop_item.update!(category_id: nil)

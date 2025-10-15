@@ -58,6 +58,7 @@ class ShopItem < ApplicationRecord
   # Scopes
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
+  scope :pending_approval_with_category, -> { where(approved: false).where.not(category_id: nil) }
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
   scope :in_category, ->(category) { where(category: category) }

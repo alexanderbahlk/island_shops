@@ -379,6 +379,7 @@ ActiveAdmin.register ShopItem do
   scope :all
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
+  scope :pending_approval_with_category, -> { where(approved: false).where.not(category_id: nil) }
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :missing_category, -> { where(category_id: nil) }
   scope :was_manually_updated, -> { where(was_manually_updated: true) }
