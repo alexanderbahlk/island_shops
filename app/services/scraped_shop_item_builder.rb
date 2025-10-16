@@ -40,9 +40,14 @@ class ScrapedShopItemBuilder
 
   def create_shop_item_update_for_existing_shop_item(existing_item)
     @shop_item = existing_item
-    # Avoid changing the ID, size, or unit of the existing item
-    @shop_item.assign_attributes(@shop_item_params.except(:id, :size, :unit, :location))
 
+    if @shop_item.approved
+      # Avoid changing the ID, size, or unit of the existing item
+      @shop_item.assign_attributes(@shop_item_params.except(:id, :size, :unit, :location))
+    else
+      # If not approved, allow updating size and unit as well
+      @shop_item.assign_attributes(@shop_item_params.except(:id, :location))
+    end
     # Auto-assign category if not already set
     auto_assign_shop_item_category() if @shop_item.category.nil?
 

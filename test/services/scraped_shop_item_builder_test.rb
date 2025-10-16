@@ -625,4 +625,46 @@ class ScrapedShopItemBuilderTest < ActiveSupport::TestCase
     @milk_category = categories(:milk)
     assert_equal @milk_category, builder.shop_item.category
   end
+
+  test "does not change size or unit for approved item" do
+    existing_item = shop_items(:shop_item_one)
+    @shop_item_params[:url] = existing_item.url
+    @shop_item_params[:size] = 10.0
+    @shop_item_params[:unit] = "kg"
+    @shop_item_params[:title] = "Rice Bag 5Kg" # Title suggests different size/unit, but should not change
+
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+
+    assert_difference "ShopItemUpdate.count", 1 do
+      assert_no_difference "ShopItem.count" do
+        result = builder.build
+        assert result
+      end
+    end
+
+    assert_equal existing_item, builder.shop_item
+    assert_equal 1.0, builder.shop_item.size # Size should remain unchanged
+    assert_equal "l", builder.shop_item.unit # Unit should remain unchanged
+  end
+
+  test "does change size or unit for unapproved item" do
+    existing_item = shop_items(:shop_item_two) # This item is unapproved
+    @shop_item_params[:url] = existing_item.url
+    @shop_item_params[:size] = 10.0
+    @shop_item_params[:unit] = "kg"
+    @shop_item_params[:title] = "Rice Bag 5Kg" # Title suggests different size/unit, should update
+
+    builder = ScrapedShopItemBuilder.new(@shop_item_params, @shop_item_update_params)
+
+    assert_difference "ShopItemUpdate.count", 1 do
+      assert_no_difference "ShopItem.count" do
+        result = builder.build
+        assert result
+      end
+    end
+
+    assert_equal existing_item, builder.shop_item
+    assert_equal 10.0, builder.shop_item.size # Size should be updated
+    assert_equal "kg", builder.shop_item.unit # Unit should be updated
+  end
 end
