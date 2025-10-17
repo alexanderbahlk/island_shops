@@ -68,6 +68,7 @@ class ScrapedShopItemBuilder
     Rails.logger.debug "Last update: #{last_update.inspect}"
 
     should_create_update = last_update.nil? ||
+                           last_update.price_per_unit.nil? ||
                            last_update.price != @shop_item_update_params[:price] ||
                            last_update.stock_status != @shop_item_update_params[:stock_status]
 
