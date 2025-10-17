@@ -69,6 +69,7 @@ class ScrapedShopItemBuilder
 
     should_create_update = last_update.nil? ||
                            last_update.price_per_unit.nil? ||
+                           @shop_item.approved == false ||
                            last_update.price != @shop_item_update_params[:price] ||
                            last_update.stock_status != @shop_item_update_params[:stock_status]
 
@@ -80,6 +81,8 @@ class ScrapedShopItemBuilder
       unless @shop_item_update.save
         @errors.concat(@shop_item_update.errors.full_messages)
       end
+
+      remove_old_updates()
     else
       @shop_item_update = last_update
     end
@@ -160,6 +163,23 @@ class ScrapedShopItemBuilder
         #Also store the normalized_unit if you have a field for it
         @shop_item_update.normalized_unit = calculation_result[:normalized_unit]
       end
+    end
+  end
+
+  def remove_old_updates
+    updates_to_keep = 5
+    # Keep only the latest 5 updates
+    old_updates = @shop_item.shop_item_updates.order(created_at: :desc).offset(updates_to_keep)
+
+    if old_updates.any?
+      old_updates.destroy_all
+      Rails.logger.info "Removed #{old_updates.size} old ShopItemUpdates for ShopItem #{@shop_item.id}"
+    end
+
+    wrong_unit_updates = @shop_item.shop_item_updates.where.not(normalized_unit: @shop_item_update.normalized_unit)
+    if wrong_unit_updates.any?
+      wrong_unit_updates.destroy_all
+      Rails.logger.info "Removed #{wrong_unit_updates.size} ShopItemUpdates with wrong unit for ShopItem #{@shop_item.id}"
     end
   end
 end
