@@ -5,6 +5,7 @@ ActiveAdmin.register ShoppingListItem do
   permit_params :title, :quantity, :priority, :purchased, :shopping_list_id, :category_id, :user_id
 
   scope :all
+  scope :with_deleted, -> { ShoppingListItem.with_deleted } # Include soft-deleted items
   scope :without_category, -> { where(without_category: true) }
 
   # Customize the index page
@@ -18,7 +19,7 @@ ActiveAdmin.register ShoppingListItem do
     column :shopping_list
     column :category
     column :user
-    column :created_at
+    column :deleted_at # Show the deleted_at column to indicate soft-deleted records
     column :updated_at
     actions
   end
@@ -50,6 +51,7 @@ ActiveAdmin.register ShoppingListItem do
       row :user
       row :created_at
       row :updated_at
+      row :deleted_at
     end
 
     # Add a panel to create a new Category
@@ -74,4 +76,5 @@ ActiveAdmin.register ShoppingListItem do
   filter :category
   filter :user
   filter :created_at
+  filter :deleted_at # Add a filter for soft-deleted records
 end

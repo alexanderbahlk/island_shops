@@ -2,6 +2,9 @@ ActiveAdmin.register ShoppingList do
   # Permit parameters for strong parameter handling
   permit_params :display_name, :slug
 
+  scope :all
+  scope :with_deleted, -> { ShoppingListItem.with_deleted } # Include soft-deleted items
+
   # Customize the index page
   index do
     selectable_column
@@ -14,7 +17,7 @@ ActiveAdmin.register ShoppingList do
     column :shopping_list_items_count do |shopping_list|
       shopping_list.shopping_list_items.size
     end
-    column :created_at
+    column :deleted_at
     column :updated_at
     actions
   end
@@ -37,6 +40,7 @@ ActiveAdmin.register ShoppingList do
         shopping_list.users.map { |user| link_to user.id, admin_user_path(user) }.join(", ").html_safe
       end
       row :created_at
+      row :deleted_at
       row :updated_at
     end
 

@@ -3,6 +3,7 @@
 # Table name: shopping_lists
 #
 #  id           :bigint           not null, primary key
+#  deleted_at   :datetime
 #  display_name :string           not null
 #  slug         :string           not null
 #  created_at   :datetime         not null
@@ -10,9 +11,12 @@
 #
 # Indexes
 #
-#  index_shopping_lists_on_slug  (slug) UNIQUE
+#  index_shopping_lists_on_deleted_at  (deleted_at)
+#  index_shopping_lists_on_slug        (slug) UNIQUE
 #
 class ShoppingList < ApplicationRecord
+  acts_as_paranoid
+
   include CategoryBreadcrumbHelper
   has_many :shopping_list_users, dependent: :destroy
   has_many :users, through: :shopping_list_users

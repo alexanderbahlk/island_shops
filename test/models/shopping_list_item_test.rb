@@ -3,6 +3,7 @@
 # Table name: shopping_list_items
 #
 #  id               :bigint           not null, primary key
+#  deleted_at       :datetime
 #  priority         :boolean          default(FALSE), not null
 #  purchased        :boolean          default(FALSE), not null
 #  quantity         :integer          default(1), not null
@@ -18,6 +19,7 @@
 # Indexes
 #
 #  index_shopping_list_items_on_category_id   (category_id)
+#  index_shopping_list_items_on_deleted_at    (deleted_at)
 #  index_shopping_list_items_on_shop_item_id  (shop_item_id)
 #  index_shopping_list_items_on_user_id       (user_id)
 #  index_shopping_list_items_on_uuid          (uuid) UNIQUE

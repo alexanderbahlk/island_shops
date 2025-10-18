@@ -3,6 +3,7 @@
 # Table name: shopping_lists
 #
 #  id           :bigint           not null, primary key
+#  deleted_at   :datetime
 #  display_name :string           not null
 #  slug         :string           not null
 #  created_at   :datetime         not null
@@ -10,7 +11,8 @@
 #
 # Indexes
 #
-#  index_shopping_lists_on_slug  (slug) UNIQUE
+#  index_shopping_lists_on_deleted_at  (deleted_at)
+#  index_shopping_lists_on_slug        (slug) UNIQUE
 #
 require "test_helper"
 
