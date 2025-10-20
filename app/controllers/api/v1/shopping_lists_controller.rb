@@ -1,7 +1,7 @@
 module Api
   module V1
     class ShoppingListsController < Api::V1::SecureAppController
-      before_action :find_shopping_list, only: [:show, :update, :destroy]
+      before_action :find_shopping_list, only: [:show, :update, :destroy, :delete_all_purchased_shopping_list_items]
 
       # GET /api/v1/shopping_lists/:slug
       def show
@@ -44,6 +44,17 @@ module Api
           }, status: :ok
         else
           render json: { errors: @shopping_list.errors.full_messages }, status: :unprocessable_content
+        end
+      end
+
+      def delete_all_purchased_shopping_list_items
+        Rails.logger.info("Received request to delete all purchased items for ShoppingList with slug: #{@shopping_list.slug}")
+
+        purchased_items = @shopping_list.shopping_list_items.purchased
+        if purchased_items.destroy_all
+          render json: { message: "All purchased items have been deleted." }, status: :ok
+        else
+          render json: { errors: "Failed to delete purchased items." }, status: :unprocessable_entity
         end
       end
 

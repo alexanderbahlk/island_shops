@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
       resources :shopping_lists, param: :slug, only: [:create, :show, :update, :destroy] do
         resources :shopping_list_items, only: [:create, :destroy, :update], shallow: true
+        delete "delete_all_purchased_shopping_list_items", on: :member # Add this line
       end
       resources :users, only: [] do
         post :login_or_create, on: :collection
