@@ -1,10 +1,11 @@
 # == Schema Information
 #
-# Table name: locations
+# Table name: places
 #
 #  id          :bigint           not null, primary key
 #  description :text
 #  is_online   :boolean          default(FALSE), not null
+#  location    :string
 #  title       :string           not null
 #  uuid        :string           not null
 #  created_at  :datetime         not null
@@ -12,16 +13,11 @@
 #
 # Indexes
 #
-#  index_locations_on_title  (title) UNIQUE
-#  index_locations_on_uuid   (uuid) UNIQUE
+#  index_places_on_title  (title) UNIQUE
+#  index_places_on_uuid   (uuid) UNIQUE
 #
+class Place < ApplicationRecord
+  has_many :shop_items, dependent: :nullify
 
-location_one:
-  title: "Location One"
-  description: "Some description for Location One"
-  is_online: true
-
-location_two:
-  title: "Location Two"
-  description: "Some description for Location Two"
-  is_online: false
+  validates :title, presence: true, uniqueness: true
+end

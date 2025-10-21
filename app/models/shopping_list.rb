@@ -31,8 +31,8 @@ class ShoppingList < ApplicationRecord
   before_destroy :clear_active_shopping_list_references
 
   SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY = "priority".freeze
-  SHOPPING_LIST_GROUP_BY_ORDER_LOCATION = "location".freeze
-  SHOPPING_LIST_GROUP_BY_ORDERS = [SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY, SHOPPING_LIST_GROUP_BY_ORDER_LOCATION].freeze
+  SHOPPING_LIST_GROUP_BY_ORDER_PLACE = "place".freeze
+  SHOPPING_LIST_GROUP_BY_ORDERS = [SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY, SHOPPING_LIST_GROUP_BY_ORDER_PLACE].freeze
 
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "display_name", "id", "id_value", "slug", "updated_at"]
@@ -45,14 +45,14 @@ class ShoppingList < ApplicationRecord
   ## Returns the shopping list items formatted for the view list
   ## If group_shopping_lists_items_by is provided, it will group the items accordingly
   ## Possible values for group_shopping_lists_items_by are defined in SHOPPING_LIST_GROUP_BY_ORDERS
-  ## Returns an array of arrays (purchased, unpurchased, priority, non-priority, location groups)
+  ## Returns an array of arrays (purchased, unpurchased, priority, non-priority, place groups)
   def shopping_list_items_for_view_list(group_shopping_lists_items_by = nil)
     list = self.shopping_list_items.includes(:category).map do |item|
       {
         uuid: item.uuid,
         category_uuid: item.category&.uuid,
         shop_item_uuid: item.shop_item&.uuid,
-        location_name: item.shop_item&.location&.title || "N/A",
+        location_name: item.shop_item&.place&.title || "N/A",
         shop_item_count: item.category&.approved_cached_shop_items_count || 0,
         title: item.title_for_shopping_list_grouping(group_shopping_lists_items_by),
         purchased: item.purchased,
@@ -76,8 +76,8 @@ class ShoppingList < ApplicationRecord
         non_priority: list.reject { |item| item[:priority] || item[:purchased] }.sort_by { |item| item[:title] },
         purchased: list.select { |item| item[:purchased] }.sort_by { |item| item[:title] },
       }
-    when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_LOCATION
-      # Group by location and add purchased items at the end
+    when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PLACE
+      # Group by place and add purchased items at the end
       unpurchased_items_grouped = list.reject { |item| item[:purchased] }.group_by { |item| item[:location_name] }
       unpurchased_items_sorted = unpurchased_items_grouped.transform_values do |items|
         items.sort_by { |item| item[:title] }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_18_002614) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_20_180838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -71,15 +71,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_18_002614) do
     t.index ["shopping_list_id", "category_id"], name: "index_shopping_lists_categories_on_list_and_category", unique: true
   end
 
-  create_table "locations", force: :cascade do |t|
+  create_table "places", force: :cascade do |t|
     t.string "title", null: false
     t.string "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.text "description"
     t.boolean "is_online", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["title"], name: "index_locations_on_title", unique: true
-    t.index ["uuid"], name: "index_locations_on_uuid", unique: true
+    t.string "location"
+    t.index ["title"], name: "index_places_on_title", unique: true
+    t.index ["uuid"], name: "index_places_on_uuid", unique: true
   end
 
   create_table "shop_item_updates", force: :cascade do |t|
@@ -108,13 +109,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_18_002614) do
     t.bigint "category_id"
     t.string "breadcrumb"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.bigint "location_id"
+    t.bigint "place_id"
     t.jsonb "model_embedding"
     t.boolean "needs_model_embedding_update", default: false, null: false
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
-    t.index ["location_id"], name: "index_shop_items_on_location_id"
     t.index ["model_embedding"], name: "index_shop_items_on_model_embedding", using: :gin
+    t.index ["place_id"], name: "index_shop_items_on_place_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
     t.index ["uuid"], name: "index_shop_items_on_uuid", unique: true
   end
@@ -171,7 +172,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_18_002614) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
-  add_foreign_key "shop_items", "locations"
+  add_foreign_key "shop_items", "places"
   add_foreign_key "shopping_list_items", "shop_items"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_list_items", "users"

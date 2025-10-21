@@ -18,33 +18,33 @@
 #  created_at                   :datetime         not null
 #  updated_at                   :datetime         not null
 #  category_id                  :bigint
-#  location_id                  :bigint
+#  place_id                     :bigint
 #  product_id                   :string
 #
 # Indexes
 #
 #  index_shop_items_on_breadcrumb       (breadcrumb)
 #  index_shop_items_on_category_id      (category_id)
-#  index_shop_items_on_location_id      (location_id)
 #  index_shop_items_on_model_embedding  (model_embedding) USING gin
+#  index_shop_items_on_place_id         (place_id)
 #  index_shop_items_on_url              (url) UNIQUE
 #  index_shop_items_on_uuid             (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
-#  fk_rails_...  (location_id => locations.id)
+#  fk_rails_...  (place_id => places.id)
 #
 class ShopItem < ApplicationRecord
   has_many :shopping_list_items, dependent: :nullify
   has_many :shop_item_updates, dependent: :destroy
   belongs_to :category, optional: true
-  belongs_to :location, optional: true # Optional for now to allow migration of existing data
+  belongs_to :place, optional: true # Optional for now to allow migration of existing data
 
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
   validates :category, presence: true, if: -> { category_id.present? }
-  validates :location, presence: true, if: -> { location_id.present? }
+  validates :place, presence: true, if: -> { place_id.present? }
   validate :category_must_be_product, if: -> { category.present? }
   validates :uuid, uniqueness: true
 
@@ -104,7 +104,7 @@ class ShopItem < ApplicationRecord
 
   # For Ransack search
   def self.ransackable_attributes(auth_object = nil)
-    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "product_id", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review", "breadcrumb", "location_id"]
+    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "product_id", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review", "breadcrumb", "place_id"]
   end
 
   def self.ransackable_associations(auth_object = nil)

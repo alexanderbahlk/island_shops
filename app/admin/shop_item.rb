@@ -97,8 +97,8 @@ ActiveAdmin.register ShopItem do
   index do
     selectable_column
     id_column
-    column :location do |location|
-      location&.location || "N/A"
+    column :place do |place|
+      place&.title || "N/A"
     end
     column :title do |shop_item|
       link_to shop_item.title, shop_item.url, target: "_blank", data: { shop_item_id: shop_item.id }
@@ -218,7 +218,7 @@ ActiveAdmin.register ShopItem do
   # Configure filters for the index page
   filter :title
   filter :breadcrumb
-  filter :location, as: :select, collection: Location.all, include_blank: "N/A"
+  filter :place, as: :select, collection: Place.all, include_blank: "N/A"
   filter :approved
   filter :needs_another_review
   filter :unit, as: :select, collection: UnitParser::VALID_UNITS.sort.map { |unit| [unit, unit] }
@@ -234,7 +234,7 @@ ActiveAdmin.register ShopItem do
   # Configure the form for create/edit
   form do |f|
     f.inputs "Shop Item Details" do
-      f.input :location, as: :select, collection: Location.all, include_blank: false
+      f.input :place, as: :select, collection: Place.all, include_blank: false
       f.input :url, placeholder: "https://example.com/product"
       f.input :title
       f.input :display_title, hint: "Optional: Custom display name for the item"
@@ -254,7 +254,7 @@ ActiveAdmin.register ShopItem do
     attributes_table do
       row :id
       row :uuid
-      row :location
+      row :place
       row :title
       row :breadcrumb
       row :latest_stock_status
@@ -311,7 +311,7 @@ ActiveAdmin.register ShopItem do
       row :latest_price_per_normalized_unit_with_unit do |shop_item|
         shop_item.latest_price_per_normalized_unit_with_unit
       end
-      row :location
+      row :place
       row :product_id
       row :approved do |shop_item|
         best_in_place shop_item, :approved,

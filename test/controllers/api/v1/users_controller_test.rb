@@ -51,15 +51,15 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should update group_shopping_lists_items_by with valid value" do
     patch update_group_shopping_lists_items_by_api_v1_users_path,
-          params: { group_shopping_lists_items_by: "location" }.to_json,
+          params: { group_shopping_lists_items_by: "place" }.to_json,
           headers: @headers
 
     assert_response :ok
     response_data = JSON.parse(response.body)
     assert_equal "Group shopping lists items by updated successfully", response_data["message"]
-    assert_equal "location", response_data["user"]["group_shopping_lists_items_by"]
+    assert_equal "place", response_data["user"]["group_shopping_lists_items_by"]
     @user.reload
-    assert_equal "location", @user.group_shopping_lists_items_by
+    assert_equal "place", @user.group_shopping_lists_items_by
   end
 
   test "should not update group_shopping_lists_items_by with invalid value" do

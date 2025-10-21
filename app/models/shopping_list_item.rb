@@ -71,11 +71,11 @@ class ShoppingListItem < ApplicationRecord
     when nil
     when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY
       if shop_item_id
-        if shop_item && shop_item.location.present?
-          title_string += " from #{shop_item.location.title}"
+        if shop_item && shop_item.place.present?
+          title_string += " from #{shop_item.place.title}"
         end
       end
-    when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_LOCATION
+    when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PLACE
       title_string
     end
     title_string

@@ -18,22 +18,22 @@
 #  created_at                   :datetime         not null
 #  updated_at                   :datetime         not null
 #  category_id                  :bigint
-#  location_id                  :bigint
+#  place_id                     :bigint
 #  product_id                   :string
 #
 # Indexes
 #
 #  index_shop_items_on_breadcrumb       (breadcrumb)
 #  index_shop_items_on_category_id      (category_id)
-#  index_shop_items_on_location_id      (location_id)
 #  index_shop_items_on_model_embedding  (model_embedding) USING gin
+#  index_shop_items_on_place_id         (place_id)
 #  index_shop_items_on_url              (url) UNIQUE
 #  index_shop_items_on_uuid             (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
-#  fk_rails_...  (location_id => locations.id)
+#  fk_rails_...  (place_id => places.id)
 #
 require "test_helper"
 

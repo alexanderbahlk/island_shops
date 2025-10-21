@@ -1,29 +1,46 @@
-class Api::V1::ShopItemsController < Api::V1::SecureScrapeController
-  def create_by_scrape
+class Api::V1::ShopItemsController < Api::V1::SecureAppController
+  def create
+    # Request params look like this
+    # final requestBody = {
+    #  'shop_item': {
+    #    'title': shopItemTitle,
+    #    'size': shopItemSize,
+    #    'unit': shopItemUnit,
+    #  },
+    #  'shop_item_update': {
+    #    'price': shopItemPrice,
+    #  },
+    #  'place' : {
+    #    'title': placeTitle,
+    #    'location': placeLocation,
+    #  },
+    #
     #log params for debugging
     Rails.logger.debug("Received shop item params: #{params.inspect}")
-    builder = ScrapedShopItemBuilder.new(shop_item_params, shop_item_update_params)
+    builder = AppShopItemBuilder.new(shop_item_params, shop_item_update_params, place_params)
 
     if builder.build
       render json: {
         shop_item: builder.shop_item,
         shop_item_update: builder.shop_item_update,
+        place: builder.place,
       }, status: :created
     else
       render json: { errors: builder.errors }, status: :unprocessable_content
     end
   end
 
-  def create
-  end
-
   private
 
   def shop_item_params
-    params.require(:shop_item).permit(:url, :title, :breadcrumb, :image_url, :size, :unit, :location, :product_id, :shop)
+    params.require(:shop_item).permit(:title, :size, :unit)
   end
 
   def shop_item_update_params
-    params.require(:shop_item_update).permit(:price, :stock_status)
+    params.require(:shop_item_update).permit(:price)
+  end
+
+  def place_params
+    params.require(:place).permit(:title, :location)
   end
 end

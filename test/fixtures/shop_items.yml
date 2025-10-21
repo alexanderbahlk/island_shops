@@ -18,29 +18,29 @@
 #  created_at                   :datetime         not null
 #  updated_at                   :datetime         not null
 #  category_id                  :bigint
-#  location_id                  :bigint
+#  place_id                     :bigint
 #  product_id                   :string
 #
 # Indexes
 #
 #  index_shop_items_on_breadcrumb       (breadcrumb)
 #  index_shop_items_on_category_id      (category_id)
-#  index_shop_items_on_location_id      (location_id)
 #  index_shop_items_on_model_embedding  (model_embedding) USING gin
+#  index_shop_items_on_place_id         (place_id)
 #  index_shop_items_on_url              (url) UNIQUE
 #  index_shop_items_on_uuid             (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
-#  fk_rails_...  (location_id => locations.id)
+#  fk_rails_...  (place_id => places.id)
 #
 
 shop_item_one:
   url: "https://example.com/existing-item_1"
   approved: true
   category: milk  # References the milk category
-  location: location_one  # References the location fixture
+  place: place_one  # References the place fixture
   title: "Organic Milk"
   size: 1.0
   unit: "l"
@@ -51,7 +51,7 @@ shop_item_one:
 shop_item_two:
   url: "https://example.com/another-item"
   category: tomatoes_canned  # References the tomatoes category
-  location: location_two  # References the location fixture
+  place: place_two  # References the place fixture
   title: "Canned Tomatoes"
   size: 400.0
   unit: "g"
@@ -61,7 +61,7 @@ shop_item_two:
 
 shop_item_without_category:
   url: "https://example.com/no-category"
-  location: location_one  # References the location fixture
+  place: place_one  # References the place fixture
   title: "Unmatched Product"
   created_at: <%= 3.days.ago %>
   updated_at: <%= 3.days.ago %>
@@ -71,7 +71,7 @@ shop_item_four:
   url: "https://example.com/existing-item_2"
   approved: true
   category: milk  # References the milk category
-  location: location_one  # References the location fixture
+  place: place_one  # References the place fixture
   title: "Goat Milk"
   size: 1.0
   unit: "l"
@@ -83,7 +83,7 @@ shop_item_goat_cheese:
   url: "https://example.com/shop_item_goat_cheese"
   approved: true
   category: cheese  # References the cheese category
-  location: location_one  # References the location fixture
+  place: place_one  # References the place fixture
   title: "Goat Cheese"
   size: 1.0
   unit: "l"
@@ -95,7 +95,7 @@ shop_item_cheese:
   url: "https://example.com/shop_item_cheese"
   approved: true
   category: cheese  # References the cheese category
-  location: location_one  # References the location fixture
+  place: place_one  # References the place fixture
   title: "Cheese"
   size: 1.0
   unit: "l"
@@ -107,7 +107,7 @@ shop_item_milk:
   url: "https://example.com/shop_item_milk"
   approved: true
   category: milk  # References the milk category
-  location: location_two  # References the location fixture
+  place: place_two  # References the place fixture
   title: "Milk"
   size: 1.0
   unit: "l"

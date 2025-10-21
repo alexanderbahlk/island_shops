@@ -21,7 +21,7 @@ class FetchShopItemsForCategoryService
           shop_item = {
             title: item.display_title.presence || item.title,
             uuid: item.uuid,
-            location: item.location&.title || "N/A",
+            place: item.place&.title || "N/A",
             image_url: item.image_url,
             unit: item.unit || "N/A",
             stock_status: latest_shop_item_update&.normalized_stock_status || "N/A",

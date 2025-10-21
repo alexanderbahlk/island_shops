@@ -25,5 +25,5 @@ user_one:
 
 user_two:
   app_hash: 35ghg5g4g5g4g5g4g5g4g5g4g5g4g
-  group_shopping_lists_items_by: location
+  group_shopping_lists_items_by: place
   active_shopping_list: null

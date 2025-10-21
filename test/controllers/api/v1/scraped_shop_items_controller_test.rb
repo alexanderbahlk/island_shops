@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
+class Api::V1::ScrapedShopItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @headers = { "X-SECURE-HASH" => "gfh5haf_y6", "Content-Type" => "application/json" } # Adjust if you use a different auth mechanism
 
@@ -12,7 +12,7 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
         image_url: "http://example.com/image.jpg",
         size: "1kg",
         unit: "kg",
-        location: "Massy",
+        place: "Massy",
         product_id: "12345",
       },
       shop_item_update: {
@@ -29,7 +29,7 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
         image_url: "http://example.com/image.jpg",
         size: "1kg",
         unit: "kg",
-        location: "Massy",
+        place: "Massy",
         product_id: "12345",
       },
       shop_item_update: {
@@ -42,7 +42,7 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
   test "should create shop item by scrape with valid params" do
     assert_difference("ShopItem.count", 1) do
       assert_difference("ShopItemUpdate.count", 1) do
-        post create_by_scrape_api_v1_shop_items_path,
+        post api_v1_scraped_shop_items_path,
              params: @valid_shop_item_params,
              headers: @headers,
              as: :json
@@ -59,7 +59,7 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
   test "should not create shop item by scrape with invalid params" do
     assert_no_difference("ShopItem.count") do
       assert_no_difference("ShopItemUpdate.count") do
-        post create_by_scrape_api_v1_shop_items_path,
+        post api_v1_scraped_shop_items_path,
              params: @invalid_shop_item_params,
              headers: @headers,
              as: :json

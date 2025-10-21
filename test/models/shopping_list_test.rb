@@ -126,17 +126,17 @@ class ShoppingListTest < ActiveSupport::TestCase
     assert_equal ["Goat Cheese"], result[:purchased].map { |item| item[:title] }
   end
 
-  test "shopping_list_items_for_view_list returns items grouped by location" do
-    result = @shopping_list_with_items.shopping_list_items_for_view_list(ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_LOCATION)
+  test "shopping_list_items_for_view_list returns items grouped by place" do
+    result = @shopping_list_with_items.shopping_list_items_for_view_list(ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PLACE)
 
     # Ensure the result contains the correct keys
-    assert result.key?("Location One"), "Result is missing the 'Location One' key"
-    assert result.key?("Location Two"), "Result is missing the 'Location Two' key"
+    assert result.key?("Place One"), "Result is missing the 'Place One' key"
+    assert result.key?("Place Two"), "Result is missing the 'Place Two' key"
     assert result.key?(:purchased), "Result is missing the 'purchased' key"
 
-    # Ensure the locations are grouped correctly
-    assert_equal ["Cheese"], result["Location One"].map { |item| item[:title] }
-    assert_equal ["Milk 2x"], result["Location Two"].map { |item| item[:title] }
+    # Ensure the places are grouped correctly
+    assert_equal ["Cheese"], result["Place One"].map { |item| item[:title] }
+    assert_equal ["Milk 2x"], result["Place Two"].map { |item| item[:title] }
 
     # Ensure purchased items are sorted by title
     assert_equal ["Goat Cheese"], result[:purchased].map { |item| item[:title] }
