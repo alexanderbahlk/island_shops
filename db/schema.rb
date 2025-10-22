@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_20_180838) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_22_181840) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -74,12 +74,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_20_180838) do
   create_table "places", force: :cascade do |t|
     t.string "title", null: false
     t.string "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.text "description"
     t.boolean "is_online", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "location"
-    t.index ["title"], name: "index_places_on_title", unique: true
+    t.index ["title"], name: "index_places_on_title"
     t.index ["uuid"], name: "index_places_on_uuid", unique: true
   end
 
@@ -112,11 +111,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_20_180838) do
     t.bigint "place_id"
     t.jsonb "model_embedding"
     t.boolean "needs_model_embedding_update", default: false, null: false
+    t.bigint "user_id"
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
     t.index ["model_embedding"], name: "index_shop_items_on_model_embedding", using: :gin
     t.index ["place_id"], name: "index_shop_items_on_place_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
+    t.index ["user_id"], name: "index_shop_items_on_user_id"
     t.index ["uuid"], name: "index_shop_items_on_uuid", unique: true
   end
 
@@ -130,7 +131,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_20_180838) do
     t.boolean "purchased", default: false, null: false
     t.integer "quantity", default: 1, null: false
     t.boolean "priority", default: false, null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "shop_item_id"
     t.datetime "deleted_at"
     t.index ["category_id"], name: "index_shopping_list_items_on_category_id"
@@ -173,9 +174,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_20_180838) do
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
   add_foreign_key "shop_items", "places"
+  add_foreign_key "shop_items", "users", on_delete: :nullify
   add_foreign_key "shopping_list_items", "shop_items"
   add_foreign_key "shopping_list_items", "shopping_lists"
-  add_foreign_key "shopping_list_items", "users"
+  add_foreign_key "shopping_list_items", "users", on_delete: :nullify
   add_foreign_key "shopping_list_users", "shopping_lists"
   add_foreign_key "shopping_list_users", "users"
   add_foreign_key "users", "shopping_lists", column: "active_shopping_list_id"

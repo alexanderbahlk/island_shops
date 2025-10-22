@@ -66,4 +66,16 @@ class UserTest < ActiveSupport::TestCase
     new_user = User.create!(app_hash: "new_user_hash")
     assert new_user.is_new_user?
   end
+
+  test "should delete user without deleting associated shop_items" do
+    user = users(:user_one) # Assuming a fixture exists
+    shop_item = shop_items(:shop_item_with_user) # Assuming a fixture exists
+
+    assert_difference("User.count", -1) do
+      user.destroy
+    end
+
+    shop_item.reload
+    assert_nil shop_item.user_id
+  end
 end

@@ -20,6 +20,7 @@
 #  category_id                  :bigint
 #  place_id                     :bigint
 #  product_id                   :string
+#  user_id                      :bigint
 #
 # Indexes
 #
@@ -28,12 +29,14 @@
 #  index_shop_items_on_model_embedding  (model_embedding) USING gin
 #  index_shop_items_on_place_id         (place_id)
 #  index_shop_items_on_url              (url) UNIQUE
+#  index_shop_items_on_user_id          (user_id)
 #  index_shop_items_on_uuid             (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (place_id => places.id)
+#  fk_rails_...  (user_id => users.id) ON DELETE => nullify
 #
 
 shop_item_one:
@@ -114,3 +117,16 @@ shop_item_milk:
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
   uuid: 123e4567-e89b-12d3-a456-426614174993
+
+shop_item_with_user:
+  url: "https://example.com/shop_item_with_user"
+  approved: true
+  category: milk  # References the milk category
+  place: place_two  # References the place fixture
+  title: "Milk with User"
+  size: 1.0
+  unit: "l"
+  user: user_one  # References the user fixture
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+  uuid: 123e4567-e89b-12d3-a456-426614174992

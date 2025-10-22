@@ -45,7 +45,7 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   test "clears direct references and marks items as unapproved when deleting category" do
-    assert_difference "ShopItem.where(category_id: #{@product_category.id}).count", -3 do
+    assert_difference "ShopItem.where(category_id: #{@product_category.id}).count", -4 do
       @product_category.destroy!
     end
 
@@ -70,9 +70,9 @@ class CategoryTest < ActiveSupport::TestCase
     total_items = ShopItem.joins(:category)
       .where(categories: { id: @root_category.self_and_descendants.pluck(:id) })
       .count
-    assert_equal 6, total_items
+    assert_equal 7, total_items
 
-    assert_difference "ShopItem.where.not(category_id: nil).count", -6 do
+    assert_difference "ShopItem.where.not(category_id: nil).count", -7 do
       @root_category.destroy!
     end
   end

@@ -2,27 +2,29 @@
 #
 # Table name: places
 #
-#  id          :bigint           not null, primary key
-#  description :text
-#  is_online   :boolean          default(FALSE), not null
-#  location    :string
-#  title       :string           not null
-#  uuid        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id         :bigint           not null, primary key
+#  is_online  :boolean          default(FALSE), not null
+#  location   :string
+#  title      :string           not null
+#  uuid       :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_places_on_title  (title) UNIQUE
+#  index_places_on_title  (title)
 #  index_places_on_uuid   (uuid) UNIQUE
 #
 
 place_one:
   title: "Place One"
-  description: "Some description for Place One"
   is_online: true
 
 place_two:
   title: "Place Two"
-  description: "Some description for Place Two"
   is_online: false
+
+place_three:
+  title: "Coconutwater truck"
+  is_online: false
+  location: "3F85+X7W, Oistins, Christ Church"

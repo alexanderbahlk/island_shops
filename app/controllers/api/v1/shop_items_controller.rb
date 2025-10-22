@@ -32,8 +32,12 @@ class Api::V1::ShopItemsController < Api::V1::SecureAppController
 
   private
 
+  #permits params
+  #adds current user to shop item params
   def shop_item_params
-    params.require(:shop_item).permit(:title, :size, :unit)
+    params.require(:shop_item).permit(:title, :size, :unit).tap do |whitelisted|
+      whitelisted[:user] = @current_user
+    end
   end
 
   def shop_item_update_params

@@ -14,7 +14,7 @@
 #  category_id      :bigint
 #  shop_item_id     :bigint
 #  shopping_list_id :bigint           not null
-#  user_id          :bigint           not null
+#  user_id          :bigint
 #
 # Indexes
 #
@@ -28,7 +28,7 @@
 #
 #  fk_rails_...  (shop_item_id => shop_items.id)
 #  fk_rails_...  (shopping_list_id => shopping_lists.id)
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id) ON DELETE => nullify
 #
 require "test_helper"
 
@@ -113,5 +113,15 @@ class ShoppingListItemTest < ActiveSupport::TestCase
   test "should allow quantity to be updated" do
     @shopping_list_item.update!(quantity: 5)
     assert_equal 5, @shopping_list_item.quantity
+  end
+
+  test "should have valid shopping list item after user was deleted" do
+    assert @shopping_list_item.user.present?
+
+    @user.destroy
+    @shopping_list_item.reload
+
+    assert_nil @shopping_list_item.user
+    assert @shopping_list_item.valid?
   end
 end

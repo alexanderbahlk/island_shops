@@ -97,8 +97,8 @@ ActiveAdmin.register ShopItem do
   index do
     selectable_column
     id_column
-    column :place do |place|
-      place&.title || "N/A"
+    column :place do |shop_item|
+      shop_item.place&.title || "N/A"
     end
     column :title do |shop_item|
       link_to shop_item.title, shop_item.url, target: "_blank", data: { shop_item_id: shop_item.id }
@@ -311,7 +311,7 @@ ActiveAdmin.register ShopItem do
       row :latest_price_per_normalized_unit_with_unit do |shop_item|
         shop_item.latest_price_per_normalized_unit_with_unit
       end
-      row :place
+      row :user
       row :product_id
       row :approved do |shop_item|
         best_in_place shop_item, :approved,
@@ -385,6 +385,7 @@ ActiveAdmin.register ShopItem do
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :missing_category, -> { where(category_id: nil) }
   scope :was_manually_updated, -> { where(was_manually_updated: true) }
+  scope :is_community_report, -> { where.not(user_id: nil) }
 
   # Update batch actions for categories
   batch_action :approve do |ids|

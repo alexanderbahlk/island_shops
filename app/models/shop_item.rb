@@ -20,6 +20,7 @@
 #  category_id                  :bigint
 #  place_id                     :bigint
 #  product_id                   :string
+#  user_id                      :bigint
 #
 # Indexes
 #
@@ -28,18 +29,21 @@
 #  index_shop_items_on_model_embedding  (model_embedding) USING gin
 #  index_shop_items_on_place_id         (place_id)
 #  index_shop_items_on_url              (url) UNIQUE
+#  index_shop_items_on_user_id          (user_id)
 #  index_shop_items_on_uuid             (uuid) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (place_id => places.id)
+#  fk_rails_...  (user_id => users.id) ON DELETE => nullify
 #
 class ShopItem < ApplicationRecord
   has_many :shopping_list_items, dependent: :nullify
   has_many :shop_item_updates, dependent: :destroy
   belongs_to :category, optional: true
   belongs_to :place, optional: true # Optional for now to allow migration of existing data
+  belongs_to :user, optional: true # Optional association
 
   validates :url, presence: true, uniqueness: true
   validates :title, presence: true
@@ -100,6 +104,9 @@ class ShopItem < ApplicationRecord
         }
   scope :no_unit_size, -> {
           where(unit: [nil, ""]).or(where(size: nil))
+        }
+  scope :is_community_report, -> {
+          where.not(user_id: nil)
         }
 
   # For Ransack search

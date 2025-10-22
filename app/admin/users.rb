@@ -9,6 +9,9 @@ ActiveAdmin.register User do
     column :app_hash
     column :created_at
     column :updated_at
+    column :shop_item_count do |user|
+      user.shop_items.size
+    end
     column :shopping_lists_count do |user|
       user.shopping_lists.size
     end
@@ -33,6 +36,14 @@ ActiveAdmin.register User do
       row :app_hash
       row :created_at
       row :updated_at
+    end
+
+    panel "Shop Items" do
+      table_for user.shop_items do
+        column :id
+        column :title
+        column :created_at
+      end
     end
 
     panel "Shopping Lists" do

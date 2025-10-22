@@ -14,7 +14,7 @@
 #  category_id      :bigint
 #  shop_item_id     :bigint
 #  shopping_list_id :bigint           not null
-#  user_id          :bigint           not null
+#  user_id          :bigint
 #
 # Indexes
 #
@@ -28,13 +28,13 @@
 #
 #  fk_rails_...  (shop_item_id => shop_items.id)
 #  fk_rails_...  (shopping_list_id => shopping_lists.id)
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (user_id => users.id) ON DELETE => nullify
 #
 class ShoppingListItem < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :shop_item, optional: true
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :shopping_list
   belongs_to :category, optional: true
 
