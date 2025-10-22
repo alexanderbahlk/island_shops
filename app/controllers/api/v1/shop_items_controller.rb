@@ -14,10 +14,11 @@ class Api::V1::ShopItemsController < Api::V1::SecureAppController
     #    'title': placeTitle,
     #    'location': placeLocation,
     #  },
+    #  'add_to_active_shopping_list': addToActiveShoppingList,
     #
     #log params for debugging
     Rails.logger.debug("Received shop item params: #{params.inspect}")
-    builder = AppShopItemBuilder.new(shop_item_params, shop_item_update_params, place_params)
+    builder = AppShopItemBuilder.new(shop_item_params, shop_item_update_params, place_params, add_to_active_shopping_list_param)
 
     if builder.build
       render json: {
@@ -46,5 +47,9 @@ class Api::V1::ShopItemsController < Api::V1::SecureAppController
 
   def place_params
     params.require(:place).permit(:title, :location)
+  end
+
+  def add_to_active_shopping_list_param
+    params[:add_to_active_shopping_list] || false
   end
 end

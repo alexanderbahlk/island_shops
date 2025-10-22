@@ -98,6 +98,7 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not update active shopping list with invalid slug" do
+    old_active_shopping_list_id = @user.active_shopping_list_id
     patch update_active_shopping_list_api_v1_users_path,
           params: { active_shopping_list_slug: "invalid_slug" }.to_json,
           headers: @headers
@@ -106,10 +107,12 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     response_data = JSON.parse(response.body)
     assert_equal "Shopping list not found or user does not have access", response_data["error"]
     @user.reload
-    assert_nil @user.active_shopping_list_id
+    assert_equal @user.active_shopping_list_id, old_active_shopping_list_id
   end
 
   test "should not update active shopping list with shopping list not belonging to user" do
+    old_active_shopping_list_id = @user.active_shopping_list_id
+
     other_shopping_list = shopping_lists(:shopping_list_xyz) # Assuming this is a different list
     patch update_active_shopping_list_api_v1_users_path,
           params: { active_shopping_list_slug: other_shopping_list.slug }.to_json,
@@ -119,7 +122,7 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     response_data = JSON.parse(response.body)
     assert_equal "Shopping list not found or user does not have access", response_data["error"]
     @user.reload
-    assert_nil @user.active_shopping_list_id
+    assert_equal @user.active_shopping_list_id, old_active_shopping_list_id
   end
 
   test "should not update active shopping list if headers misses X-SECURE-APP-USER-HASH" do
@@ -131,7 +134,7 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     response_data = JSON.parse(response.body)
     assert_equal "Invalid APP-USER-HASH", response_data["error"]
     @user.reload
-    assert_nil @user.active_shopping_list_id
+    assert_not_equal @user.active_shopping_list_id, @shopping_list.id
   end
 
   test "should add shopping list to user with valid slug" do

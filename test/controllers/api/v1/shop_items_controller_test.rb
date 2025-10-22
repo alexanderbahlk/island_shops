@@ -66,6 +66,7 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
     existing_place = places(:place_three)
     response_data = JSON.parse(response.body)
     assert response_data["shop_item"]["title"] == "Coconutwater"
+    assert response_data["shop_item"]["approved"] == true
     assert response_data["shop_item_update"]["price"] == "17.0"
     assert_equal existing_place.id, response_data["shop_item"]["place_id"]
     assert_equal @user.id, response_data["shop_item"]["user_id"]
@@ -120,6 +121,39 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
     assert response_data["shop_item"]["title"] == "Watermelon"
     assert response_data["shop_item_update"]["price"] == "5.0"
     assert response_data["shop_item_update"]["normalized_unit"] == "each"
+  end
+
+  test "should add shop item to active shopping list when param is true" do
+    active_shopping_list = @user.active_shopping_list
+    active_shopping_list_item_count_before = active_shopping_list.shopping_list_items.count
+    watermellon_place_params = {
+      shop_item: {
+        title: "Watermelon",
+        size: 1.0,
+        unit: "each",
+      },
+      shop_item_update: {
+        price: 5.0,
+      },
+      place: {
+        title: "Fruit Stand",
+        location: "3F85+X7H, Oistins, Christ Church",
+      },
+      add_to_active_shopping_list: true,
+    }
+    assert_difference("ShopItem.count", 1) do
+      assert_difference("ShopItemUpdate.count", 1) do
+        post api_v1_shop_items_path,
+             params: watermellon_place_params,
+             headers: @headers,
+             as: :json
+
+        assert_response :created
+      end
+    end
+    active_shopping_list_item_count_after = active_shopping_list.shopping_list_items.count
+    assert_equal active_shopping_list_item_count_before + 1, active_shopping_list_item_count_after
+    assert_equal "Watermelon", active_shopping_list.shopping_list_items.last.shop_item.title
   end
 
   test "should not create shop item by scrape with invalid params" do

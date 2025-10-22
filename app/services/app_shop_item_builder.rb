@@ -1,15 +1,20 @@
 class AppShopItemBuilder < BaseShopItemBuilder
   attr_reader :place
 
-  def initialize(shop_item_params, shop_item_update_params, place_params)
+  def initialize(shop_item_params, shop_item_update_params, place_params, add_to_active_shopping_list_param)
     @shop_item_params = shop_item_params
     @shop_item_update_params = shop_item_update_params
     @place_params = place_params
+    @user = shop_item_params[:user]
+    @add_to_active_shopping_list_param = add_to_active_shopping_list_param
     @errors = []
   end
 
   def build
     create_new_shop_item_with_shop_item_update
+    if success? && @add_to_active_shopping_list_param
+      add_shop_item_to_user_active_shopping_list
+    end
     success?
   end
 
@@ -21,6 +26,7 @@ class AppShopItemBuilder < BaseShopItemBuilder
 
   def create_new_shop_item_with_shop_item_update
     @shop_item_params[:url] = create_url
+    @shop_item_params[:approved] = true
     @shop_item_params[:place] = fuzzy_match_find_or_create_place
 
     @shop_item = ShopItem.new(@shop_item_params)
@@ -39,6 +45,27 @@ class AppShopItemBuilder < BaseShopItemBuilder
       end
     else
       @errors.concat(@shop_item.errors.full_messages)
+    end
+  end
+
+  def add_shop_item_to_user_active_shopping_list
+    active_shopping_list = @user.active_shopping_list
+    if active_shopping_list.nil?
+      @errors << "User has no active shopping list"
+      return
+    end
+
+    # Build the ShoppingListItem
+    shopping_list_item = active_shopping_list.shopping_list_items.build(
+      title: @shop_item.title,
+      shop_item: @shop_item,
+      category: @shop_item.category || nil,
+      quantity: 1,
+      user: @user,
+    )
+
+    unless shopping_list_item.save
+      @errors.concat(shopping_list_item.errors.full_messages)
     end
   end
 
