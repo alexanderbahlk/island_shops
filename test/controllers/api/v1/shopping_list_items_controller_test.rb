@@ -49,4 +49,14 @@ class Api::V1::ShoppingListItemsControllerTest < ActionDispatch::IntegrationTest
     @shopping_list_item.reload
     assert_equal @shop_item.id, @shopping_list_item.shop_item_id
   end
+
+  test "should soft delete shopping list item" do
+    delete api_v1_shopping_list_item_path(@shopping_list_item.uuid),
+           headers: @headers
+
+    assert_response :success
+    @shopping_list_item.reload
+    assert_not_nil @shopping_list_item
+    assert @shopping_list_item.deleted_at <= Time.current
+  end
 end

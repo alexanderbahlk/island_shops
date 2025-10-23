@@ -124,4 +124,13 @@ class ShoppingListItemTest < ActiveSupport::TestCase
     assert_nil @shopping_list_item.user
     assert @shopping_list_item.valid?
   end
+
+  test "should soft delete shopping list item" do
+    assert_nil @shopping_list_item.deleted_at
+
+    @shopping_list_item.destroy
+
+    assert_not_nil @shopping_list_item.deleted_at
+    assert @shopping_list_item.deleted_at <= Time.current
+  end
 end

@@ -201,7 +201,7 @@ class ShopItem < ApplicationRecord
   end
 
   def clear_shopping_list_item_references
-    ShoppingListItem.where(shop_item_id: self.id).update_all(shop_item_id: nil)
+    ShoppingListItem.with_deleted.where(shop_item_id: self.id).update_all(shop_item_id: nil)
   end
 
   def category_must_be_product
