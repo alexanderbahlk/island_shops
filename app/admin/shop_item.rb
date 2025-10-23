@@ -42,6 +42,16 @@ ActiveAdmin.register ShopItem do
 
     before_action :store_current_filters, only: [:index]
 
+    def destroy
+      shop_item = ShopItem.find(params[:id])
+      if shop_item.destroy
+        flash[:notice] = "ShopItem was successfully destroyed."
+      else
+        flash[:error] = "Failed to destroy ShopItem: #{shop_item.errors.full_messages.join(", ")}"
+      end
+      redirect_to admin_shop_items_path
+    end
+
     def category_collection
       @category_collection ||= [[nil, "None"]] + Category.products.pluck(:path, :id).map { |path, id| [id, path.split("/").join(" > ")] }.sort_by { |id, breadcrumb| breadcrumb }
     end

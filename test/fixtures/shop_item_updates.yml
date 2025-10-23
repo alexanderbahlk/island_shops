@@ -51,3 +51,11 @@ shop_item_update_four:
   stock_status: "in stock"
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
+
+shop_item_update_milk:
+  shop_item: shop_item_milk
+  price: 4.50
+  price_per_unit: 4.50
+  stock_status: "in stock"
+  created_at: <%= 5.days.ago %>
+  updated_at: <%= 5.days.ago %>
