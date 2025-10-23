@@ -31,7 +31,7 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
       },
       place: {
         title: "Coconutwater truck",
-        location: "3F85+X7E, Oistins, Christ Church",
+        location: "Warenstreat, Oistins, Christ Church",
       },
     }
 
@@ -171,5 +171,43 @@ class Api::V1::ShopItemsControllerTest < ActionDispatch::IntegrationTest
     response_data = JSON.parse(response.body)
     assert response_data["errors"].present?
     assert response_data["errors"].include?("Title can't be blank")
+  end
+
+  test "should create shop item with place that has latitude and longitude" do
+    place_with_coords_params = {
+      shop_item: {
+        title: "Banana",
+        size: 2.0,
+        unit: "kg",
+      },
+      shop_item_update: {
+        price: 3.0,
+      },
+      place: {
+        title: "Banana Stand",
+        location: "3F85+X7J, Oistins, Christ Church",
+        latitude: 13.0975,
+        longitude: -59.6145,
+      },
+    }
+    assert_difference("ShopItem.count", 1) do
+      assert_difference("ShopItemUpdate.count", 1) do
+        post api_v1_shop_items_path,
+             params: place_with_coords_params,
+             headers: @headers,
+             as: :json
+
+        assert_response :created
+      end
+    end
+
+    response_data = JSON.parse(response.body)
+    assert response_data["shop_item"]["title"] == "Banana"
+    assert response_data["shop_item_update"]["price"] == "3.0"
+
+    place_id = response_data["shop_item"]["place_id"]
+    place = Place.find(place_id)
+    assert_equal 13.0975, place.latitude.to_f
+    assert_equal(-59.6145, place.longitude.to_f)
   end
 end

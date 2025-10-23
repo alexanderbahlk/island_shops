@@ -4,7 +4,9 @@
 #
 #  id         :bigint           not null, primary key
 #  is_online  :boolean          default(FALSE), not null
+#  latitude   :decimal(10, 6)
 #  location   :string
+#  longitude  :decimal(10, 6)
 #  title      :string           not null
 #  uuid       :string           not null
 #  created_at :datetime         not null
@@ -25,6 +27,13 @@ place_two:
   is_online: false
 
 place_three:
-  title: "Coconutwater truck"
+  title: "Coconutwater Truck"
   is_online: false
   location: "3F85+X7W, Oistins, Christ Church"
+
+place_four:
+  title: "Coconutwater guy"
+  is_online: false
+  location: "3F85+X7W, Oistins, Christ Church"
+  latitude: 13.096200
+  longitude: -59.535900

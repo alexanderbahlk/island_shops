@@ -27,7 +27,7 @@ class AppShopItemBuilder < BaseShopItemBuilder
   def create_new_shop_item_with_shop_item_update
     @shop_item_params[:url] = create_url
     @shop_item_params[:approved] = true
-    @shop_item_params[:place] = fuzzy_match_find_or_create_place
+    @shop_item_params[:place] = find_or_create_place
 
     @shop_item = ShopItem.new(@shop_item_params)
 
@@ -82,47 +82,35 @@ class AppShopItemBuilder < BaseShopItemBuilder
     url
   end
 
-  def fuzzy_match_find_or_create_place
-    location = @place_params[:location]
-    title = @place_params[:title]
-    sanitized_place_title = ActiveRecord::Base.connection.quote(title)
+  def find_or_create_place
+    place = fuzzy_find_place_by_latitude_longitude
+    return place if place.present?
 
-    similarity_threshold = 0.8 # Adjust this value between 0.0 and 1.0
-
-    # Ensure the pg_trgm extension is enabled
-    ActiveRecord::Base.connection.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
-
-    cache_key = "fuzzy_match_place/#{title}/#{location}"
-    Rails.cache.fetch(cache_key, expires_in: 1.seconds) do
-
-      # Perform a fuzzy search using similarity
-      sql = <<~SQL
-              SELECT  *, 
-                      GREATEST(
-                        similarity(places.title, #{sanitized_place_title})
-                    ) as sim_score
-        FROM places
-        WHERE GREATEST(
-                similarity(places.title, #{sanitized_place_title})
-              ) >= #{similarity_threshold}
-        ORDER BY sim_score DESC
-        LIMIT 10
-      SQL
-
-      results = ActiveRecord::Base.connection.exec_query(sql)
-
-      #check if in any of the results the location matches and store the first one found in one variable
-
-      matching_results = results.to_a.select { |row| row["location"] == location }
-      if matching_results.any?
-        @place = Place.find(matching_results.first["id"])
-      else
-        @place = Place.new(title: title, location: location)
-        unless @place.save
-          @errors.concat(@place.errors.full_messages)
-        end
+    place = fuzzy_match_find_or_create_place
+    if place.nil?
+      place = Place.new(@place_params)
+      unless place.save
+        @errors.concat(place.errors.full_messages)
       end
-      @place
     end
+    place
+  end
+
+  def fuzzy_find_place_by_latitude_longitude
+    service = Places::FuzzyFindPlaceByLatitudeLongitudeService.new(place_params: @place_params)
+    place = service.call
+    if service.errors.any?
+      @errors.concat(service.errors)
+    end
+    place
+  end
+
+  def fuzzy_match_find_or_create_place
+    service = Places::FuzzyFindPlaceByTitleLocationService.new(place_params: @place_params)
+    place = service.call
+    if service.errors.any?
+      @errors.concat(service.errors)
+    end
+    place
   end
 end

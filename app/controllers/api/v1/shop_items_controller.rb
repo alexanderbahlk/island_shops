@@ -46,7 +46,7 @@ class Api::V1::ShopItemsController < Api::V1::SecureAppController
   end
 
   def place_params
-    params.require(:place).permit(:title, :location)
+    params.require(:place).permit(:title, :location, :latitude, :longitude)
   end
 
   def add_to_active_shopping_list_param

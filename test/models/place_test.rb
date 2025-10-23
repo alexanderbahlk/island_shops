@@ -4,7 +4,9 @@
 #
 #  id         :bigint           not null, primary key
 #  is_online  :boolean          default(FALSE), not null
+#  latitude   :decimal(10, 6)
 #  location   :string
+#  longitude  :decimal(10, 6)
 #  title      :string           not null
 #  uuid       :string           not null
 #  created_at :datetime         not null
