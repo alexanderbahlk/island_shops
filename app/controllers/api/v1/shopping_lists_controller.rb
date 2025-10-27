@@ -64,6 +64,7 @@ module Api
         {
           slug: @shopping_list.slug,
           group_shopping_lists_items_by: current_user.group_shopping_lists_items_by,
+          shop_item_stock_status_filter: current_user.shop_item_stock_status_filter,
           display_name: @shopping_list.display_name,
           shopping_list_items: @shopping_list.shopping_list_items_for_view_list(@current_user.group_shopping_lists_items_by),
           shopping_list_items_count: @shopping_list.shopping_list_items.count,

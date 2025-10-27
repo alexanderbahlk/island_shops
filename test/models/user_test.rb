@@ -5,6 +5,7 @@
 #  id                            :bigint           not null, primary key
 #  app_hash                      :string
 #  group_shopping_lists_items_by :string
+#  shop_item_stock_status_filter :string           default("all"), not null
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #  active_shopping_list_id       :bigint

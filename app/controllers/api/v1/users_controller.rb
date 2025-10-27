@@ -29,8 +29,18 @@ class Api::V1::UsersController < Api::V1::SecureAppController
   end
 
   def update_group_shopping_lists_items_by
+    Rails.logger.info("Received params for update_group_shopping_lists_items_by: #{params.inspect}")
     if @current_user.update(group_shopping_lists_items_by: params[:group_shopping_lists_items_by])
       render json: { message: "Group shopping lists items by updated successfully", user: @current_user }, status: :ok
+    else
+      render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_content
+    end
+  end
+
+  def update_filter_shop_items_by_stock_status
+    Rails.logger.info("Received params for update_filter_shop_items_by_stock_status: #{params.inspect}")
+    if @current_user.update(shop_item_stock_status_filter: params[:filter])
+      render json: { message: "Shop item stock status filter updated successfully", user: @current_user }, status: :ok
     else
       render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_content
     end

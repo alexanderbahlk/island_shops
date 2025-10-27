@@ -10,8 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_23_155039) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_24_175247) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "cube"
+  enable_extension "earthdistance"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
@@ -169,6 +171,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_23_155039) do
     t.datetime "updated_at", null: false
     t.string "group_shopping_lists_items_by"
     t.bigint "active_shopping_list_id"
+    t.string "shop_item_stock_status_filter", default: "all", null: false
     t.index ["active_shopping_list_id"], name: "index_users_on_active_shopping_list_id"
   end
 

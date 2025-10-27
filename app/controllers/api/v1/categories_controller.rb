@@ -11,10 +11,12 @@ module Api
           return
         end
 
+        filter_shop_items_by_stock_status = @current_user.filter_shop_items_by_stock_status?
+
         # Fetch shop items using the service
         service = FetchShopItemsForCategoryService.new(
           category: category,
-          hide_out_of_stock: params[:hide_out_of_stock] == "true",
+          hide_out_of_stock: filter_shop_items_by_stock_status,
           limit: params[:limit]&.to_i || 5,
         )
         shop_items = service.fetch_shop_items

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       resources :users, only: [] do
         post :login_or_create, on: :collection
         patch :update_group_shopping_lists_items_by, on: :collection
+        patch :update_filter_shop_items_by_stock_status, on: :collection
         patch :update_active_shopping_list, on: :collection
         post :add_shopping_list, on: :collection
         post :remove_shopping_list, on: :collection
