@@ -11,6 +11,8 @@ class ShopItemModelEmbeddingsUpdateJob < ApplicationJob
     # Load the Informers model
     model = Informers.pipeline("embedding", "sentence-transformers/all-MiniLM-L6-v2")
 
+    to_process = ShopItem.needs_model_embedding_update.count
+    Rails.logger.info "Starting ShopItem model embedding update job. #{to_process} items to process."
     processed_count = 0
     error_count = 0
 
@@ -27,6 +29,7 @@ class ShopItemModelEmbeddingsUpdateJob < ApplicationJob
           processed_count += 1
 
           Rails.logger.info "Updated model embedding for ShopItem #{shop_item.id} (#{shop_item.title})"
+          Rails.logger.info "Progress: #{processed_count}/#{to_process} items processed"
 
           # Optional: Sleep briefly to avoid overwhelming the database
           sleep(0.2)
@@ -36,7 +39,11 @@ class ShopItemModelEmbeddingsUpdateJob < ApplicationJob
         end
       end
     end
-
     Rails.logger.info "ShopItem Category assignment completed: #{processed_count} processed, #{error_count} errors"
+
+    #how to clean the memory afterwards
+    model = nil
+    GC.start
+    sleep(1)
   end
 end

@@ -28,6 +28,8 @@ class AiShopItemCategoryMatchJob < ApplicationJob
       category_embeddings[category.id] = model.call(matching_context) # Use `call` to generate embeddings
     end
 
+    to_process = ShopItem.needs_ai_category_match.count
+    Rails.logger.info "Starting AiShopItemCategoryMatch job. #{to_process} items to process."
     processed_count = 0
     matched_count = 0
     error_count = 0
@@ -66,6 +68,8 @@ class AiShopItemCategoryMatchJob < ApplicationJob
             Rails.logger.info "No suitable category found for ShopItem #{shop_item.title} (highest similarity: #{highest_similarity.round(4)})"
           end
 
+          Rails.logger.info "Progress: #{processed_count}/#{to_process} items processed"
+
           processed_count += 1
 
           # Optional: Sleep briefly to avoid overwhelming the database
@@ -78,6 +82,10 @@ class AiShopItemCategoryMatchJob < ApplicationJob
     end
 
     Rails.logger.info "ShopItem Category assignment completed: #{processed_count} processed, #{matched_count} matched, #{error_count} errors"
+    #how to clean the memory afterwards
+    model = nil
+    GC.start
+    sleep(1)
   end
 
   private
