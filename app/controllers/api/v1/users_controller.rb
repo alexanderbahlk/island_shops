@@ -106,4 +106,29 @@ class Api::V1::UsersController < Api::V1::SecureAppController
       render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_content
     end
   end
+
+  def update_tutorial_step
+    if @current_user.update(tutorial_step: params[:tutorial_step])
+      render json: { message: "Tutorial step updated successfully", tutorial_step: @current_user.tutorial_step }, status: :ok
+    else
+      render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_content
+    end
+  end
+
+  # return
+  #  app_hash                      :string
+  #  group_shopping_lists_items_by :string
+  #  shop_item_stock_status_filter :string           default("all"), not null
+  #  tutorial_step                 :integer          default(0), not null
+  #  active_shopping_list_id       :bigint
+  def show
+    active_shopping_list_slug = @current_user.active_shopping_list&.slug
+    render json: {
+             app_hash: @current_user.app_hash,
+             group_shopping_lists_items_by: @current_user.group_shopping_lists_items_by,
+             shop_item_stock_status_filter: @current_user.shop_item_stock_status_filter,
+             tutorial_step: @current_user.tutorial_step,
+             active_shopping_list: active_shopping_list_slug,
+           }, status: :ok
+  end
 end

@@ -6,6 +6,7 @@
 #  app_hash                      :string
 #  group_shopping_lists_items_by :string
 #  shop_item_stock_status_filter :string           default("all"), not null
+#  tutorial_step                 :integer          default(0), not null
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #  active_shopping_list_id       :bigint
@@ -33,6 +34,8 @@ class User < ApplicationRecord
 
   validates :group_shopping_lists_items_by, inclusion: { in: ShoppingList::SHOPPING_LIST_GROUP_BY_ORDERS, allow_nil: true }
   validates :shop_item_stock_status_filter, inclusion: { in: SHOP_ITEM_STOCK_STATUS_FILTERS }
+
+  validates :tutorial_step, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def self.ransackable_attributes(auth_object = nil)
     ["app_hash", "created_at", "id", "id_value", "updated_at"]

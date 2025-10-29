@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   # Permit parameters for strong parameter handling
-  permit_params :app_hash
+  permit_params :app_hash, :tutorial_step
 
   # Customize the index page
   index do
@@ -26,6 +26,9 @@ ActiveAdmin.register User do
     f.inputs "User Details" do
       f.input :app_hash
     end
+    f.inputs "Tutorial" do
+      f.input :tutorial_step
+    end
     f.actions
   end
 
@@ -34,6 +37,10 @@ ActiveAdmin.register User do
     attributes_table do
       row :id
       row :app_hash
+      row :tutorial_step
+      row :active_shopping_list
+      row :group_shopping_lists_items_by
+      row :shop_item_stock_status_filter
       row :created_at
       row :updated_at
     end

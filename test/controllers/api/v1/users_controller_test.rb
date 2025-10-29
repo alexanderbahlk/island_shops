@@ -259,4 +259,63 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not response_data["shopping_lists"].empty?
     assert_equal response_data["shopping_lists"].size, 2
   end
+
+  # Test for update_tutorial_step
+  test "should update tutorial step with valid value" do
+    patch update_tutorial_step_api_v1_users_path,
+          params: { tutorial_step: 3 }.to_json,
+          headers: @headers
+
+    assert_response :ok
+    response_data = JSON.parse(response.body)
+    assert_equal "Tutorial step updated successfully", response_data["message"]
+    assert_equal 3, response_data["user"]["tutorial_step"]
+    @user.reload
+    assert_equal 3, @user.tutorial_step
+  end
+
+  test "should not update tutorial step if headers miss X-SECURE-APP-USER-HASH" do
+    patch update_tutorial_step_api_v1_users_path,
+          params: { tutorial_step: 3 }.to_json,
+          headers: { "Content-Type" => "application/json" }
+
+    assert_response :bad_request
+    response_data = JSON.parse(response.body)
+    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    @user.reload
+    assert_not_equal 3, @user.tutorial_step
+  end
+
+  test "should not update tutorial step with invalid value" do
+    patch update_tutorial_step_api_v1_users_path,
+          params: { tutorial_step: "invalid" }.to_json,
+          headers: @headers
+
+    assert_response :unprocessable_content
+    response_data = JSON.parse(response.body)
+    assert_includes response_data["errors"], "Tutorial step is not a number"
+    @user.reload
+    assert_not_equal "invalid", @user.tutorial_step
+  end
+
+  # Test for show
+  test "should show user details" do
+    get api_v1_users_path, headers: @headers
+
+    assert_response :ok
+    response_data = JSON.parse(response.body)
+    assert_equal @user.app_hash, response_data["app_hash"]
+    assert_equal @user.group_shopping_lists_items_by, response_data["group_shopping_lists_items_by"]
+    assert_equal @user.shop_item_stock_status_filter, response_data["shop_item_stock_status_filter"]
+    assert_equal @user.tutorial_step, response_data["tutorial_step"]
+    assert_equal @user.active_shopping_list.slug, response_data["active_shopping_list"]
+  end
+
+  test "should not show user details if headers miss X-SECURE-APP-USER-HASH" do
+    get api_v1_users_path, headers: { "Content-Type" => "application/json" }
+
+    assert_response :bad_request
+    response_data = JSON.parse(response.body)
+    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+  end
 end

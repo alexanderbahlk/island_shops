@@ -46,6 +46,8 @@ Rails.application.routes.draw do
         post :add_shopping_list, on: :collection
         post :remove_shopping_list, on: :collection
         get :fetch_all_shopping_lists_slugs, on: :collection
+        patch :update_tutorial_step, on: :collection
+        get :show, on: :collection
       end
       get "/search/products", to: "search#products", defaults: { format: :json }
       get "/search/products_with_shop_items", to: "search#products_with_shop_items", defaults: { format: :json }
