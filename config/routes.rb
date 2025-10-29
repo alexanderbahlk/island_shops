@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         patch :update_active_shopping_list, on: :collection
         post :add_shopping_list, on: :collection
         post :remove_shopping_list, on: :collection
+        post :send_feedback, on: :collection
         get :fetch_all_shopping_lists_slugs, on: :collection
         patch :update_tutorial_step, on: :collection
         get :show, on: :collection

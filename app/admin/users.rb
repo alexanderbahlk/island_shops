@@ -71,6 +71,14 @@ ActiveAdmin.register User do
         column :created_at
       end
     end
+
+    panel "Feedback" do
+      table_for user.feedbacks do
+        column :id
+        column :content
+        column :created_at
+      end
+    end
   end
 
   # Add filters for the index page

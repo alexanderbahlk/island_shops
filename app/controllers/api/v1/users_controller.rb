@@ -115,6 +115,17 @@ class Api::V1::UsersController < Api::V1::SecureAppController
     end
   end
 
+  def send_feedback
+    Rails.logger.info("Received params for send_feedback: #{params.inspect}")
+    feedback_params = params.permit(:content)
+    feedback = @current_user.feedbacks.new(content: feedback_params[:content])
+    if feedback.save
+      render json: { message: "Feedback submitted successfully" }, status: :ok
+    else
+      render json: { errors: feedback.errors.full_messages }, status: :unprocessable_content
+    end
+  end
+
   # return
   #  app_hash                      :string
   #  group_shopping_lists_items_by :string

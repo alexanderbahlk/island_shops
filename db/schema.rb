@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_28_192039) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_29_161709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -71,6 +71,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_28_192039) do
     t.bigint "category_id", null: false
     t.index ["category_id", "shopping_list_id"], name: "index_shopping_lists_categories_on_category_and_list"
     t.index ["shopping_list_id", "category_id"], name: "index_shopping_lists_categories_on_list_and_category", unique: true
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -177,6 +185,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_28_192039) do
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "shop_item_updates", "shop_items"
   add_foreign_key "shop_items", "categories"
   add_foreign_key "shop_items", "places"

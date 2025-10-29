@@ -24,6 +24,8 @@ class User < ApplicationRecord
   has_many :shopping_lists, through: :shopping_list_users
   has_many :shop_items
 
+  has_many :feedbacks, dependent: :destroy
+
   has_many :shopping_list_items, dependent: :destroy
   belongs_to :active_shopping_list, class_name: "ShoppingList", optional: true
   validate :active_shopping_list_belongs_to_user
