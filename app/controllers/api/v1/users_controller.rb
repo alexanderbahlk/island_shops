@@ -117,13 +117,20 @@ class Api::V1::UsersController < Api::V1::SecureAppController
 
   def send_feedback
     Rails.logger.info("Received params for send_feedback: #{params.inspect}")
-    feedback_params = params.permit(:content)
+    feedback_params = params.permit("content", "contact_details")
     #sanitize the content
     #remove any script tags
-    feedback_params[:content] = feedback_params[:content].gsub(/<script.*?>.*?<\/script>/m, "")
+    feedback_params[:content] = feedback_params[:content].to_s.gsub(/<script.*?>.*?<\/script>/m, "")
     feedback_params[:content] = ActionController::Base.helpers.strip_tags(feedback_params[:content])
 
-    feedback = @current_user.feedbacks.new(content: feedback_params[:content])
+    if feedback_params[:contact_details].present?
+      feedback_params[:contact_details] = feedback_params[:contact_details].to_s.gsub(/<script.*?>.*?<\/script>/m, "")
+      feedback_params[:contact_details] = ActionController::Base.helpers.strip_tags(feedback_params[:contact_details])
+    else
+      feedback_params[:contact_details] = nil
+    end
+
+    feedback = @current_user.feedbacks.new(content: feedback_params[:content], contact_details: feedback_params[:contact_details])
     if feedback.save
       render json: { message: "Feedback submitted successfully" }, status: :ok
     else

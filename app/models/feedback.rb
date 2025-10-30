@@ -2,11 +2,12 @@
 #
 # Table name: feedbacks
 #
-#  id         :bigint           not null, primary key
-#  content    :text             not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :bigint           not null
+#  id              :bigint           not null, primary key
+#  contact_details :string
+#  content         :text             not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :bigint           not null
 #
 # Indexes
 #

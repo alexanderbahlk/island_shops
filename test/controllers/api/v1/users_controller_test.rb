@@ -269,7 +269,7 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     response_data = JSON.parse(response.body)
     assert_equal "Tutorial step updated successfully", response_data["message"]
-    assert_equal 3, response_data["user"]["tutorial_step"]
+    assert_equal 3, response_data["tutorial_step"]
     @user.reload
     assert_equal 3, @user.tutorial_step
   end
@@ -317,5 +317,88 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
     response_data = JSON.parse(response.body)
     assert_equal "Invalid APP-USER-HASH", response_data["error"]
+  end
+
+  # Test for send_feedback
+  test "should send feedback with valid content and contact details" do
+    assert_difference("Feedback.count", 1) do
+      post send_feedback_api_v1_users_path,
+           params: { content: "This is a test feedback.", contact_details: "user@example.com" }.to_json,
+           headers: @headers
+
+      assert_response :ok
+    end
+
+    response_data = JSON.parse(response.body)
+    assert_equal "Feedback submitted successfully", response_data["message"]
+    feedback = Feedback.last
+    assert_equal @user.id, feedback.user_id
+    assert_equal "This is a test feedback.", feedback.content
+    assert_equal "user@example.com", feedback.contact_details
+  end
+
+  test "should sanitize feedback content and contact details with script tags" do
+    malicious_content = "<script>alert('Hacked!');</script>This is a test feedback."
+    malicious_contact_details = "<script>alert('Hacked!');</script>user@example.com"
+    sanitized_content = "This is a test feedback."
+    sanitized_contact_details = "user@example.com"
+
+    assert_difference("Feedback.count", 1) do
+      post send_feedback_api_v1_users_path,
+           params: { content: malicious_content, contact_details: malicious_contact_details }.to_json,
+           headers: @headers
+
+      assert_response :ok
+    end
+
+    response_data = JSON.parse(response.body)
+    assert_equal "Feedback submitted successfully", response_data["message"]
+    feedback = Feedback.last
+    assert_equal @user.id, feedback.user_id
+    assert_equal sanitized_content, feedback.content
+    assert_equal sanitized_contact_details, feedback.contact_details
+  end
+
+  test "should not send feedback with empty content" do
+    assert_no_difference("Feedback.count") do
+      post send_feedback_api_v1_users_path,
+           params: { content: "", contact_details: "user@example.com" }.to_json,
+           headers: @headers
+
+      assert_response :unprocessable_content
+    end
+
+    response_data = JSON.parse(response.body)
+    assert_includes response_data["errors"], "Content can't be blank"
+  end
+
+  test "should not send feedback if headers miss X-SECURE-APP-USER-HASH" do
+    assert_no_difference("Feedback.count") do
+      post send_feedback_api_v1_users_path,
+           params: { content: "This is a test feedback.", contact_details: "user@example.com" }.to_json,
+           headers: { "Content-Type" => "application/json" }
+
+      assert_response :bad_request
+    end
+
+    response_data = JSON.parse(response.body)
+    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+  end
+
+  test "should send feedback with only content and no contact details" do
+    assert_difference("Feedback.count", 1) do
+      post send_feedback_api_v1_users_path,
+           params: { content: "This is a test feedback." }.to_json,
+           headers: @headers
+
+      assert_response :ok
+    end
+
+    response_data = JSON.parse(response.body)
+    assert_equal "Feedback submitted successfully", response_data["message"]
+    feedback = Feedback.last
+    assert_equal @user.id, feedback.user_id
+    assert_equal "This is a test feedback.", feedback.content
+    assert_nil feedback.contact_details
   end
 end
