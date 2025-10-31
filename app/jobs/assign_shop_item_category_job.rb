@@ -1,23 +1,28 @@
 class AssignShopItemCategoryJob < ApplicationJob
   queue_as :default
 
-  def perform(batch_size: 10)
+  def perform(args)
+    similarity_threshold = args[:similarity_threshold]
+    batch_size = args[:batch_size] || 10
     Rails.logger.info "Starting ShopItem Category assignment job"
 
     processed_count = 0
     matched_count = 0
     error_count = 0
 
-    ShopItem.missing_category.find_in_batches(batch_size: batch_size) do |batch|
+    ShopItem.pending_approval.find_in_batches(batch_size: batch_size) do |batch|
       batch.each do |shop_item|
         begin
           # Try to find the best matching category
-          best_match = ShopItemCategoryMatcher.new(shop_item: shop_item).find_best_match()
+          best_match = ShopItemCategoryMatcher.new(shop_item: shop_item, sim: similarity_threshold).find_best_match()
 
           if best_match
             shop_item.update!(category: best_match)
             matched_count += 1
             Rails.logger.info "Assigned '#{best_match.title}' to '#{shop_item.title}'"
+          else
+            shop_item.update!(category: nil)
+            Rails.logger.info "No matching category found for '#{shop_item.title}'"
           end
 
           processed_count += 1

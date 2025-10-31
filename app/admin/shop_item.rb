@@ -16,7 +16,7 @@ ActiveAdmin.register ShopItem do
   end
 
   action_item :assign_missing_categories, only: :index do
-    link_to "Auto-assign Missing Categories",
+    link_to "Auto-assign Categories",
             assign_missing_categories_admin_shop_items_path,
             method: :post,
             data: {
@@ -608,7 +608,8 @@ ActiveAdmin.register ShopItem do
     end
 
     # Enqueue the job
-    AssignShopItemCategoryJob.perform_later
+    similarity_threshold = 0.3
+    AssignShopItemCategoryJob.perform_later(similarity_threshold: similarity_threshold)
 
     # You can implement auto-assignment logic here or create a job
     redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results.")

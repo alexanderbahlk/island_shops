@@ -6,8 +6,9 @@ class ShopItemCategoryMatcher
 
   attr_reader :shop_item
 
-  def initialize(shop_item:)
+  def initialize(shop_item:, sim: SIMILARITY_THRESHOLD)
     @shop_item = shop_item
+    @similarity_threshold = sim
   end
 
   def find_best_match()
@@ -63,12 +64,12 @@ class ShopItemCategoryMatcher
         FROM categories
         WHERE category_type = #{Category.category_types[:product]}
           AND (
-            similarity(categories.path, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
-            OR similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
-            OR similarity(categories.title, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
+            similarity(categories.path, #{sanitized_shop_item_text}) > #{@similarity_threshold}
+            OR similarity(split_part(categories.path, '/', array_length(string_to_array(categories.path, '/'), 1)), #{sanitized_shop_item_text}) > #{@similarity_threshold}
+            OR similarity(categories.title, #{sanitized_shop_item_text}) > #{@similarity_threshold}
             OR EXISTS (
               SELECT 1 FROM unnest(categories.synonyms) AS syn
-              WHERE similarity(syn, #{sanitized_shop_item_text}) > #{SIMILARITY_THRESHOLD}
+              WHERE similarity(syn, #{sanitized_shop_item_text}) > #{@similarity_threshold}
             )
           )
         ORDER BY sim_score DESC
