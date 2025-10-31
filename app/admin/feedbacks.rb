@@ -4,6 +4,7 @@ ActiveAdmin.register Feedback do
     selectable_column
     id_column
     column :user
+    column :contact_details
     column :content
     column :created_at
     actions
@@ -23,6 +24,7 @@ ActiveAdmin.register Feedback do
     attributes_table do
       row :id
       row :user
+      row :contact_details
       row :content
       row :created_at
       row :updated_at
