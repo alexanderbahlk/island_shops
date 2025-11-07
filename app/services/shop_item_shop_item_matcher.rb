@@ -73,7 +73,7 @@ class ShopItemShopItemMatcher
   end
 
   def sql_with_same_place_and_breadcrumb(sanitized_shop_item_title, similarity_threshold)
-    sanitized_place = ActiveRecord::Base.connection.quote(@shop_item.place)
+    sanitized_place_id = ActiveRecord::Base.connection.quote(@shop_item.place.id)
     sanitized_breadcrumb = ActiveRecord::Base.connection.quote(@shop_item.breadcrumb)
 
     sql = <<~SQL
@@ -82,8 +82,10 @@ class ShopItemShopItemMatcher
                similarity(shop_items.title, #{sanitized_shop_item_title})
              ) as sim_score
       FROM shop_items
-      WHERE approved = true
-        AND shop_items.place = #{sanitized_place}
+      WHERE shop_items.approved = true
+        AND shop_items.place_id IS NOT NULL
+        AND shop_items.breadcrumb IS NOT NULL
+        AND shop_items.place_id = #{sanitized_place_id}
         AND shop_items.breadcrumb = #{sanitized_breadcrumb}
         AND similarity(shop_items.title, #{sanitized_shop_item_title}) > #{similarity_threshold}
       ORDER BY sim_score DESC

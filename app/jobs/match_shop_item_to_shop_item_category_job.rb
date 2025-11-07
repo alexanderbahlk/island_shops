@@ -1,6 +1,9 @@
 class MatchShopItemToShopItemCategoryJob < ApplicationJob
   queue_as :default
 
+
+  #MatchShopItemToShopItemCategoryJob.perform_now(similarity_threshold: 0.6, batch_size: 20)
+
   def perform(args)
     similarity_threshold = args[:similarity_threshold]
     batch_size = args[:batch_size] || 10
