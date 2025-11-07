@@ -47,6 +47,7 @@ shop_item_one:
   title: "Organic Milk"
   size: 1.0
   unit: "l"
+  breadcrumb: "PriceSmart > Groceries > Dairy and Eggs"
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
   uuid: 123e4567-e89b-12d3-a456-426614174999

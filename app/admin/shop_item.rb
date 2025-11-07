@@ -600,9 +600,9 @@ ActiveAdmin.register ShopItem do
 
   # Collection action for auto-assigning categories
   collection_action :assign_missing_categories, method: :post do
-    missing_count = ShopItem.missing_category.count
+    pending_approval_count = ShopItem.pending_approval.count
 
-    if missing_count == 0
+    if pending_approval_count == 0
       redirect_to_collection_with_filters(:notice, "No items found without category assignments.")
       return
     end
@@ -612,7 +612,7 @@ ActiveAdmin.register ShopItem do
     AssignShopItemCategoryJob.perform_later(similarity_threshold: similarity_threshold)
 
     # You can implement auto-assignment logic here or create a job
-    redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{missing_count} items. Check back in a few minutes to see results.")
+    redirect_to_collection_with_filters(:notice, "Auto-assignment job started for #{pending_approval_count} items. Check back in a few minutes to see results.")
   end
 
   # Collection action for auto-assigning categories
