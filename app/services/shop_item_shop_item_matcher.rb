@@ -19,7 +19,11 @@ class ShopItemShopItemMatcher
 
     found_shop_item = find_shop_item_by_title(@shop_item.title)
 
-    return found_shop_item
+    if found_shop_item.present? && found_shop_item.category.present?
+      return found_shop_item.category
+    else
+      return nil
+    end
   end
 
   private

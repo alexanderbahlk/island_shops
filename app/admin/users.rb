@@ -7,8 +7,7 @@ ActiveAdmin.register User do
     selectable_column
     id_column
     column :app_hash
-    column :created_at
-    column :updated_at
+    column :tutorial_step
     column :shop_item_count do |user|
       user.shop_items.size
     end
@@ -18,6 +17,8 @@ ActiveAdmin.register User do
     column :shopping_list_items_count do |user|
       user.shopping_list_items.size
     end
+    column :created_at
+    column :updated_at
     actions
   end
 

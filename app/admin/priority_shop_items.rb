@@ -15,7 +15,7 @@ ActiveAdmin.register_page "Priority Shop Items" do
       ul class: "priority-shop_item-list" do
         priority_shop_items.each do |item|
           li class: "priority-shop_item-list-item" do
-            span "#{item[:product].title} - #{item[:count]}"
+            span "(#{item[:product].id}) #{item[:product].title} - #{item[:count]}"
             text_node link_to "View Shop Items", admin_shop_items_path(q: { category_id_eq: item[:product].id, status_eq: "pending_approval" }), style: "margin-left: 10px;"
             text_node " | "
             text_node link_to "Start Overwrite Job", admin_priority_shop_items_start_overwrite_job_path(old_category_id: item[:product].id), method: :post, data: { confirm: "Are you sure you want to start the OverwriteShopItemCategoryJob for this product?" }, style: "margin-left: 10px;"

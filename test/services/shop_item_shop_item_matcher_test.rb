@@ -12,7 +12,7 @@ class ShopItemShopItemMatcherTest < ActiveSupport::TestCase
     newOrganicMilkShopItem = ShopItem.new(title: "Organic Milk 1l", url: "www.example.com", breadcrumb: "PriceSmart > Groceries > Dairy and Eggs", place: @place)
     result = ShopItemShopItemMatcher.new(shop_item: newOrganicMilkShopItem).find_best_match
 
-    assert_equal approvedOrganicMilkShopItem.category, result.category
+    assert_equal approvedOrganicMilkShopItem.category, result
   end
 
   test "should not match gouda cheese category" do
