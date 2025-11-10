@@ -198,7 +198,7 @@ ActiveAdmin.register ShopItem do
     end
     column :updated_at
     actions do |shop_item|
-      item "Re-assign Category", auto_assign_category_admin_shop_item_path(shop_item),
+      item "Re-assign Category", re_assign_category_admin_shop_item_path(shop_item),
            method: :post,
            class: "member_link reassign-category-link custom-action-link",
            data: {
@@ -704,12 +704,16 @@ ActiveAdmin.register ShopItem do
     end
   end
 
-  member_action :auto_assign_category, method: :post do
+  member_action :re_assign_category, method: :post do
     begin
       original_category = resource.category
 
-      # Use the category matcher to find the best match
-      best_match = ShopItemCategoryMatcher.new(shop_item: resource).find_best_match()
+      best_match = ShopItemShopItemMatcher.new(shop_item: resource).find_best_match()
+
+      if best_match.nil?
+        # Use the category matcher to find the best match
+        best_match = ShopItemCategoryMatcher.new(shop_item: resource).find_best_match()
+      end
 
       if best_match
         resource.update!(category: best_match)
