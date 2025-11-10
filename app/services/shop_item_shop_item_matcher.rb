@@ -17,10 +17,10 @@ class ShopItemShopItemMatcher
 
     return nil unless pg_trgm_available?
 
-    found_shop_item = find_shop_item_by_title(@shop_item.title)
+    found_category = find_category_by_title(@shop_item.title)
 
-    if found_shop_item.present? && found_shop_item.category.present?
-      return found_shop_item.category
+    if found_category.present?
+      return found_category
     else
       return nil
     end
@@ -28,7 +28,7 @@ class ShopItemShopItemMatcher
 
   private
 
-  def find_shop_item_by_title(title)
+  def find_category_by_title(title)
     # Clean and normalize the title
     normalized_title = normalize_title(title)
     sanitized_shop_item_title = ActiveRecord::Base.connection.quote(normalized_title)
@@ -52,8 +52,10 @@ class ShopItemShopItemMatcher
       # Convert the first result back to a ShopItem object
       first_result = results.first
       shop_item = ShopItem.find(first_result["id"])
-      shop_item.define_singleton_method(:sim_score) { first_result["sim_score"].to_f }
-      shop_item
+      return nil if shop_item.category.nil?
+      category = shop_item.category
+      category.define_singleton_method(:sim_score) { first_result["sim_score"].to_f }
+      category
     rescue => e
       Rails.logger.error "Error in find_fuzzy_match: #{e.message}"
       nil
