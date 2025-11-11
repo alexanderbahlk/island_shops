@@ -30,6 +30,15 @@ class ScrapedShopItemBuilder < BaseShopItemBuilder
     success?
   end
 
+  def decompose
+    # Clear instance variables to avoid memory leaks
+    @shop_item = nil
+    @shop_item_update = nil
+    @shop_item_params = nil
+    @shop_item_update_params = nil
+    @errors = nil
+  end
+
   def success?
     @errors.empty?
   end

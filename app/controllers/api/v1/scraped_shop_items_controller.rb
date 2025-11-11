@@ -16,6 +16,7 @@ class Api::V1::ScrapedShopItemsController < ApplicationController
     else
       render json: { errors: builder.errors }, status: :unprocessable_content
     end
+    builder.decompose
   end
 
   private
