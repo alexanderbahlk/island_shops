@@ -10,7 +10,6 @@
 #
 
 # Require the CategoryImporter
-require_relative "seeds/category_importer"
 
 # Only create the admin user if it doesn't already exist
 if AdminUser.where(email: "admin@islandshop.com").blank?

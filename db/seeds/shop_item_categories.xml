@@ -129,7 +129,7 @@
                                 <name>Infant Formula</name>
                             </type>
                             <type>
-                                <name>Poweder</name>
+                                <name>Powder</name>
                             </type>
                             <type>
                                 <name>Toddler Formula</name>
@@ -441,7 +441,22 @@
                                 <name>Bagels</name>
                             </type>
                             <type>
+                                <name>Banana Bread</name>
+                            </type>
+                            <type>
+                                <name>Coconut Bread</name>
+                            </type>
+                            <type>
                                 <name>Flatbreads</name>
+                            </type>
+                            <type>
+                                <name>Foccacia</name>
+                            </type>
+                            <type>
+                                <name>Hot Dog Buns</name>
+                            </type>
+                            <type>
+                                <name>Pita</name>
                             </type>
                             <type>
                                 <name>Rolls</name>
@@ -496,6 +511,10 @@
                             </type>
                             <type>
                                 <name>Cookies</name>
+                                <synonyms>
+                                    <synonym>Biscuits</synonym>
+                                    <synonym>Butter Cookies</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Creme Cakes</name>
@@ -534,6 +553,9 @@
                                 <name>Pies</name>
                             </type>
                             <type>
+                                <name>Poptarts</name>
+                            </type>
+                            <type>
                                 <name>Rainbow Cakes</name>
                             </type>
                             <type>
@@ -547,12 +569,16 @@
                             </type>
                             <type>
                                 <name>Strudel</name>
-                            </type>
-                            <type>
-                                <name>Strudel Stick</name>
+                                <synonyms>
+                                    <synonym>Strudel Bites</synonym>
+                                    <synonym>Strudel Sticks</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Tarts</name>
+                                <synonyms>
+                                    <synonym>Tarte</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Turnovers</name>
@@ -578,12 +604,18 @@
                             </type>
                             <type>
                                 <name>Cider</name>
+                                <synonyms>
+                                    <synonym>Sparkling Cider</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Cocktails</name>
                             </type>
                             <type>
                                 <name>Gin</name>
+                            </type>
+                            <type>
+                                <name>Port Wine</name>
                             </type>
                             <type>
                                 <name>Red Wine</name>
@@ -601,6 +633,9 @@
                                 <name>Shandy</name>
                             </type>
                             <type>
+                                <name>Sparkling Wine</name>
+                            </type>
+                            <type>
                                 <name>Tequila</name>
                             </type>
                             <type>
@@ -612,9 +647,6 @@
                             <type>
                                 <name>White Wine</name>
                             </type>
-                            <type>
-                                <name>Wine</name>
-                            </type>
                         </types>
                     </category>
                     <category>
@@ -624,13 +656,29 @@
                                 <name>Black Tea</name>
                             </type>
                             <type>
+                                <name>Cappuccino</name>
+                            </type>
+                            <type>
                                 <name>Chai Tea</name>
                             </type>
                             <type>
                                 <name>Coffee</name>
+                                <synonyms>
+                                    <synonym>Coffee Blend</synonym>
+                                    <synonym>Coffee Ground</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Coffee Beans</name>
+                            </type>
+                            <type>
+                                <name>Coffee Filters</name>
+                            </type>
+                            <type>
+                                <name>Decaf Coffee</name>
+                            </type>
+                            <type>
+                                <name>Flavoured Coffee</name>
                             </type>
                             <type>
                                 <name>Green Tea</name>
@@ -673,6 +721,7 @@
                             <type>
                                 <name>Coke</name>
                                 <synonyms>
+                                    <synonym>Coca-Cola</synonym>
                                     <synonym>Cola</synonym>
                                     <synonym>Pepsi</synonym>
                                 </synonyms>
@@ -698,6 +747,9 @@
                             </type>
                             <type>
                                 <name>Evaporated Milk</name>
+                            </type>
+                            <type>
+                                <name>Fanta</name>
                             </type>
                             <type>
                                 <name>Fante</name>
@@ -727,6 +779,9 @@
                                 <name>Grape Juice</name>
                             </type>
                             <type>
+                                <name>Grapefruit Juice</name>
+                            </type>
+                            <type>
                                 <name>Iced Tea</name>
                             </type>
                             <type>
@@ -749,6 +804,9 @@
                             </type>
                             <type>
                                 <name>Non-Alcoholic Beer</name>
+                            </type>
+                            <type>
+                                <name>Non-Alcoholic Sparkling Wine</name>
                             </type>
                             <type>
                                 <name>Non-Alcoholic Wine</name>
@@ -788,6 +846,13 @@
                             </type>
                             <type>
                                 <name>Water</name>
+                                <synonyms>
+                                    <synonym>Alkaline Water</synonym>
+                                    <synonym>Mineral Water</synonym>
+                                    <synonym>Purified Water</synonym>
+                                    <synonym>Spring Still Spring</synonym>
+                                    <synonym>Spring Water</synonym>
+                                </synonyms>
                             </type>
                         </types>
                     </category>
@@ -800,13 +865,22 @@
                         <title>Cold Cereal</title>
                         <types>
                             <type>
+                                <name>Cereal</name>
+                            </type>
+                            <type>
+                                <name>Chia Seeds</name>
+                            </type>
+                            <type>
+                                <name>Flaxseeds</name>
+                            </type>
+                            <type>
                                 <name>Granola</name>
                             </type>
                             <type>
                                 <name>Muesli</name>
                             </type>
                             <type>
-                                <name>Ready-to-Eat Cereal</name>
+                                <name>Oats</name>
                             </type>
                         </types>
                     </category>
@@ -843,6 +917,9 @@
                         <types>
                             <type>
                                 <name>Honey</name>
+                                <synonyms>
+                                    <synonym>Wildflower Honey</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Jam</name>
@@ -860,6 +937,50 @@
             <category>
                 <title>Canned &amp; Pickled Food</title>
                 <categories>
+                    <category>
+                        <title>Canned Fruits</title>
+                        <types>
+                            <type>
+                                <name>Ackees</name>
+                            </type>
+                            <type>
+                                <name>Apples</name>
+                            </type>
+                            <type>
+                                <name>Banana</name>
+                            </type>
+                            <type>
+                                <name>Cherries</name>
+                            </type>
+                            <type>
+                                <name>Fruit Cocktail</name>
+                            </type>
+                            <type>
+                                <name>Mandarines</name>
+                            </type>
+                            <type>
+                                <name>Mango</name>
+                            </type>
+                            <type>
+                                <name>Mixed Fruit</name>
+                            </type>
+                            <type>
+                                <name>Oranges</name>
+                            </type>
+                            <type>
+                                <name>Peach</name>
+                            </type>
+                            <type>
+                                <name>Pear</name>
+                            </type>
+                            <type>
+                                <name>Pineapple</name>
+                            </type>
+                            <type>
+                                <name>Tropical Fruits</name>
+                            </type>
+                        </types>
+                    </category>
                     <category>
                         <title>Canned Meals</title>
                         <types>
@@ -943,46 +1064,76 @@
                         </types>
                     </category>
                     <category>
-                        <title>Fruits</title>
+                        <title>Canned Vegetables</title>
                         <types>
                             <type>
-                                <name>Ackees</name>
+                                <name>Artichoke</name>
                             </type>
                             <type>
-                                <name>Apple</name>
+                                <name>Asparagus</name>
                             </type>
                             <type>
-                                <name>Banana</name>
+                                <name>Baked Beans</name>
                             </type>
                             <type>
-                                <name>Cherries</name>
+                                <name>Bean Sprouts</name>
                             </type>
                             <type>
-                                <name>Fruit Cocktail</name>
+                                <name>Beans</name>
+                                <synonyms>
+                                    <synonym>Black Beans</synonym>
+                                    <synonym>Green Beans</synonym>
+                                </synonyms>
                             </type>
                             <type>
-                                <name>Mandarin</name>
+                                <name>Beetroot</name>
                             </type>
                             <type>
-                                <name>Mango</name>
+                                <name>Capers</name>
                             </type>
                             <type>
-                                <name>Mixed Fruit</name>
+                                <name>Carrots</name>
                             </type>
                             <type>
-                                <name>Orange</name>
+                                <name>Chickpea</name>
                             </type>
                             <type>
-                                <name>Peach</name>
+                                <name>Corn</name>
                             </type>
                             <type>
-                                <name>Pear</name>
+                                <name>Garlic in Brine</name>
                             </type>
                             <type>
-                                <name>Pineapple</name>
+                                <name>Kidney Beans</name>
                             </type>
                             <type>
-                                <name>Tropical Fruits</name>
+                                <name>Minced Garlic</name>
+                            </type>
+                            <type>
+                                <name>Mixed Vegetables</name>
+                            </type>
+                            <type>
+                                <name>Mushrooms</name>
+                            </type>
+                            <type>
+                                <name>Olives</name>
+                                <synonyms>
+                                    <synonym>Black Olives</synonym>
+                                    <synonym>Green Olives</synonym>
+                                    <synonym>Kalamata</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Peas</name>
+                                <synonyms>
+                                    <synonym>Pigeon Peas</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Pumpkin</name>
+                            </type>
+                            <type>
+                                <name>Tomato</name>
                             </type>
                         </types>
                     </category>
@@ -1035,74 +1186,6 @@
                             </type>
                         </types>
                     </category>
-                    <category>
-                        <title>Vegetables</title>
-                        <types>
-                            <type>
-                                <name>Artichoke</name>
-                            </type>
-                            <type>
-                                <name>Asparagus</name>
-                            </type>
-                            <type>
-                                <name>Baked Beans</name>
-                            </type>
-                            <type>
-                                <name>Bean Sprouts</name>
-                            </type>
-                            <type>
-                                <name>Beans</name>
-                                <synonyms>
-                                    <synonym>Black Beans</synonym>
-                                    <synonym>Green Beans</synonym>
-                                </synonyms>
-                            </type>
-                            <type>
-                                <name>Beetroot</name>
-                            </type>
-                            <type>
-                                <name>Capers</name>
-                            </type>
-                            <type>
-                                <name>Carrots</name>
-                            </type>
-                            <type>
-                                <name>Chickpea</name>
-                            </type>
-                            <type>
-                                <name>Corn</name>
-                            </type>
-                            <type>
-                                <name>Kidney Beans</name>
-                            </type>
-                            <type>
-                                <name>Mixed Vegetables</name>
-                            </type>
-                            <type>
-                                <name>Mushrooms</name>
-                            </type>
-                            <type>
-                                <name>Olives</name>
-                                <synonyms>
-                                    <synonym>Black Olives</synonym>
-                                    <synonym>Green Olives</synonym>
-                                    <synonym>Kalamata</synonym>
-                                </synonyms>
-                            </type>
-                            <type>
-                                <name>Peas</name>
-                                <synonyms>
-                                    <synonym>Pigeon Peas</synonym>
-                                </synonyms>
-                            </type>
-                            <type>
-                                <name>Pumpkin</name>
-                            </type>
-                            <type>
-                                <name>Tomato</name>
-                            </type>
-                        </types>
-                    </category>
                 </categories>
             </category>
             <category>
@@ -1131,6 +1214,9 @@
                             </type>
                             <type>
                                 <name>Brown Sugar</name>
+                                <synonyms>
+                                    <synonym>Sugar Yellow Crystals</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Chia Seeds</name>
@@ -1148,9 +1234,6 @@
                                 <name>Coconut Flour</name>
                             </type>
                             <type>
-                                <name>Confectioners&#39; Sugar</name>
-                            </type>
-                            <type>
                                 <name>Cornmeal</name>
                             </type>
                             <type>
@@ -1159,6 +1242,8 @@
                             <type>
                                 <name>Flour</name>
                                 <synonyms>
+                                    <synonym>All Purpose Flour</synonym>
+                                    <synonym>Wheat Flour</synonym>
                                     <synonym>White Flour</synonym>
                                 </synonyms>
                             </type>
@@ -1184,6 +1269,12 @@
                                 <name>Molasses</name>
                             </type>
                             <type>
+                                <name>Muffin Mixes</name>
+                                <synonyms>
+                                    <synonym>Muffin Mix</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
                                 <name>Oat Flour</name>
                             </type>
                             <type>
@@ -1197,6 +1288,10 @@
                             </type>
                             <type>
                                 <name>Powdered Sugar</name>
+                                <synonyms>
+                                    <synonym>Confectioners&#39; Sugar</synonym>
+                                    <synonym>Sugar Icing</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Psyllium Husk</name>
@@ -1206,6 +1301,9 @@
                             </type>
                             <type>
                                 <name>Rice Flour</name>
+                            </type>
+                            <type>
+                                <name>Self Raising Flour</name>
                             </type>
                             <type>
                                 <name>Sorghum Flour</name>
@@ -1218,6 +1316,9 @@
                             </type>
                             <type>
                                 <name>Sugar</name>
+                                <synonyms>
+                                    <synonym>Sugar Granulated</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Tapioca Flour</name>
@@ -1230,6 +1331,13 @@
                             </type>
                             <type>
                                 <name>Yeast</name>
+                                <synonyms>
+                                    <synonym>Dry Yeast</synonym>
+                                    <synonym>Instant Yeast</synonym>
+                                    <synonym>Yeast Active Dry</synonym>
+                                    <synonym>Yeast Extract</synonym>
+                                    <synonym>Yeast Rapid Rise</synonym>
+                                </synonyms>
                             </type>
                         </types>
                     </category>
@@ -1252,7 +1360,13 @@
                                 <name>Coconut Oil</name>
                             </type>
                             <type>
+                                <name>Grapeseed Oil</name>
+                            </type>
+                            <type>
                                 <name>Olive Oil</name>
+                            </type>
+                            <type>
+                                <name>Rice Bran Oil</name>
                             </type>
                             <type>
                                 <name>Sunflower Oil</name>
@@ -1331,10 +1445,20 @@
                                 <name>Hoisin Sauce</name>
                             </type>
                             <type>
+                                <name>Honey Mustard</name>
+                            </type>
+                            <type>
                                 <name>Hot Sauce</name>
+                                <synonyms>
+                                    <synonym>Bajan Sauce</synonym>
+                                    <synonym>Pepper Sauce</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Ketchup</name>
+                                <synonyms>
+                                    <synonym>Tomato Ketchup</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Marinara Sauce</name>
@@ -1344,6 +1468,10 @@
                             </type>
                             <type>
                                 <name>Mustard</name>
+                                <synonyms>
+                                    <synonym>Mustard Dijon</synonym>
+                                    <synonym>Mustard Squeeze</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Pasta Sauce</name>
@@ -1371,6 +1499,9 @@
                             </type>
                             <type>
                                 <name>Sweet and Sour Sauce</name>
+                            </type>
+                            <type>
+                                <name>Tabasco Sauce</name>
                             </type>
                             <type>
                                 <name>Tapenade</name>
@@ -1403,6 +1534,9 @@
                             </type>
                             <type>
                                 <name>Allspice</name>
+                                <synonyms>
+                                    <synonym>All Purpose Seasoning</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Basil Leaves</name>
@@ -1465,6 +1599,9 @@
                                 <name>Cumin Powder</name>
                             </type>
                             <type>
+                                <name>Curry Paste</name>
+                            </type>
+                            <type>
                                 <name>Curry Powder</name>
                             </type>
                             <type>
@@ -1478,15 +1615,23 @@
                             </type>
                             <type>
                                 <name>Garlic Powder</name>
+                                <synonyms>
+                                    <synonym>Granulated Garlic</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Ginger</name>
                             </type>
                             <type>
-                                <name>Ground Black Pepper</name>
+                                <name>Ground Pakrika</name>
                             </type>
                             <type>
-                                <name>Ground Pakrika</name>
+                                <name>Ground Pepper</name>
+                                <synonyms>
+                                    <synonym>Black Pepper</synonym>
+                                    <synonym>Pepper Blend</synonym>
+                                    <synonym>Pepper Powder</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Herbes de Provence</name>
@@ -1519,13 +1664,19 @@
                                 <name>Oregano Flakes</name>
                             </type>
                             <type>
-                                <name>Paprika Poweder</name>
+                                <name>Paprika Powder</name>
+                                <synonyms>
+                                    <synonym>Paprika Blend</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Parsley Flakes</name>
                             </type>
                             <type>
                                 <name>Pepper Corn</name>
+                                <synonyms>
+                                    <synonym>Pepper Whole</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Ranch Seasoning</name>
@@ -1546,6 +1697,9 @@
                                 <name>Seasoned Salt</name>
                             </type>
                             <type>
+                                <name>Seasoning Blends</name>
+                            </type>
+                            <type>
                                 <name>Sumac</name>
                             </type>
                             <type>
@@ -1556,6 +1710,9 @@
                             </type>
                             <type>
                                 <name>Turmeric</name>
+                            </type>
+                            <type>
+                                <name>White Pepper</name>
                             </type>
                             <type>
                                 <name>Za&#39;atar</name>
@@ -1604,18 +1761,28 @@
                             </type>
                             <type>
                                 <name>Almond Milk</name>
+                                <synonyms>
+                                    <synonym>Almond Beverage</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Coconut Milk</name>
                             </type>
                             <type>
                                 <name>Creamer</name>
+                                <synonyms>
+                                    <synonym>Coffee Creamer</synonym>
+                                    <synonym>Coffee Mate</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Goat Milk</name>
                             </type>
                             <type>
                                 <name>Oat Milk</name>
+                                <synonyms>
+                                    <synonym>Oat Beverage</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Rice Milk</name>
@@ -1625,6 +1792,9 @@
                             </type>
                             <type>
                                 <name>Soy Milk</name>
+                                <synonyms>
+                                    <synonym>Soy Beverage</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Whole Milk</name>
@@ -1648,6 +1818,14 @@
                             </type>
                             <type>
                                 <name>Eggs</name>
+                                <synonyms>
+                                    <synonym>Brown Eggs</synonym>
+                                    <synonym>Free Range Eggs</synonym>
+                                    <synonym>Large Eggs</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Margarine</name>
                             </type>
                             <type>
                                 <name>Sour Cream</name>
@@ -1661,16 +1839,25 @@
                                 <name>Flavoured Yogurt</name>
                             </type>
                             <type>
-                                <name>Frozen Yogurt</name>
-                            </type>
-                            <type>
                                 <name>Greek Yogurt</name>
                             </type>
                             <type>
-                                <name>Probiotic Yogurt</name>
+                                <name>Light Yogurt</name>
                             </type>
                             <type>
-                                <name>Regular Yogurt</name>
+                                <name>Low Fat Yogurt</name>
+                            </type>
+                            <type>
+                                <name>Plain Yogurt</name>
+                                <synonyms>
+                                    <synonym>Regular Yogurt</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Probiotic Yogurt</name>
+                                <synonyms>
+                                    <synonym>Activia Yogurt</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Unsweetened Yogurt</name>
@@ -1726,6 +1913,14 @@
                 </categories>
             </category>
             <category>
+                <title>Dried Food</title>
+                <categories>
+                    <category>
+                        <title>Dried Vegetables</title>
+                    </category>
+                </categories>
+            </category>
+            <category>
                 <title>Fresh Food</title>
                 <categories>
                     <category>
@@ -1735,91 +1930,76 @@
                                 <name>Abiu</name>
                             </type>
                             <type>
-                                <name>Apple</name>
+                                <name>Apples</name>
                             </type>
                             <type>
-                                <name>Apricot</name>
+                                <name>Apricots</name>
                             </type>
                             <type>
-                                <name>Banana</name>
+                                <name>Bananas</name>
                             </type>
                             <type>
-                                <name>Barberry</name>
-                            </type>
-                            <type>
-                                <name>Berrie</name>
+                                <name>Barberries</name>
                             </type>
                             <type>
                                 <name>Black Grapes</name>
                             </type>
                             <type>
-                                <name>Blackberry</name>
+                                <name>Blackberries</name>
                             </type>
                             <type>
-                                <name>Blueberry</name>
-                            </type>
-                            <type>
-                                <name>Boysenberrie</name>
+                                <name>Blueberries</name>
                             </type>
                             <type>
                                 <name>Cantaloupe</name>
+                                <synonyms>
+                                    <synonym>Musk Melon</synonym>
+                                </synonyms>
                             </type>
                             <type>
-                                <name>Cherry</name>
+                                <name>Cherries</name>
                             </type>
                             <type>
-                                <name>Chokecherrie</name>
+                                <name>Chokecherries</name>
                             </type>
                             <type>
-                                <name>Chokecherry</name>
+                                <name>Clementines</name>
                             </type>
                             <type>
-                                <name>Clementine</name>
+                                <name>Cloudberries</name>
                             </type>
                             <type>
-                                <name>Cloudberrie</name>
-                            </type>
-                            <type>
-                                <name>Cloudberry</name>
-                            </type>
-                            <type>
-                                <name>Cranberry</name>
+                                <name>Cranberries</name>
                             </type>
                             <type>
                                 <name>Currants</name>
                             </type>
                             <type>
-                                <name>Custard Apple</name>
+                                <name>Custard Apples</name>
                             </type>
                             <type>
-                                <name>Dragon Fruit</name>
+                                <name>Dorado</name>
+                            </type>
+                            <type>
+                                <name>Dragon Fruits</name>
                             </type>
                             <type>
                                 <name>Durian</name>
                             </type>
                             <type>
-                                <name>Elderberrie</name>
-                            </type>
-                            <type>
-                                <name>Elderberry</name>
+                                <name>Elderberries</name>
                             </type>
                             <type>
                                 <name>Feijoa</name>
                             </type>
                             <type>
-                                <name>Fig</name>
+                                <name>Figs</name>
                             </type>
                             <type>
-                                <name>Gooseberrie</name>
+                                <name>Gooseberries</name>
                             </type>
                             <type>
-                                <name>Gooseberry</name>
-                            </type>
-                            <type>
-                                <name>Grape</name>
-                            </type>
-                            <type>
-                                <name>Grapefruit</name>
+                                <name>Grapefruits</name>
                             </type>
                             <type>
                                 <name>Green Grapes</name>
@@ -1828,28 +2008,25 @@
                                 <name>Honeydew</name>
                             </type>
                             <type>
-                                <name>Huckleberrie</name>
-                            </type>
-                            <type>
-                                <name>Huckleberry</name>
+                                <name>Huckleberries</name>
                             </type>
                             <type>
                                 <name>Jabuticaba</name>
                             </type>
                             <type>
-                                <name>Jackfruit</name>
+                                <name>Jackfruits</name>
                             </type>
                             <type>
-                                <name>Kiwi</name>
+                                <name>Kiwis</name>
                             </type>
                             <type>
                                 <name>Langsat</name>
                             </type>
                             <type>
-                                <name>Lemon</name>
+                                <name>Lemons</name>
                             </type>
                             <type>
-                                <name>Lime</name>
+                                <name>Limes</name>
                             </type>
                             <type>
                                 <name>Longan</name>
@@ -1864,10 +2041,10 @@
                                 <name>Lychee</name>
                             </type>
                             <type>
-                                <name>Mango</name>
+                                <name>Mandarines</name>
                             </type>
                             <type>
-                                <name>Marionberrie</name>
+                                <name>Mangos</name>
                             </type>
                             <type>
                                 <name>Medlar</name>
@@ -1879,22 +2056,22 @@
                                 <name>Miracle Fruit</name>
                             </type>
                             <type>
-                                <name>Mulberrie</name>
+                                <name>Mulberries</name>
                             </type>
                             <type>
-                                <name>Mulberry</name>
+                                <name>Nectarines</name>
                             </type>
                             <type>
-                                <name>Nectarine</name>
+                                <name>Oranges</name>
                             </type>
                             <type>
-                                <name>Orange</name>
+                                <name>Passion Fruits</name>
                             </type>
                             <type>
-                                <name>Passion Fruit</name>
+                                <name>Peaches</name>
                             </type>
                             <type>
-                                <name>Peach</name>
+                                <name>Pears</name>
                             </type>
                             <type>
                                 <name>Persimmon</name>
@@ -1906,13 +2083,13 @@
                                 <name>Pineapple</name>
                             </type>
                             <type>
-                                <name>Plum</name>
+                                <name>Plums</name>
                             </type>
                             <type>
                                 <name>Pomegranate</name>
                             </type>
                             <type>
-                                <name>Pomelo</name>
+                                <name>Pomelos</name>
                             </type>
                             <type>
                                 <name>Quince</name>
@@ -1921,25 +2098,22 @@
                                 <name>Rambutan</name>
                             </type>
                             <type>
-                                <name>Raspberry</name>
+                                <name>Raspberries</name>
+                            </type>
+                            <type>
+                                <name>Red Grapes</name>
                             </type>
                             <type>
                                 <name>Salak</name>
                             </type>
                             <type>
-                                <name>Salmonberrie</name>
-                            </type>
-                            <type>
-                                <name>Salmonberry</name>
+                                <name>Salmonberries</name>
                             </type>
                             <type>
                                 <name>Sea Buckthorn</name>
                             </type>
                             <type>
-                                <name>Serviceberrie</name>
-                            </type>
-                            <type>
-                                <name>Serviceberry</name>
+                                <name>Serviceberries</name>
                             </type>
                             <type>
                                 <name>Snake Fruit</name>
@@ -1948,13 +2122,13 @@
                                 <name>Soursop</name>
                             </type>
                             <type>
-                                <name>Starfruit</name>
+                                <name>Starfruits</name>
                             </type>
                             <type>
-                                <name>Strawberry</name>
+                                <name>Strawberries</name>
                             </type>
                             <type>
-                                <name>Tangerine</name>
+                                <name>Tangerines</name>
                             </type>
                             <type>
                                 <name>Ugli Fruit</name>
@@ -2265,6 +2439,10 @@
                             </type>
                             <type>
                                 <name>Ginger</name>
+                                <synonyms>
+                                    <synonym>Fresh Ginger Root</synonym>
+                                    <synonym>Ginger Root</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Green Beans</name>
@@ -2306,10 +2484,10 @@
                                 <name>Okra</name>
                             </type>
                             <type>
-                                <name>Onion</name>
+                                <name>Onions</name>
                                 <synonyms>
-                                    <synonym>Red Onion</synonym>
-                                    <synonym>Yellow Onion</synonym>
+                                    <synonym>Red Onions</synonym>
+                                    <synonym>Yellow Onions</synonym>
                                 </synonyms>
                             </type>
                             <type>
@@ -2328,6 +2506,7 @@
                                 <name>Potato</name>
                                 <synonyms>
                                     <synonym>Red Potato</synonym>
+                                    <synonym>Russet Potato</synonym>
                                     <synonym>White Potato</synonym>
                                 </synonyms>
                             </type>
@@ -2363,6 +2542,9 @@
                             </type>
                             <type>
                                 <name>Squash</name>
+                                <synonyms>
+                                    <synonym>Butternut Squash</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Sugar Snap Peas</name>
@@ -2410,8 +2592,55 @@
                 </categories>
             </category>
             <category>
-                <title>Frozen Foods</title>
+                <title>Frozen Food</title>
                 <categories>
+                    <category>
+                        <title>Frozen Beef</title>
+                    </category>
+                    <category>
+                        <title>Frozen Chicken</title>
+                        <types>
+                            <type>
+                                <name>Frozen Chicken Drumsticks</name>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Feet</name>
+                                <synonyms>
+                                    <synonym>Frozen Chicken Steppers</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Fillets</name>
+                                <synonyms>
+                                    <synonym>Frozen Chicken Breasts</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Nuggets</name>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Patties</name>
+                                <synonyms>
+                                    <synonym>Chicken Burgers</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Tenders</name>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Thighs</name>
+                            </type>
+                            <type>
+                                <name>Frozen Chicken Wings</name>
+                            </type>
+                            <type>
+                                <name>Frozen Ground Chicken</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Frozen Pork</title>
+                    </category>
                     <category>
                         <title>Fruits</title>
                         <types>
@@ -2477,15 +2706,6 @@
                                 <name>Calamari</name>
                             </type>
                             <type>
-                                <name>Chicken Drumsticks</name>
-                            </type>
-                            <type>
-                                <name>Chicken Nuggets</name>
-                            </type>
-                            <type>
-                                <name>Chicken Wings</name>
-                            </type>
-                            <type>
                                 <name>Dim Sum</name>
                             </type>
                             <type>
@@ -2502,6 +2722,12 @@
                                 <synonyms>
                                     <synonym>Potato Fries</synonym>
                                 </synonyms>
+                            </type>
+                            <type>
+                                <name>Jamaican Patties</name>
+                            </type>
+                            <type>
+                                <name>Jamaican patty</name>
                             </type>
                             <type>
                                 <name>Lasagna</name>
@@ -2537,6 +2763,9 @@
                                 <name>Rice</name>
                             </type>
                             <type>
+                                <name>Samosas</name>
+                            </type>
+                            <type>
                                 <name>Spring Rolls</name>
                             </type>
                             <type>
@@ -2545,16 +2774,19 @@
                             <type>
                                 <name>Vegetable Mix</name>
                             </type>
+                            <type>
+                                <name>Vegetable Sticks</name>
+                            </type>
                         </types>
+                    </category>
+                    <category>
+                        <title>Other Frozen Meats</title>
                     </category>
                     <category>
                         <title>Pastries</title>
                         <types>
                             <type>
                                 <name>Cakes</name>
-                            </type>
-                            <type>
-                                <name>Cookies</name>
                             </type>
                             <type>
                                 <name>Croissants</name>
@@ -2649,13 +2881,19 @@
                                 <name>Black Lentils</name>
                             </type>
                             <type>
-                                <name>Brown Lentils</name>
+                                <name>Blackeye Peas</name>
                             </type>
                             <type>
                                 <name>Bulgur</name>
                             </type>
                             <type>
+                                <name>Canary Beans</name>
+                            </type>
+                            <type>
                                 <name>Cannellini Beans</name>
+                            </type>
+                            <type>
+                                <name>Channa Beans</name>
                             </type>
                             <type>
                                 <name>Chickpeas</name>
@@ -2676,13 +2914,22 @@
                                 <name>Freekeh</name>
                             </type>
                             <type>
-                                <name>Green Split Peas</name>
+                                <name>Green Peas</name>
+                                <synonyms>
+                                    <synonym>Green Split Peas</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Kamut</name>
                             </type>
                             <type>
                                 <name>Kidney Beans</name>
+                            </type>
+                            <type>
+                                <name>Lentils</name>
+                                <synonyms>
+                                    <synonym>Lentil Peas</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Lima Beans</name>
@@ -2698,6 +2945,9 @@
                             </type>
                             <type>
                                 <name>Oats</name>
+                            </type>
+                            <type>
+                                <name>Peas</name>
                             </type>
                             <type>
                                 <name>Pinto Beans</name>
@@ -2721,7 +2971,10 @@
                                 <name>Wild Rice</name>
                             </type>
                             <type>
-                                <name>Yellow Split Peas</name>
+                                <name>Yellow Peas</name>
+                                <synonyms>
+                                    <synonym>Yellow Split Peas</synonym>
+                                </synonyms>
                             </type>
                         </types>
                     </category>
@@ -2736,6 +2989,15 @@
                             </type>
                             <type>
                                 <name>Cavatappi</name>
+                            </type>
+                            <type>
+                                <name>Chowmein</name>
+                            </type>
+                            <type>
+                                <name>Elbows</name>
+                            </type>
+                            <type>
+                                <name>Farfalle</name>
                             </type>
                             <type>
                                 <name>Fettuccine</name>
@@ -2757,6 +3019,12 @@
                             </type>
                             <type>
                                 <name>Macaroni</name>
+                            </type>
+                            <type>
+                                <name>Macaroni &amp; Cheese</name>
+                                <synonyms>
+                                    <synonym>Mac&amp;Cheese</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Macaroni &amp; Cheese </name>
@@ -2849,22 +3117,62 @@
                         <title>Beef</title>
                         <types>
                             <type>
+                                <name>Beef Brisket</name>
+                            </type>
+                            <type>
+                                <name>Beef Burger</name>
+                                <synonyms>
+                                    <synonym>Patties</synonym>
+                                    <synonym>Patty</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Beef Flank</name>
+                            </type>
+                            <type>
+                                <name>Beef Kebab</name>
+                            </type>
+                            <type>
+                                <name>Beef Pin Wheel</name>
+                            </type>
+                            <type>
+                                <name>Beef Ribeye</name>
+                            </type>
+                            <type>
+                                <name>Beef Ribs</name>
+                            </type>
+                            <type>
+                                <name>Beef Roasts</name>
+                            </type>
+                            <type>
+                                <name>Beef Roulade</name>
+                            </type>
+                            <type>
+                                <name>Beef Sausage</name>
+                            </type>
+                            <type>
+                                <name>Beef Shoulder</name>
+                            </type>
+                            <type>
+                                <name>Beef Steak</name>
+                            </type>
+                            <type>
+                                <name>Beef Stew</name>
+                            </type>
+                            <type>
+                                <name>Beef Striploin</name>
+                            </type>
+                            <type>
+                                <name>Beef Tenderloin</name>
+                            </type>
+                            <type>
                                 <name>Eye of Round Roast Beef</name>
                             </type>
                             <type>
                                 <name>Ground Beef</name>
                             </type>
                             <type>
-                                <name>Ribs</name>
-                            </type>
-                            <type>
-                                <name>Roasts</name>
-                            </type>
-                            <type>
-                                <name>Steak</name>
-                            </type>
-                            <type>
-                                <name>Stew</name>
+                                <name>Minced Beef</name>
                             </type>
                         </types>
                     </category>
@@ -2875,10 +3183,31 @@
                                 <name>Chicken Breast</name>
                             </type>
                             <type>
+                                <name>Chicken Cut</name>
+                            </type>
+                            <type>
                                 <name>Chicken Drumsticks</name>
                             </type>
                             <type>
+                                <name>Chicken Feet</name>
+                            </type>
+                            <type>
+                                <name>Chicken Giblets</name>
+                            </type>
+                            <type>
                                 <name>Chicken Legs</name>
+                            </type>
+                            <type>
+                                <name>Chicken Quarters</name>
+                                <synonyms>
+                                    <synonym>Chicken Parts</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Chicken Sausage</name>
+                            </type>
+                            <type>
+                                <name>Chicken Tenders</name>
                             </type>
                             <type>
                                 <name>Chicken Thighs</name>
@@ -2887,7 +3216,51 @@
                                 <name>Chicken Wings</name>
                             </type>
                             <type>
+                                <name>Ground Chicken</name>
+                            </type>
+                            <type>
                                 <name>Whole Chicken</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Lamb</title>
+                        <types>
+                            <type>
+                                <name>Lamb Chop</name>
+                            </type>
+                            <type>
+                                <name>Lamb Chumps</name>
+                            </type>
+                            <type>
+                                <name>Lamb Legs</name>
+                                <synonyms>
+                                    <synonym>Lamb Shanks</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Lamb Loin</name>
+                            </type>
+                            <type>
+                                <name>Lamb Necks</name>
+                            </type>
+                            <type>
+                                <name>Lamb Rips</name>
+                                <synonyms>
+                                    <synonym>Lamb Racks</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Lamb Shoulders</name>
+                            </type>
+                            <type>
+                                <name>Lamb Stew</name>
+                            </type>
+                            <type>
+                                <name>Minced Lamb</name>
+                                <synonyms>
+                                    <synonym>Ground Lamb</synonym>
+                                </synonyms>
                             </type>
                         </types>
                     </category>
@@ -2896,9 +3269,6 @@
                         <types>
                             <type>
                                 <name>Deli Meats</name>
-                            </type>
-                            <type>
-                                <name>Lamb</name>
                             </type>
                             <type>
                                 <name>Sausages</name>
@@ -2921,10 +3291,70 @@
                                 <name>Ham</name>
                             </type>
                             <type>
+                                <name>Minced Pork</name>
+                            </type>
+                            <type>
+                                <name>Pork Belly</name>
+                            </type>
+                            <type>
                                 <name>Pork Chops</name>
                             </type>
                             <type>
-                                <name>Rips</name>
+                                <name>Pork Cutlets</name>
+                            </type>
+                            <type>
+                                <name>Pork Feet</name>
+                            </type>
+                            <type>
+                                <name>Pork Flap</name>
+                            </type>
+                            <type>
+                                <name>Pork Hock</name>
+                            </type>
+                            <type>
+                                <name>Pork Kebab</name>
+                            </type>
+                            <type>
+                                <name>Pork Knuckle</name>
+                            </type>
+                            <type>
+                                <name>Pork Leg</name>
+                            </type>
+                            <type>
+                                <name>Pork Loin</name>
+                            </type>
+                            <type>
+                                <name>Pork Rips</name>
+                                <synonyms>
+                                    <synonym>Pork Riblets</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Pork Sausage</name>
+                                <synonyms>
+                                    <synonym>Pork Chipolata</synonym>
+                                </synonyms>
+                            </type>
+                            <type>
+                                <name>Pork Shoulder</name>
+                            </type>
+                            <type>
+                                <name>Pork Spare Ribs</name>
+                            </type>
+                            <type>
+                                <name>Pork Stew</name>
+                            </type>
+                            <type>
+                                <name>Pork Tail</name>
+                            </type>
+                            <type>
+                                <name>Pork Tails</name>
+                            </type>
+                            <type>
+                                <name>Pork Tenderloin</name>
+                            </type>
+                            <type>
+                                <name>Pork Tongue</name>
                             </type>
                         </types>
                     </category>
@@ -2961,6 +3391,9 @@
                             </type>
                             <type>
                                 <name>Salmon</name>
+                            </type>
+                            <type>
+                                <name>Saltfish</name>
                             </type>
                             <type>
                                 <name>Sword Fish</name>
@@ -3073,9 +3506,6 @@
                                 <name>Bagel Chips</name>
                             </type>
                             <type>
-                                <name>Beet Chips</name>
-                            </type>
-                            <type>
                                 <name>Cheese Balls</name>
                             </type>
                             <type>
@@ -3101,9 +3531,6 @@
                             </type>
                             <type>
                                 <name>Gluten-Free Crackers</name>
-                            </type>
-                            <type>
-                                <name>Kale Chips</name>
                             </type>
                             <type>
                                 <name>Multigrain Crackers</name>
@@ -3142,19 +3569,17 @@
                                 <name>Tortilla Chips</name>
                             </type>
                             <type>
-                                <name>Trail Mix</name>
-                            </type>
-                            <type>
                                 <name>Vegetable Chips</name>
+                                <synonyms>
+                                    <synonym>Beet Chips</synonym>
+                                    <synonym>Zucchini Chips</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Veggie Straws</name>
                             </type>
                             <type>
                                 <name>Whole Wheat Crackers</name>
-                            </type>
-                            <type>
-                                <name>Zucchini Chips</name>
                             </type>
                         </types>
                     </category>
@@ -3169,6 +3594,9 @@
                             </type>
                             <type>
                                 <name>Cranberries</name>
+                            </type>
+                            <type>
+                                <name>Currants</name>
                             </type>
                             <type>
                                 <name>Date</name>
@@ -3187,6 +3615,9 @@
                             </type>
                             <type>
                                 <name>Raisins</name>
+                            </type>
+                            <type>
+                                <name>Sorrel</name>
                             </type>
                         </types>
                     </category>
@@ -3221,6 +3652,12 @@
                                 <name>Macadamia Nuts</name>
                             </type>
                             <type>
+                                <name>Mixed Nuts</name>
+                            </type>
+                            <type>
+                                <name>Peanuts</name>
+                            </type>
+                            <type>
                                 <name>Pecans</name>
                             </type>
                             <type>
@@ -3231,6 +3668,9 @@
                             </type>
                             <type>
                                 <name>Sunflower Seeds</name>
+                            </type>
+                            <type>
+                                <name>Trail Mix</name>
                             </type>
                             <type>
                                 <name>Walnuts</name>
@@ -3282,10 +3722,26 @@
                                 <name>Conditioner</name>
                             </type>
                             <type>
-                                <name>Hair Masks</name>
+                                <name>Hair Mask</name>
                             </type>
                             <type>
                                 <name>Shampoo</name>
+                                <synonyms>
+                                    <synonym>Shamp</synonym>
+                                </synonyms>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
+                <title>Nail Care</title>
+                <categories>
+                    <category>
+                        <title>Nail Polish</title>
+                        <types>
+                            <type>
+                                <name>Remover</name>
                             </type>
                         </types>
                     </category>
@@ -3305,6 +3761,12 @@
                             </type>
                             <type>
                                 <name>Deodorant</name>
+                            </type>
+                            <type>
+                                <name>Hand Soap</name>
+                                <synonyms>
+                                    <synonym>Hand Wash</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Soap</name>
@@ -3338,6 +3800,9 @@
                         <types>
                             <type>
                                 <name>Cleanser</name>
+                                <synonyms>
+                                    <synonym>Facial Cleansing</synonym>
+                                </synonyms>
                             </type>
                             <type>
                                 <name>Face Masks</name>
@@ -3388,6 +3853,9 @@
                             </type>
                             <type>
                                 <name>Toilet Cleaner</name>
+                                <synonyms>
+                                    <synonym>Limescale Remover</synonym>
+                                </synonyms>
                             </type>
                         </types>
                     </category>
@@ -3403,7 +3871,31 @@
                         <title>General Cleaning</title>
                         <types>
                             <type>
+                                <name>Air Freshener</name>
+                            </type>
+                            <type>
+                                <name>Broom</name>
+                            </type>
+                            <type>
+                                <name>Cleanser</name>
+                            </type>
+                            <type>
+                                <name>Eraser</name>
+                            </type>
+                            <type>
+                                <name>Floor Mop</name>
+                            </type>
+                            <type>
+                                <name>Gloves</name>
+                            </type>
+                            <type>
+                                <name>Sponge</name>
+                            </type>
+                            <type>
                                 <name>Vinegar</name>
+                            </type>
+                            <type>
+                                <name>Wipes</name>
                             </type>
                         </types>
                     </category>
@@ -3511,6 +4003,9 @@
                         <title>Trash Bags</title>
                         <types>
                             <type>
+                                <name>Garbage Bags</name>
+                            </type>
+                            <type>
                                 <name>Kitchen Trash Bags</name>
                             </type>
                             <type>
@@ -3592,160 +4087,16 @@
         <title>Pharmacy</title>
         <categories>
             <category>
-                <title>Health</title>
-                <categories>
-                    <category>
-                        <title>Allergy &amp; Sinus</title>
-                        <categories>
-                            <category>
-                                <title>Allergy Relief Liquids</title>
-                            </category>
-                            <category>
-                                <title>Allergy Relief Tablets</title>
-                            </category>
-                            <category>
-                                <title>Antihistamines</title>
-                            </category>
-                            <category>
-                                <title>Decongestants</title>
-                            </category>
-                            <category>
-                                <title>Eye Drops</title>
-                            </category>
-                            <category>
-                                <title>Nasal Sprays</title>
-                            </category>
-                            <category>
-                                <title>Saline Nasal Spray</title>
-                            </category>
-                        </categories>
-                    </category>
-                    <category>
-                        <title>Cold &amp; Flu</title>
-                        <categories>
-                            <category>
-                                <title>Cold &amp; Flu Liquids</title>
-                            </category>
-                            <category>
-                                <title>Cold &amp; Flu Tablets</title>
-                            </category>
-                            <category>
-                                <title>Cough Syrup</title>
-                            </category>
-                            <category>
-                                <title>Decongestants</title>
-                            </category>
-                            <category>
-                                <title>Fever Reducers</title>
-                            </category>
-                            <category>
-                                <title>Nasal Sprays</title>
-                            </category>
-                            <category>
-                                <title>Throat Lozenges</title>
-                            </category>
-                        </categories>
-                    </category>
-                    <category>
-                        <title>Digestive Health</title>
-                        <categories>
-                            <category>
-                                <title>Antacids</title>
-                            </category>
-                            <category>
-                                <title>Anti-Diarrheal</title>
-                            </category>
-                            <category>
-                                <title>Fiber Supplements</title>
-                            </category>
-                            <category>
-                                <title>H2 Blockers</title>
-                            </category>
-                            <category>
-                                <title>Laxatives</title>
-                            </category>
-                            <category>
-                                <title>Probiotics</title>
-                            </category>
-                            <category>
-                                <title>Proton Pump Inhibitors</title>
-                            </category>
-                        </categories>
-                    </category>
-                    <category>
-                        <title>Pain Relief</title>
-                        <categories>
-                            <category>
-                                <title>Acetaminophen</title>
-                            </category>
-                            <category>
-                                <title>Aspirin</title>
-                            </category>
-                            <category>
-                                <title>Cold Packs</title>
-                            </category>
-                            <category>
-                                <title>Heat Patches</title>
-                            </category>
-                            <category>
-                                <title>Ibuprofen</title>
-                            </category>
-                            <category>
-                                <title>Muscle Rubs</title>
-                            </category>
-                            <category>
-                                <title>Naproxen</title>
-                            </category>
-                            <category>
-                                <title>Topical Analgesics</title>
-                            </category>
-                        </categories>
-                    </category>
-                    <category>
-                        <title>Vitamins &amp; Supplements</title>
-                        <categories>
-                            <category>
-                                <title>Calcium</title>
-                            </category>
-                            <category>
-                                <title>Fish Oil</title>
-                            </category>
-                            <category>
-                                <title>Herbal Supplements</title>
-                            </category>
-                            <category>
-                                <title>Iron</title>
-                            </category>
-                            <category>
-                                <title>Magnesium</title>
-                            </category>
-                            <category>
-                                <title>Multivitamins</title>
-                            </category>
-                            <category>
-                                <title>Probiotics</title>
-                            </category>
-                            <category>
-                                <title>Vitamin C</title>
-                            </category>
-                            <category>
-                                <title>Vitamin D</title>
-                            </category>
-                        </categories>
-                    </category>
-                </categories>
-            </category>
-            <category>
                 <title>First Aid</title>
                 <categories>
                     <category>
                         <title>Bandages &amp; Dressings</title>
                         <types>
                             <type>
-                                <name>Adhesive Bandages</name>
+                                <name>Antiseptic Wipes</name>
                             </type>
                             <type>
-                                <name>Antiseptic Wipes</name>
+                                <name>Bandages</name>
                             </type>
                             <type>
                                 <name>Cotton Balls</name>
@@ -3797,13 +4148,170 @@
                                 <name>CPR Masks</name>
                             </type>
                             <type>
-                                <name>Elastic Bandages</name>
-                            </type>
-                            <type>
                                 <name>Eye Wash</name>
                             </type>
                             <type>
                                 <name>Thermometers</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
+                <title>Health</title>
+                <categories>
+                    <category>
+                        <title>Allergy &amp; Sinus</title>
+                        <types>
+                            <type>
+                                <name>Allergy Relief Liquids</name>
+                            </type>
+                            <type>
+                                <name>Allergy Relief Tablets</name>
+                            </type>
+                            <type>
+                                <name>Antihistamines</name>
+                            </type>
+                            <type>
+                                <name>Decongestants</name>
+                            </type>
+                            <type>
+                                <name>Eye Drops</name>
+                            </type>
+                            <type>
+                                <name>Nasal Sprays</name>
+                            </type>
+                            <type>
+                                <name>Saline Nasal Spray</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Cold &amp; Flu</title>
+                        <types>
+                            <type>
+                                <name>Cold &amp; Flu Liquids</name>
+                            </type>
+                            <type>
+                                <name>Cold &amp; Flu Tablets</name>
+                            </type>
+                            <type>
+                                <name>Cough Syrup</name>
+                            </type>
+                            <type>
+                                <name>Decongestants</name>
+                            </type>
+                            <type>
+                                <name>Fever Reducers</name>
+                            </type>
+                            <type>
+                                <name>Nasal Sprays</name>
+                            </type>
+                            <type>
+                                <name>Throat Lozenges</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Digestive Health</title>
+                        <types>
+                            <type>
+                                <name>Antacids</name>
+                            </type>
+                            <type>
+                                <name>Anti-Diarrheal</name>
+                            </type>
+                            <type>
+                                <name>Fiber Supplements</name>
+                            </type>
+                            <type>
+                                <name>H2 Blockers</name>
+                            </type>
+                            <type>
+                                <name>Laxatives</name>
+                            </type>
+                            <type>
+                                <name>Probiotics</name>
+                            </type>
+                            <type>
+                                <name>Proton Pump Inhibitors</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Pain Relief</title>
+                        <types>
+                            <type>
+                                <name>Acetaminophen</name>
+                            </type>
+                            <type>
+                                <name>Analgesics</name>
+                            </type>
+                            <type>
+                                <name>Aspirin</name>
+                            </type>
+                            <type>
+                                <name>Cold Packs</name>
+                            </type>
+                            <type>
+                                <name>Heat Patches</name>
+                            </type>
+                            <type>
+                                <name>Ibuprofen</name>
+                            </type>
+                            <type>
+                                <name>Muscle Rubs</name>
+                            </type>
+                            <type>
+                                <name>Naproxen</name>
+                            </type>
+                        </types>
+                    </category>
+                    <category>
+                        <title>Vitamins &amp; Supplements</title>
+                        <types>
+                            <type>
+                                <name>Calcium</name>
+                            </type>
+                            <type>
+                                <name>Fish Oil</name>
+                            </type>
+                            <type>
+                                <name>Herbal Supplements</name>
+                            </type>
+                            <type>
+                                <name>Iron</name>
+                            </type>
+                            <type>
+                                <name>Magnesium</name>
+                            </type>
+                            <type>
+                                <name>Multivitamins</name>
+                            </type>
+                            <type>
+                                <name>Probiotics</name>
+                            </type>
+                            <type>
+                                <name>Vitamin C</name>
+                            </type>
+                            <type>
+                                <name>Vitamin D</name>
+                            </type>
+                        </types>
+                    </category>
+                </categories>
+            </category>
+            <category>
+                <title>Ointment</title>
+                <categories>
+                    <category>
+                        <title>Active Ingredients</title>
+                        <types>
+                            <type>
+                                <name>Cream</name>
+                            </type>
+                            <type>
+                                <name>Oil</name>
                             </type>
                         </types>
                     </category>

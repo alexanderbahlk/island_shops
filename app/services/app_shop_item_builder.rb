@@ -51,8 +51,12 @@ class AppShopItemBuilder < BaseShopItemBuilder
   def add_shop_item_to_user_active_shopping_list
     active_shopping_list = @user.active_shopping_list
     if active_shopping_list.nil?
-      @errors << "User has no active shopping list"
-      return
+      create_first_active_shopping_list_for_user
+      active_shopping_list = @user.active_shopping_list
+      if active_shopping_list.nil?
+        @errors << "User has no active shopping list"
+        return
+      end
     end
 
     # Build the ShoppingListItem
@@ -66,6 +70,16 @@ class AppShopItemBuilder < BaseShopItemBuilder
 
     unless shopping_list_item.save
       @errors.concat(shopping_list_item.errors.full_messages)
+    end
+  end
+
+  def create_first_active_shopping_list_for_user
+    shopping_list = ShoppingList.new(display_name: "First Shopping List", shopping_list_items: [])
+    shopping_list.users << @user
+    if shopping_list.save
+      @user.update(active_shopping_list: shopping_list)
+    else
+      @errors.concat(shopping_list.errors.full_messages)
     end
   end
 
