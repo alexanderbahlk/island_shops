@@ -3,6 +3,17 @@ ActiveAdmin.register Place do
 
   permit_params :title, :location, :is_online
 
+  index do
+    selectable_column
+    id_column
+    column :title
+    column :location
+    column :is_online
+    column :created_at
+    column :updated_at
+    actions
+  end
+
 
   form do |f|
     f.inputs "Place Details" do
