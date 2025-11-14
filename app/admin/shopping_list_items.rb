@@ -32,7 +32,7 @@ ActiveAdmin.register ShoppingListItem do
       f.input :priority
       f.input :purchased
       f.input :shopping_list, as: :select, collection: ShoppingList.all.map { |sl| [sl.display_name, sl.id] }
-      f.input :category, as: :select, collection: Category.all.map { |c| [c.title, c.id] }
+      f.input :category, label: "Product", as: :select, collection: Category.only_products, include_blank: true, input_html: { id: "category_select" }
       f.input :user, as: :select, collection: User.all.map { |u| [u.hash, u.id] }
     end
     f.actions

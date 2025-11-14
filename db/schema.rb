@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_30_170358) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_14_143811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -191,6 +191,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_170358) do
   add_foreign_key "shop_items", "categories"
   add_foreign_key "shop_items", "places"
   add_foreign_key "shop_items", "users", on_delete: :nullify
+  add_foreign_key "shopping_list_items", "categories"
   add_foreign_key "shopping_list_items", "shop_items"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_list_items", "users", on_delete: :nullify

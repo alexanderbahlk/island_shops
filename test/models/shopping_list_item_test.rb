@@ -26,6 +26,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (shop_item_id => shop_items.id)
 #  fk_rails_...  (shopping_list_id => shopping_lists.id)
 #  fk_rails_...  (user_id => users.id) ON DELETE => nullify
