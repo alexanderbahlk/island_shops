@@ -18,11 +18,13 @@
 #
 # Indexes
 #
-#  index_shopping_list_items_on_category_id   (category_id)
-#  index_shopping_list_items_on_deleted_at    (deleted_at)
-#  index_shopping_list_items_on_shop_item_id  (shop_item_id)
-#  index_shopping_list_items_on_user_id       (user_id)
-#  index_shopping_list_items_on_uuid          (uuid) UNIQUE
+#  index_shopping_list_items_on_category_id             (category_id)
+#  index_shopping_list_items_on_deleted_at              (deleted_at)
+#  index_shopping_list_items_on_list_deleted_purchased  (shopping_list_id,deleted_at,purchased)
+#  index_shopping_list_items_on_shop_item_id            (shop_item_id)
+#  index_shopping_list_items_on_shopping_list_id        (shopping_list_id)
+#  index_shopping_list_items_on_user_id                 (user_id)
+#  index_shopping_list_items_on_uuid                    (uuid) UNIQUE
 #
 # Foreign Keys
 #

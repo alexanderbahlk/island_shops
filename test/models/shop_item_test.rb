@@ -24,6 +24,7 @@
 #
 # Indexes
 #
+#  index_shop_items_on_approved         (approved)
 #  index_shop_items_on_breadcrumb       (breadcrumb)
 #  index_shop_items_on_category_id      (category_id)
 #  index_shop_items_on_model_embedding  (model_embedding) USING gin

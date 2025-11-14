@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_14_143811) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_14_145218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -125,6 +125,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_14_143811) do
     t.jsonb "model_embedding"
     t.boolean "needs_model_embedding_update", default: false, null: false
     t.bigint "user_id"
+    t.index ["approved"], name: "index_shop_items_on_approved"
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
     t.index ["model_embedding"], name: "index_shop_items_on_model_embedding", using: :gin
@@ -150,6 +151,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_14_143811) do
     t.index ["category_id"], name: "index_shopping_list_items_on_category_id"
     t.index ["deleted_at"], name: "index_shopping_list_items_on_deleted_at"
     t.index ["shop_item_id"], name: "index_shopping_list_items_on_shop_item_id"
+    t.index ["shopping_list_id", "deleted_at", "purchased"], name: "index_shopping_list_items_on_list_deleted_purchased"
+    t.index ["shopping_list_id"], name: "index_shopping_list_items_on_shopping_list_id"
     t.index ["user_id"], name: "index_shopping_list_items_on_user_id"
     t.index ["uuid"], name: "index_shopping_list_items_on_uuid", unique: true
   end

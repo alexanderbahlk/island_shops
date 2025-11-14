@@ -156,8 +156,12 @@ class Category < ApplicationRecord
       descendant_ids = self_and_descendants.pluck(:id)
 
       # Clear all shop item references first
-      cleared_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
-      Rails.logger.info "Cleared #{cleared_count} shop item references for category '#{title}' and its descendants before deletion"
+      cleared_shop_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
+      Rails.logger.info "Cleared #{cleared_shop_count} shop item references for category '#{title}' and its descendants before deletion"
+
+      # Clear all shopping list item references
+      cleared_list_count = ShoppingListItem.where(category_id: descendant_ids).update_all(category_id: nil)
+      Rails.logger.info "Cleared #{cleared_list_count} shopping list item references for category '#{title}' and its descendants before deletion"
 
       # Now call the parent destroy method
       super
@@ -171,8 +175,12 @@ class Category < ApplicationRecord
       descendant_ids = self_and_descendants.pluck(:id)
 
       # Clear all shop item references first
-      cleared_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
-      Rails.logger.info "Cleared #{cleared_count} shop item references for category '#{title}' and its descendants before deletion"
+      cleared_shop_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
+      Rails.logger.info "Cleared #{cleared_shop_count} shop item references for category '#{title}' and its descendants before deletion"
+
+      # Clear all shopping list item references
+      cleared_list_count = ShoppingListItem.where(category_id: descendant_ids).update_all(category_id: nil)
+      Rails.logger.info "Cleared #{cleared_list_count} shopping list item references for category '#{title}' and its descendants before deletion"
 
       # Now call the parent destroy! method
       super
