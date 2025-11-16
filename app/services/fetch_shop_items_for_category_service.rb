@@ -35,7 +35,9 @@ class FetchShopItemsForCategoryService
 
           if second_last_shop_item_update&.price && second_last_shop_item_update&.price != latest_shop_item_update&.price 
             shop_item[:previous_price] = format("%.2f", second_last_shop_item_update.price)
-            shop_item[:price_change] = format("%.2f", latest_shop_item_update.price - second_last_shop_item_update.price)
+            price_change = format("%.2f", latest_shop_item_update.price - second_last_shop_item_update.price)
+            price_change = "+#{price_change}" unless price_change.start_with?("-")
+            shop_item[:price_change] = price_change
           end
 
           shop_items << shop_item
