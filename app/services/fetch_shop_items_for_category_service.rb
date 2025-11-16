@@ -33,7 +33,7 @@ class FetchShopItemsForCategoryService
             url: item.url,
           }
 
-          if second_last_shop_item_update&.price
+          if second_last_shop_item_update&.price && second_last_shop_item_update&.price != latest_shop_item_update&.price 
             shop_item[:previous_price] = format("%.2f", second_last_shop_item_update.price)
             shop_item[:price_change] = format("%.2f", latest_shop_item_update.price - second_last_shop_item_update.price)
           end
