@@ -356,6 +356,9 @@ ActiveAdmin.register ShopItem do
     # Display associated shop item updates
     panel "Price & Stock History" do
       table_for shop_item.shop_item_updates.order(created_at: :desc) do
+        column :id do |update|
+          link_to update.id, admin_shop_item_update_path(update)
+        end
         column :price do |update|
           best_in_place update, :price,
                         as: :input,

@@ -19,8 +19,8 @@ class Api::V1::ShoppingListsControllerTest < ActionDispatch::IntegrationTest
     assert response_data["shopping_list_items"].key?("purchased"), "Response is missing the 'purchased' key"
 
     # Ensure the items are grouped correctly
-    assert_equal ["Cheese", "Milk 2x"], response_data["shopping_list_items"]["unpurchased"].map { |item| item["title"] }
-    assert_equal ["Goat Cheese"], response_data["shopping_list_items"]["purchased"].map { |item| item["title"] }
+    assert_equal ["Cheese from Place One", "Milk 2x from Place Two"], response_data["shopping_list_items"]["unpurchased"].map { |item| item["title"] }
+    assert_equal ["Goat Cheese from Place One"], response_data["shopping_list_items"]["purchased"].map { |item| item["title"] }
 
     # Ensure other attributes are present
     assert_equal @shopping_list.slug, response_data["slug"]

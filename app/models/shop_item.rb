@@ -164,6 +164,13 @@ class ShopItem < ApplicationRecord
     self.shop_item_updates.order(created_at: :desc).first
   end
 
+  def second_last_shop_item_update
+    if self.shop_item_updates.count < 2
+      return nil
+    end
+    self.shop_item_updates.order(created_at: :desc).second
+  end
+
   def category_hierarchy
     return {} unless category
 

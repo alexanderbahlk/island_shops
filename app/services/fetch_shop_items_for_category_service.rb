@@ -17,6 +17,7 @@ class FetchShopItemsForCategoryService
       approved_items_with_updates.select do |item|
         if !(hide_out_of_stock && item.latest_stock_status_out_of_stock?)
           latest_shop_item_update = item.latest_shop_item_update
+          second_last_shop_item_update = item.second_last_shop_item_update
 
           shop_item = {
             title: item.display_title.presence || item.title,
@@ -25,12 +26,17 @@ class FetchShopItemsForCategoryService
             image_url: item.image_url,
             unit: item.unit || "N/A",
             stock_status: latest_shop_item_update&.normalized_stock_status || "N/A",
-            latest_price: latest_shop_item_update&.price || "N/A",
+            latest_price: latest_shop_item_update&.price ? format("%.2f", latest_shop_item_update.price) : "N/A",
             latest_price_per_normalized_unit: item.latest_price_per_normalized_unit || "N/A",
             latest_price_per_normalized_unit_with_unit: item.latest_price_per_normalized_unit_with_unit,
             latest_price_per_unit_with_unit: item.latest_price_per_unit_with_unit,
             url: item.url,
           }
+
+          if second_last_shop_item_update&.price
+            shop_item[:previous_price] = format("%.2f", second_last_shop_item_update.price)
+            shop_item[:price_change] = format("%.2f", latest_shop_item_update.price - second_last_shop_item_update.price)
+          end
 
           shop_items << shop_item
         end

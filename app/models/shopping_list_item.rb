@@ -73,6 +73,11 @@ class ShoppingListItem < ApplicationRecord
     end
     case shopping_list_grouping
     when nil
+      if shop_item_id
+        if shop_item && shop_item.place.present?
+          title_string += " from #{shop_item.place.title}"
+        end
+      end
     when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY
       if shop_item_id
         if shop_item && shop_item.place.present?

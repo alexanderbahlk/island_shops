@@ -45,8 +45,8 @@ class ShoppingListTest < ActiveSupport::TestCase
     result = @shopping_list_with_items.shopping_list_items_for_view_list
 
     # Ensure breadcrumbs are generated correctly
-    milk_item = result[:unpurchased].find { |item| item[:title] == "Milk 2x" }
-    cheese_item = result[:unpurchased].find { |item| item[:title] == "Cheese" }
+    milk_item = result[:unpurchased].find { |item| item[:title] == "Milk 2x from Place Two" }
+    cheese_item = result[:unpurchased].find { |item| item[:title] == "Cheese from Place One" }
 
     assert_equal ["Food", "Fresh Food", "Dairy"], milk_item[:breadcrumb], "Breadcrumb for Milk is incorrect"
     assert_equal ["Food", "Fresh Food", "Dairy"], cheese_item[:breadcrumb], "Breadcrumb for Cheese is incorrect"
@@ -122,8 +122,8 @@ class ShoppingListTest < ActiveSupport::TestCase
     assert result.key?(:purchased), "Result is missing the 'purchased' key"
 
     # Ensure the items are sorted by title within each group
-    assert_equal ["Cheese", "Milk 2x"], result[:unpurchased].map { |item| item[:title] }
-    assert_equal ["Goat Cheese"], result[:purchased].map { |item| item[:title] }
+    assert_equal ["Cheese from Place One", "Milk 2x from Place Two"], result[:unpurchased].map { |item| item[:title] }
+    assert_equal ["Goat Cheese from Place One"], result[:purchased].map { |item| item[:title] }
   end
 
   test "shopping_list_items_for_view_list returns items grouped by place" do

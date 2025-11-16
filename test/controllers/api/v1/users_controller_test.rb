@@ -305,7 +305,7 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     response_data = JSON.parse(response.body)
     assert_equal @user.app_hash, response_data["app_hash"]
-    assert_equal @user.group_shopping_lists_items_by, response_data["group_shopping_lists_items_by"]
+    assert_nil @user.group_shopping_lists_items_by
     assert_equal @user.shop_item_stock_status_filter, response_data["shop_item_stock_status_filter"]
     assert_equal @user.tutorial_step, response_data["tutorial_step"]
     assert_equal @user.active_shopping_list.slug, response_data["active_shopping_list"]
