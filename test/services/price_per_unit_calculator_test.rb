@@ -39,7 +39,7 @@ class PricePerUnitCalculatorTest < ActiveSupport::TestCase
     assert_equal 9.98, result[:display_value] # $2.83 / 28.3495g * 100g ≈ $10.00 per 100g
     assert_equal 9.9825, result[:value]
     assert_equal 100, result[:base_quantity]
-    assert_equal "100g", result[:normalized_unit]
+    assert_equal "100g/100ml", result[:normalized_unit]
   end
 
   # Tests for volume units

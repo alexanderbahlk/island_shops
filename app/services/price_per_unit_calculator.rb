@@ -1,66 +1,66 @@
 class PricePerUnitCalculator
   # Base quantities for normalized price comparison
   BASE_QUANTITIES = {
-    "g" => 100,      # Price per 100g
-    "kg" => 100,     # Price per 100g (converted from kg)
-    "lbs" => 100,    # Price per 100g (converted from lbs)
-    "ml" => 100,     # Price per 100ml
-    "l" => 100,      # Price per 100ml (converted from l)
-    "gal" => 100,    # Price per 100ml (converted from gal)
-    "qt" => 100,    # Price per 100ml (converted from gal)
-    "fz" => 100,     # Price per 100ml (converted from fl oz)
-    "oz" => 100,     # Price per 100g (converted from oz)
-    "pt" => 100,     # Price per 100g (converted from pt)
-    "ft" => 1,       # Price per 1 ft
-    "fl" => 1,       # Price per 1 fl
-    "pc" => 1,       # Price per 1 piece
-    "pk" => 1,       # Price per 1 pack
-    "ct" => 1,       # Price per 1 count
-    "whole" => 1,     # Price per 1 whole
-    "unit" => 1,     # Price per 1 whole
-    "each" => 1,     # Price per 1 each
-    "N/A" => 1,      # Price per 1 unit (when unit is unknown)
+    'g' => 100,      # Price per 100g
+    'kg' => 100,     # Price per 100g (converted from kg)
+    'lbs' => 100,    # Price per 100g (converted from lbs)
+    'ml' => 100,     # Price per 100ml
+    'l' => 100,      # Price per 100ml (converted from l)
+    'gal' => 100,    # Price per 100ml (converted from gal)
+    'qt' => 100, # Price per 100ml (converted from gal)
+    'fz' => 100,     # Price per 100ml (converted from fl oz)
+    'oz' => 100,     # Price per 100g (converted from oz)
+    'pt' => 100,     # Price per 100g (converted from pt)
+    'ft' => 1,       # Price per 1 ft
+    'fl' => 1,       # Price per 1 fl
+    'pc' => 1,       # Price per 1 piece
+    'pk' => 1,       # Price per 1 pack
+    'ct' => 1,       # Price per 1 count
+    'whole' => 1, # Price per 1 whole
+    'unit' => 1,     # Price per 1 whole
+    'each' => 1,     # Price per 1 each
+    'N/A' => 1 # Price per 1 unit (when unit is unknown)
   }.freeze
 
   # Conversion factors to grams
   WEIGHT_TO_GRAMS = {
-    "g" => 1,
-    "kg" => 1000,
-    "lbs" => 453.592,  # 1 pound = 453.592 grams
-    "oz" => 28.3495,    # 1 ounce = 28.3495 grams
+    'g' => 1,
+    'kg' => 1000,
+    'lbs' => 453.592, # 1 pound = 453.592 grams
+    'oz' => 28.3495 # 1 ounce = 28.3495 grams
   }.freeze
 
   # Conversion factors to milliliters
   VOLUME_TO_ML = {
-    "ml" => 1,
-    "l" => 1000,        # 1 liter = 1000 milliliters
-    "gal" => 3785.41,   # 1 US gallon = 3785.41 milliliters
-    "qt" => 946.353,    # 1 US quart = 946.353 milliliters
-    "fz" => 29.5735,    # 1 fluid ounce = 29.5735 milliliters
-    "pt" => 473.176,    # 1 US pint = 473.176 milliliters
+    'ml' => 1,
+    'l' => 1000,        # 1 liter = 1000 milliliters
+    'gal' => 3785.41,   # 1 US gallon = 3785.41 milliliters
+    'qt' => 946.353,    # 1 US quart = 946.353 milliliters
+    'fz' => 29.5735,    # 1 fluid ounce = 29.5735 milliliters
+    'pt' => 473.176 # 1 US pint = 473.176 milliliters
   }.freeze
 
   # Normalized unit labels
   NORMALIZED_UNITS = {
-    "ft" => "1ft",
-    "g" => "100g",
-    "kg" => "100g",
-    "lbs" => "100g",
-    "oz" => "100g",
-    "pt" => "100ml",
-    "ml" => "100ml",
-    "gal" => "100ml",
-    "qt" => "100ml",
-    "fz" => "100ml",
-    "l" => "100ml",
-    "fl" => "1fl",
-    "pc" => "1pc",
-    "whole" => "each",
-    "unit" => "each",
-    "pk" => "1pc",
-    "ct" => "1ct",
-    "each" => "each",
-    "N/A" => "1unit",
+    'ft' => '1ft',
+    'g' => '100g',
+    'kg' => '100g',
+    'lbs' => '100g',
+    'oz' => '100g/100ml',
+    'pt' => '100ml',
+    'ml' => '100ml',
+    'gal' => '100ml',
+    'qt' => '100ml',
+    'fz' => '100ml',
+    'l' => '100ml',
+    'fl' => '1fl',
+    'pc' => '1pc',
+    'whole' => 'each',
+    'unit' => 'each',
+    'pk' => '1pc',
+    'ct' => '1ct',
+    'each' => 'each',
+    'N/A' => '1unit'
   }.freeze
 
   def self.calculate(price, size, unit)
@@ -86,7 +86,7 @@ class PricePerUnitCalculator
       value: price_per_unit.round(4),
       display_value: price_per_unit.round(2),
       base_quantity: base_quantity,
-      normalized_unit: NORMALIZED_UNITS[unit],
+      normalized_unit: NORMALIZED_UNITS[unit]
     }
   end
 
@@ -96,26 +96,24 @@ class PricePerUnitCalculator
 
     {
       price_per_unit: result[:display_value],
-      normalized_unit: result[:normalized_unit],
+      normalized_unit: result[:normalized_unit]
     }
   end
 
   def self.should_calculate?(price, size, unit)
     valid_inputs?(price, size, unit) &&
-    UnitParser.valid_unit?(unit) &&
-    unit != "N/A"  # Optional: skip calculation for unknown units
+      UnitParser.valid_unit?(unit) &&
+      unit != 'N/A' # Optional: skip calculation for unknown units
   end
-
-  private
 
   def self.valid_inputs?(price, size, unit)
     price.present? &&
-    price.is_a?(Numeric) &&
-    price > 0 &&
-    size.present? &&
-    size.is_a?(Numeric) &&
-    size > 0 &&
-    unit.present? &&
-    UnitParser.valid_unit?(unit)
+      price.is_a?(Numeric) &&
+      price > 0 &&
+      size.present? &&
+      size.is_a?(Numeric) &&
+      size > 0 &&
+      unit.present? &&
+      UnitParser.valid_unit?(unit)
   end
 end

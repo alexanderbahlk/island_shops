@@ -16,6 +16,7 @@ class ScrapedShopItemBuilder < BaseShopItemBuilder
     @shop_item_params = shop_item_params
     @shop_item_update_params = shop_item_update_params
     @errors = []
+    super()
   end
 
   def build
