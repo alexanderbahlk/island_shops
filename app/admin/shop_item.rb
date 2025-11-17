@@ -290,7 +290,7 @@ ActiveAdmin.register ShopItem do
       row :image_url do |shop_item|
         if shop_item.image_url.present?
           div do
-            image_tag shop_item.image_url, style: "max-width: 300px; height: auto;"
+            image_tag shop_item.image_url, style: "max-width: 300px; height: auto;", referrerpolicy: "no-referrer", crossorigin: "anonymous"
           end
         end
       end
