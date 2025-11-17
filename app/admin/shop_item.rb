@@ -137,7 +137,7 @@ ActiveAdmin.register ShopItem do
     #end
     column :image_url do |shop_item|
       if shop_item.image_url.present?
-        image_tag shop_item.image_url, size: "50x50", style: "object-fit: cover;"
+        image_tag shop_item.image_url, size: "50x50", style: "object-fit: cover;", referrerpolicy: "no-referrer", crossorigin: "anonymous"
       end
     end
     column :category do |shop_item|
