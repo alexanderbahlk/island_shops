@@ -215,12 +215,10 @@ ActiveAdmin.register Category do
           end
         end
 
-        if category.shop_items.count > 20
-          div style: "margin-top: 10px;" do
+        div style: "margin-top: 10px;" do
             link_to "View all #{category.shop_items.count} items",
                     admin_shop_items_path(q: { category_id_eq: category.id }),
                     class: "button"
-          end
         end
       end
     end
