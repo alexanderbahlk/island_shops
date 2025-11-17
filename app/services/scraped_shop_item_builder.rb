@@ -1,15 +1,15 @@
 class ScrapedShopItemBuilder < BaseShopItemBuilder
-  MASSY = "Massy".freeze
-  COSTULESS = "Cost.U.Less".freeze
-  PRICESMART = "PriceSmart".freeze
-  AONE = "A1".freeze
+  MASSY = 'Massy'.freeze
+  COSTULESS = 'Cost.U.Less'.freeze
+  PRICESMART = 'PriceSmart'.freeze
+  AONE = 'A1'.freeze
 
   # List of all traits
   ALLOWED_SCRAPE_SHOPS = [
     MASSY,
     COSTULESS,
     PRICESMART,
-    AONE,
+    AONE
   ].freeze
 
   def initialize(shop_item_params, shop_item_update_params)
@@ -56,17 +56,15 @@ class ScrapedShopItemBuilder < BaseShopItemBuilder
       @shop_item.assign_attributes(@shop_item_params.except(:id, :place))
     end
     # Auto-assign category if not already set
-    auto_assign_shop_item_category() if @shop_item.category.nil?
+    auto_assign_shop_item_category if @shop_item.category.nil?
 
     # set size and/or unit from title
-    set_shop_item_size_and_unit_from_title()
+    set_shop_item_size_and_unit_from_title
 
     # Only save if there are actual changes
-    if @shop_item.changed?
-      unless @shop_item.save
-        @errors.concat(@shop_item.errors.full_messages)
-        return
-      end
+    if @shop_item.changed? && !@shop_item.save
+      @errors.concat(@shop_item.errors.full_messages)
+      return
     end
 
     # Check if we need to create an update based on changes
@@ -83,13 +81,11 @@ class ScrapedShopItemBuilder < BaseShopItemBuilder
     Rails.logger.debug "Should create update: #{should_create_update}"
 
     if should_create_update
-      build_shop_item_update()
+      build_shop_item_update
 
-      unless @shop_item_update.save
-        @errors.concat(@shop_item_update.errors.full_messages)
-      end
+      @errors.concat(@shop_item_update.errors.full_messages) unless @shop_item_update.save
 
-      remove_old_updates()
+      remove_old_updates
     else
       @shop_item_update = last_update
     end
@@ -110,17 +106,15 @@ class ScrapedShopItemBuilder < BaseShopItemBuilder
     @shop_item = ShopItem.new(@shop_item_params)
 
     # Auto-assign category for new items
-    auto_assign_shop_item_category()
+    auto_assign_shop_item_category
 
     # set size and/or unit from title
-    set_shop_item_size_and_unit_from_title()
+    set_shop_item_size_and_unit_from_title
 
     if @shop_item.save
-      build_shop_item_update()
+      build_shop_item_update
 
-      unless @shop_item_update.save
-        @errors.concat(@shop_item_update.errors.full_messages)
-      end
+      @errors.concat(@shop_item_update.errors.full_messages) unless @shop_item_update.save
     else
       @errors.concat(@shop_item.errors.full_messages)
     end
@@ -137,9 +131,9 @@ class ScrapedShopItemBuilder < BaseShopItemBuilder
     end
 
     wrong_unit_updates = @shop_item.shop_item_updates.where.not(normalized_unit: @shop_item_update.normalized_unit)
-    if wrong_unit_updates.any?
-      wrong_unit_updates.destroy_all
-      Rails.logger.info "Removed #{wrong_unit_updates.size} ShopItemUpdates with wrong unit for ShopItem #{@shop_item.id}"
-    end
+    return unless wrong_unit_updates.any?
+
+    wrong_unit_updates.destroy_all
+    Rails.logger.info "Removed #{wrong_unit_updates.size} ShopItemUpdates with wrong unit for ShopItem #{@shop_item.id}"
   end
 end

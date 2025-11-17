@@ -36,16 +36,16 @@ class Category < ApplicationRecord
   acts_as_nested_set order_column: :sort_order
 
   has_many :shop_items, dependent: :nullify
-  belongs_to :parent, class_name: "Category", optional: true
-  has_many :children, class_name: "Category", foreign_key: "parent_id", dependent: :destroy
+  belongs_to :parent, class_name: 'Category', optional: true
+  has_many :children, class_name: 'Category', foreign_key: 'parent_id', dependent: :destroy
 
   has_many :shopping_list_items, dependent: :nullify
 
   enum category_type: {
-    root: 0,           # Food, Health & Beauty, etc.
-    category: 1,        # Fresh Food, Dairy, etc.
-    subcategory: 2,        # Vegetables, Fruits, etc.
-    product: 3,       # Tomatoes, Parmesan, etc.
+    root: 0, # Food, Health & Beauty, etc.
+    category: 1, # Fresh Food, Dairy, etc.
+    subcategory: 2, # Vegetables, Fruits, etc.
+    product: 3 # Tomatoes, Parmesan, etc.
   }
 
   validates :title, presence: true
@@ -60,9 +60,9 @@ class Category < ApplicationRecord
   after_save :update_children_paths, if: :saved_change_to_path?
   before_save do
     if synonyms.is_a?(String)
-      self.synonyms = synonyms.split(",").map(&:strip)
-    elsif synonyms.is_a?(Array) && synonyms.length == 1 && synonyms.first.is_a?(String) && synonyms.first.include?(",")
-      self.synonyms = synonyms.first.split(",").map(&:strip)
+      self.synonyms = synonyms.split(',').map(&:strip)
+    elsif synonyms.is_a?(Array) && synonyms.length == 1 && synonyms.first.is_a?(String) && synonyms.first.include?(',')
+      self.synonyms = synonyms.first.split(',').map(&:strip)
     else
       self.synonyms = synonyms
     end
@@ -77,35 +77,36 @@ class Category < ApplicationRecord
   scope :with_shop_items, -> { joins(:shop_items).distinct }
 
   # Efficient queries using materialized path
-  scope :under_path, ->(path) { where("path LIKE ?", "#{path}%") }
-  scope :direct_children_of, ->(parent_path) {
-          where("path LIKE ? AND depth = ?", "#{parent_path}/%", parent_path.split("/").length + 1)
-        }
+  scope :under_path, ->(path) { where('path LIKE ?', "#{path}%") }
+  scope :direct_children_of, lambda { |parent_path|
+    where('path LIKE ? AND depth = ?', "#{parent_path}/%", parent_path.split('/').length + 1)
+  }
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["category_type", "created_at", "depth", "id", "id_value", "lft", "parent_id", "path", "rgt", "slug", "sort_order", "title", "updated_at"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[category_type created_at depth id id_value lft parent_id path rgt slug sort_order
+       title updated_at]
   end
 
-  def self.ransackable_associations(auth_object = nil)
-    ["children", "parent", "shop_items"]
+  def self.ransackable_associations(_auth_object = nil)
+    %w[children parent shop_items]
   end
 
   def self.parent_options_for_select
     # Simple approach without using arrange
     where.not(category_type: :product)
-      .includes(:parent)
-      .order(:lft) # Use nested set ordering
-      .map do |category|
+         .includes(:parent)
+         .order(:lft) # Use nested set ordering
+         .map do |category|
       # Create indented display name based on depth
-      indent = "--" * category.depth
+      indent = '--' * category.depth
       ["#{indent}#{category.title}", category.id]
     end
   end
 
   def self.only_products
-    products.includes(:parent).map { |cat|
-      [cat.breadcrumbs.map(&:title).join(" > "), cat.id]
-    }.sort_by { |breadcrumb, _id| breadcrumb }
+    products.includes(:parent).map do |cat|
+      [cat.breadcrumbs.map(&:title).join(' > '), cat.id]
+    end.sort_by { |breadcrumb, _id| breadcrumb }
   end
 
   def full_path
@@ -113,7 +114,7 @@ class Category < ApplicationRecord
   end
 
   def ancestors_titles
-    path ? path.split("/") : []
+    path ? path.split('/') : []
   end
 
   def breadcrumbs
@@ -142,9 +143,9 @@ class Category < ApplicationRecord
   def self.find_similar(title, threshold: 0.3, limit: 5)
     return none if title.blank?
 
-    select("*, similarity(title, ?) as sim_score")
-      .where("similarity(title, ?) > ?", title, threshold)
-      .order("sim_score DESC")
+    select('*, similarity(title, ?) as sim_score')
+      .where('similarity(title, ?) > ?', title, threshold)
+      .order('sim_score DESC')
       .limit(limit)
   end
 
@@ -198,6 +199,7 @@ class Category < ApplicationRecord
   def approved_cached_shop_items_count
     Rails.cache.fetch("category/#{id}/approved_cached_shop_items_count", expires_in: 5.minutes) do
       return 0 unless product?
+
       shop_items.approved.count
     end
   end
@@ -213,7 +215,7 @@ class Category < ApplicationRecord
     cleared_shop_item_count = ShopItem.where(category_id: descendant_ids).update_all(category_id: nil, approved: false)
     Rails.logger.info "Cleared #{cleared_shop_item_count} shop item references for category '#{title}' and its descendants"
 
-    #Clear ShoppingListItem references
+    # Clear ShoppingListItem references
     cleared_shopping_list_item_count = ShoppingListItem.where(category_id: descendant_ids).update_all(category_id: nil)
     Rails.logger.info "Cleared #{cleared_shopping_list_item_count} shopping list item references for category '#{title}' and its descendants"
 
@@ -239,12 +241,12 @@ class Category < ApplicationRecord
     current_depth = calculate_depth
 
     self.category_type = case current_depth
-      when 0 then :root
-      when 1 then :category
-      when 2 then :subcategory
-      when 3 then :product
-      else :product
-      end
+                         when 0 then :root
+                         when 1 then :category
+                         when 2 then :subcategory
+                         when 3 then :product
+                         else :product
+                         end
   end
 
   def build_path
@@ -275,8 +277,8 @@ class Category < ApplicationRecord
     return unless parent
 
     calculated_depth = calculate_depth
-    if calculated_depth > 3
-      errors.add(:parent, "Category hierarchy cannot exceed 4 levels")
-    end
+    return unless calculated_depth > 3
+
+    errors.add(:parent, 'Category hierarchy cannot exceed 4 levels')
   end
 end
