@@ -111,7 +111,7 @@ ActiveAdmin.register ShopItem do
       shop_item.place&.title || "N/A"
     end
     column :title do |shop_item|
-      link_to shop_item.title, shop_item.url, target: "_blank", data: { shop_item_id: shop_item.id }
+      link_to shop_item.title, shop_item.url, target: "_blank", rel: "noopener", referrerpolicy: "origin", data: { shop_item_id: shop_item.id, turbo: false }
     end
     column :breadcrumb do |shop_item|
       #find ">" in the breadcrumb
