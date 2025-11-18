@@ -3,19 +3,6 @@ ActiveAdmin.register ShopItem do
   permit_params :url, :title, :display_title, :image_url, :size, :unit, :location_id, :product_id, :approved,
                 :needs_another_review, :category_id
 
-  # Add the action at the top level of the resource
-  #
-  action_item :ai_category_match, only: :index do
-    link_to 'AI Category Match',
-            ai_category_match_admin_shop_items_path,
-            method: :post,
-            data: {
-              confirm: 'This will start an AI job to suggest categories for items without a category. Continue?',
-              disable_with: 'Starting...'
-            },
-            class: 'button'
-  end
-
   action_item :assign_missing_categories, only: :index do
     link_to 'Auto-assign Categories',
             assign_missing_categories_admin_shop_items_path,
@@ -178,10 +165,10 @@ ActiveAdmin.register ShopItem do
                     class: 'bip-select-unit'
     end
     column :latest_price_per_normalized_unit_with_unit do |shop_item|
-      if shop_item.latest_price_per_normalized_unit_with_unit != 'N/A'
-        shop_item.latest_price_per_normalized_unit_with_unit
-      else
+      if shop_item.latest_price_per_normalized_unit_with_unit == 'N/A'
         content_tag(:span, 'N/A', style: 'color: red; font-size: 11px;')
+      else
+        shop_item.latest_price_per_normalized_unit_with_unit
       end
     end
     column :latest_stock_status do |shop_item|
@@ -610,15 +597,6 @@ ActiveAdmin.register ShopItem do
     end
   end
 
-  # Placeholder for AI category match action
-  collection_action :ai_category_match, method: :post do
-    # Enqueue the job
-    AiShopItemCategoryMatchJob.perform_later
-
-    redirect_to_collection_with_filters(:notice,
-                                        'AI category matching job started. Check back in a few minutes to see results.')
-  end
-
   # Collection action for auto-assigning categories
   collection_action :assign_missing_categories, method: :post do
     pending_approval_count = ShopItem.pending_approval.count
@@ -629,8 +607,7 @@ ActiveAdmin.register ShopItem do
     end
 
     # Enqueue the job
-    similarity_threshold = 0.3
-    AssignShopItemCategoryJob.perform_later(similarity_threshold: similarity_threshold)
+    AssignShopItemCategoryJob.perform_later({})
 
     # You can implement auto-assignment logic here or create a job
     redirect_to_collection_with_filters(:notice,
