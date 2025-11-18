@@ -19,6 +19,7 @@ class PricePerUnitCalculator
     'whole' => 1, # Price per 1 whole
     'unit' => 1,     # Price per 1 whole
     'each' => 1,     # Price per 1 each
+    'sq ft' => 1, # Price per 1 square foot
     'N/A' => 1 # Price per 1 unit (when unit is unknown)
   }.freeze
 
@@ -60,6 +61,7 @@ class PricePerUnitCalculator
     'pk' => '1pc',
     'ct' => '1ct',
     'each' => 'each',
+    'sq ft' => '1sq ft',
     'N/A' => '1unit'
   }.freeze
 

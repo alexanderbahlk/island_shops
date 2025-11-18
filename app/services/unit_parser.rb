@@ -1,99 +1,105 @@
 module UnitParser
-  VALID_UNITS = %w[
-    ft
-    whole
-    ct
-    pc
-    pk
-    pt
-    each
-    g
-    kg
-    lbs
-    l
-    ml
-    oz
-    fz
-    gal
-    qt
-    fl
-    unit
-    N/A
+  VALID_UNITS = [
+    'ft',
+    'whole',
+    'ct',
+    'pc',
+    'pk',
+    'pt',
+    'each',
+    'g',
+    'kg',
+    'lbs',
+    'l',
+    'ml',
+    'oz',
+    'fz',
+    'gal',
+    'qt',
+    'fl',
+    'unit',
+    'sq ft',
+    'N/A'
   ].freeze
 
   UNIT_PATTERNS = {
-    "ft" => /(\d+(?:\.\d+)?)\s*ft\s*$/i,
-    "ct" => /(?:(\d+(?:\.\d+)?)\s*)?ct\s*$/i,
-    "lbs" => /(\d+(?:\.\d+)?)\s*lbs\s*$/i,
-    "lb" => /(\d+(?:\.\d+)?)\s*lb\s*$/i,
-    "packs" => /(?:(\d+(?:\.\d+)?)\s*)?packs\s*$/i,
-    "pack" => /(?:(\d+(?:\.\d+)?)\s*)?pack\s*/i,
-    "pcs" => /(?:(\d+(?:\.\d+)?)\s*)?pcs\s*$/i,
-    "pc" => /(?:(\d+(?:\.\d+)?)\s*)?pc\s*$/i,
-    "each" => /(?:(\d+(?:\.\d+)?)\s*)?(each|\[each\])\s*$/i,
-    "g" => /(\d+(?:\.\d+)?)\s*(g|gr)\s*$/i,
-    "kg" => /(\d+(?:\.\d+)?)\s*kg\s*$/i,
-    "lt" => /(\d+(?:\.\d+)?)\s*lt\s*$/i,
-    "l" => /(\d+(?:\.\d+)?)\s*l\s*$/i,
-    "ml" => /(\d+(?:\.\d+)?)\s*ml\s*$/i,
-    "oz" => /(\d+(?:\.\d+)?)\s*oz\s*$/i,
-    "fz" => /(\d+(?:\.\d+)?)\s*fz\s*$/i,
-    "fl" => /(\d+(?:\.\d+)?)\s*fl\s*$/i,
-    "gal" => /(\d+(?:\.\d+)?)\s*gal\s*$/i,
-    "qt" => /(\d+(?:\.\d+)?)\s*qt\s*$/i,
-    "whole" => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
-    "kg_per" => /(?:(\d+(?:\.\d+)?)\s*)?\[per\s*kg\]/i,
-    "unit" => /(?:(\d+(?:\.\d+)?)\s*)?unit\s*$/i,
-    "pt" => /(\d+(?:\.\d+)?)\s*pt\s*$/i,
-    "pts" => /(\d+(?:\.\d+)?)\s*pts\s*$/i,
-    "pint" => /(\d+(?:\.\d+)?)\s*pint?\s*$/i,
-    "pints" => /(\d+(?:\.\d+)?)\s*pints?\s*$/i,
+    'ft' => /(\d+(?:\.\d+)?)\s*ft\s*$/i,
+    'ct' => /(?:(\d+(?:\.\d+)?)\s*)?ct\s*$/i,
+    'lbs' => /(\d+(?:\.\d+)?)\s*lbs\s*$/i,
+    'lb' => /(\d+(?:\.\d+)?)\s*lb\s*$/i,
+    'packs' => /(?:(\d+(?:\.\d+)?)\s*)?packs\s*$/i,
+    'pack' => /(?:(\d+(?:\.\d+)?)\s*)?pack\s*/i,
+    'pcs' => /(?:(\d+(?:\.\d+)?)\s*)?pcs\s*$/i,
+    'pc' => /(?:(\d+(?:\.\d+)?)\s*)?pc\s*$/i,
+    'each' => /(?:(\d+(?:\.\d+)?)\s*)?(each|\[each\])\s*$/i,
+    'sq ft' => /(\d+(?:\.\d+)?)\s*sq\s*ft\s*$/i,
+    'g' => /(\d+(?:\.\d+)?)\s*(g|gr)\s*$/i,
+    'kg' => /(\d+(?:\.\d+)?)\s*kg\s*$/i,
+    'lt' => /(\d+(?:\.\d+)?)\s*lt\s*$/i,
+    'l' => /(\d+(?:\.\d+)?)\s*l\s*$/i,
+    'ml' => /(\d+(?:\.\d+)?)\s*ml\s*$/i,
+    'oz' => /(\d+(?:\.\d+)?)\s*oz\s*$/i,
+    'fz' => /(\d+(?:\.\d+)?)\s*fz\s*$/i,
+    'fl' => /(\d+(?:\.\d+)?)\s*fl\s*$/i,
+    'gal' => /(\d+(?:\.\d+)?)\s*gal\s*$/i,
+    'qt' => /(\d+(?:\.\d+)?)\s*qt\s*$/i,
+    'whole' => /(?:(\d+(?:\.\d+)?)\s*)?whole\s*/i,
+    'kg_per' => /(?:(\d+(?:\.\d+)?)\s*)?\[per\s*kg\]/i,
+    'unit' => /(?:(\d+(?:\.\d+)?)\s*)?unit\s*$/i,
+    'pt' => /(\d+(?:\.\d+)?)\s*pt\s*$/i,
+    'pts' => /(\d+(?:\.\d+)?)\s*pts\s*$/i,
+    'pint' => /(\d+(?:\.\d+)?)\s*pint?\s*$/i,
+    'pints' => /(\d+(?:\.\d+)?)\s*pints?\s*$/i
   }.freeze
 
   # Extended aliases for fuzzy matching
   UNIT_ALIASES = {
-    "feet" => "ft",
-    "pounds" => "lbs",
-    "lb" => "lbs",
-    "gr" => "g",
-    "gram" => "g",
-    "grams" => "g",
-    "pack" => "pk",
-    "packs" => "pk",
-    "pcs" => "pk",
-    "piece" => "pc",
-    "pieces" => "pc",
-    "piece(s)" => "pc",
-    "whole" => "pc",
-    "count" => "ct",
-    "quart" => "qt",
-    "gallon" => "gal",
-    "gallons" => "gal",
-    "pint" => "pt",
-    "pints" => "pt",
-    "pts" => "pt",
-    "lt" => "l",
-    "liter" => "l",
-    "liters" => "l",
-    "litre" => "l",
-    "litres" => "l",
-    "milliliter" => "ml",
-    "milliliters" => "ml",
-    "millilitre" => "ml",
-    "millilitres" => "ml",
-    "mL" => "ml",
-    "[per kg]" => "kg",
-    "kilogram" => "kg",
-    "kilograms" => "kg",
-    "kg_per" => "kg",
-    "ounce" => "oz",
-    "ounces" => "oz",
-    "fluid" => "fl",
-    "each" => "each",
-    "[each]" => "each",
-    "ea" => "each",
-    "n/a" => "N/A",
-    "na" => "N/A",
+    'feet' => 'ft',
+    'pounds' => 'lbs',
+    'lb' => 'lbs',
+    'gr' => 'g',
+    'gram' => 'g',
+    'grams' => 'g',
+    'pack' => 'pk',
+    'packs' => 'pk',
+    'pcs' => 'pk',
+    'piece' => 'pc',
+    'pieces' => 'pc',
+    'piece(s)' => 'pc',
+    'whole' => 'pc',
+    'count' => 'ct',
+    'quart' => 'qt',
+    'gallon' => 'gal',
+    'gallons' => 'gal',
+    'pint' => 'pt',
+    'pints' => 'pt',
+    'pts' => 'pt',
+    'lt' => 'l',
+    'liter' => 'l',
+    'liters' => 'l',
+    'litre' => 'l',
+    'litres' => 'l',
+    'milliliter' => 'ml',
+    'milliliters' => 'ml',
+    'millilitre' => 'ml',
+    'millilitres' => 'ml',
+    'mL' => 'ml',
+    '[per kg]' => 'kg',
+    'kilogram' => 'kg',
+    'kilograms' => 'kg',
+    'kg_per' => 'kg',
+    'ounce' => 'oz',
+    'ounces' => 'oz',
+    'fluid' => 'fl',
+    'each' => 'each',
+    '[each]' => 'each',
+    'sq ft' => 'sq ft',
+    'sqft' => 'sq ft',
+    'square foot' => 'sq ft',
+    'square feet' => 'sq ft',
+    'ea' => 'each',
+    'n/a' => 'N/A',
+    'na' => 'N/A'
   }.freeze
 
   ONE_SIZE_FROM_UNITS = %w[pk whole].freeze
@@ -104,30 +110,30 @@ module UnitParser
     # Check for specific unit patterns first
     UNIT_PATTERNS.each do |unit, pattern|
       match = title.match(pattern)
-      if match
-        normalized_unit = normalize_unit(unit)
-        #if normalized_unit is in ONE_SIZE_FROM_UNITS and size is nil, set size to 1
-        if ONE_SIZE_FROM_UNITS.include?(normalized_unit) && match[1].nil?
-          return {
-                   size: 1.0,
-                   unit: normalized_unit,
-                 }
-        end
+      next unless match
 
+      normalized_unit = normalize_unit(unit)
+      # if normalized_unit is in ONE_SIZE_FROM_UNITS and size is nil, set size to 1
+      if ONE_SIZE_FROM_UNITS.include?(normalized_unit) && match[1].nil?
         return {
-                 size: match[1].to_f,
-                 unit: normalized_unit,
-               }
+          size: 1.0,
+          unit: normalized_unit
+        }
       end
+
+      return {
+        size: match[1].to_f,
+        unit: normalized_unit
+      }
     end
 
     # Check for standalone number at the end (default to N/A unit)
     size_match = title.match(/(\d+(?:\.\d+)?)\s*$/)
     if size_match
       return {
-               size: size_match[1].to_f,
-               unit: "N/A",
-             }
+        size: size_match[1].to_f,
+        unit: 'N/A'
+      }
     end
 
     { size: nil, unit: nil }
@@ -154,8 +160,6 @@ module UnitParser
   def self.valid_unit?(unit)
     VALID_UNITS.include?(unit)
   end
-
-  private
 
   def self.fuzzy_match(input, threshold: 2)
     return nil if input.length < 2 # Too short for meaningful fuzzy matching
@@ -196,7 +200,7 @@ module UnitParser
         matrix[i][j] = [
           matrix[i - 1][j] + 1,     # deletion
           matrix[i][j - 1] + 1,     # insertion
-          matrix[i - 1][j - 1] + cost, # substitution
+          matrix[i - 1][j - 1] + cost # substitution
         ].min
       end
     end
