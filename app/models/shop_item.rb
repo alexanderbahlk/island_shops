@@ -54,7 +54,8 @@ class ShopItem < ApplicationRecord
   validates :uuid, uniqueness: true
 
   # Optional validations
-  validates :image_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }, allow_blank: true
+  validates :image_url,
+            format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: 'must be a valid URL' }, allow_blank: true
 
   # Callbacks
   # Parse and set unit from title
@@ -63,7 +64,7 @@ class ShopItem < ApplicationRecord
   # needs_model_embedding_update = true if title or breadcrumb changes
   before_save :set_needs_model_embedding_update, if: -> { title_changed? || breadcrumb_changed? }
   #
-  #Does not run on create, only when unit is changed
+  # Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
 
   before_destroy :clear_shopping_list_item_references
@@ -78,57 +79,58 @@ class ShopItem < ApplicationRecord
   scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
   scope :in_category, ->(category) { where(category: category) }
   scope :missing_category, -> { where(category_id: nil) }
-  scope :under_category_path, ->(path) {
-          joins(:category).where("categories.path LIKE ?", "#{path}%")
-        }
-  scope :was_manually_updated, -> { where.not(display_title: [nil, ""]).where.not(category_id: nil) }
-  scope :no_price_per_unified_unit, -> {
-          # Items with no updates at all OR items where the latest update has no price_per_unit
-          where(
-            id: ShopItem.left_joins(:shop_item_updates)
-                        .where(shop_item_updates: { id: nil })
-                        .select(:id),
-          ).or(
-                          where(
-                            id: ShopItem.joins(:shop_item_updates)
-                                        .where(shop_item_updates: { price_per_unit: nil })
-                                        .where(
-                                          shop_item_updates: {
-                                            id: ShopItemUpdate.select("MAX(id)")
-                                                              .where("shop_item_updates.shop_item_id = shop_items.id")
-                                                              .group(:shop_item_id),
-                                          },
-                                        )
-                                        .select(:id),
-                          )
-                        )
-        }
-  scope :no_unit_size, -> {
-          where(unit: [nil, ""]).or(where(size: nil))
-        }
-  scope :is_community_report, -> {
-          where.not(user_id: nil)
-        }
+  scope :under_category_path, lambda { |path|
+    joins(:category).where('categories.path LIKE ?', "#{path}%")
+  }
+  scope :was_manually_updated, -> { where.not(display_title: [nil, '']).where.not(category_id: nil) }
+  scope :no_price_per_unified_unit, lambda {
+    # Items with no updates at all OR items where the latest update has no price_per_unit
+    where(
+      id: ShopItem.left_joins(:shop_item_updates)
+                  .where(shop_item_updates: { id: nil })
+                  .select(:id)
+    ).or(
+      where(
+        id: ShopItem.joins(:shop_item_updates)
+                    .where(shop_item_updates: { price_per_unit: nil })
+                    .where(
+                      shop_item_updates: {
+                        id: ShopItemUpdate.select('MAX(id)')
+                                          .where('shop_item_updates.shop_item_id = shop_items.id')
+                                          .group(:shop_item_id)
+                      }
+                    )
+                    .select(:id)
+      )
+    )
+  }
+  scope :no_unit_size, lambda {
+    where(unit: [nil, '']).or(where(size: nil))
+  }
+  scope :is_community_report, lambda {
+    where.not(user_id: nil)
+  }
 
   # For Ransack search
-  def self.ransackable_attributes(auth_object = nil)
-    ["approved", "created_at", "display_title", "id", "id_value", "image_url", "product_id", "size", "title", "updated_at", "url", "unit", "category_id", "needs_another_review", "breadcrumb", "place_id"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[approved created_at display_title id id_value image_url product_id size title
+       updated_at url unit category_id needs_another_review breadcrumb place_id]
   end
 
-  def self.ransackable_associations(auth_object = nil)
-    ["shop_item_updates", "category"]
+  def self.ransackable_associations(_auth_object = nil)
+    %w[shop_item_updates category]
   end
 
-  def self.ransackable_scopes(auth_object = nil)
+  def self.ransackable_scopes(_auth_object = nil)
     [:no_price_per_unified_unit]
   end
 
   def latest_price_per_unit_with_unit
     latest_update = latest_shop_item_update
-    if latest_update&.price && self.unit.present?
-      self.size.to_s + self.unit.to_s + " for $" + latest_update.price.to_s
+    if latest_update&.price && unit.present?
+      size.to_s + unit.to_s + ' for $' + latest_update.price.to_s
     else
-      "N/A"
+      'N/A'
     end
   end
 
@@ -137,16 +139,17 @@ class ShopItem < ApplicationRecord
     if latest_update&.price_per_unit && latest_update&.price_per_unit.is_a?(Numeric)
       latest_update.price_per_unit
     else
-      "N/A"
+      'N/A'
     end
   end
 
   def latest_price_per_normalized_unit_with_unit
     latest_price_per_normalized_unit = latest_price_per_normalized_unit()
     if latest_price_per_normalized_unit && latest_price_per_normalized_unit.is_a?(Numeric)
-      "$" + sprintf("%.2f", latest_shop_item_update.price_per_unit).to_s + " per " + latest_shop_item_update.normalized_unit.to_s
+      '$' + format('%.2f',
+                   latest_shop_item_update.price_per_unit).to_s + ' per ' + latest_shop_item_update.normalized_unit.to_s
     else
-      "N/A"
+      'N/A'
     end
   end
 
@@ -157,18 +160,17 @@ class ShopItem < ApplicationRecord
 
   def latest_stock_status
     latest_update = latest_shop_item_update
-    latest_update&.normalized_stock_status || "N/A"
+    latest_update&.normalized_stock_status || 'N/A'
   end
 
   def latest_shop_item_update
-    self.shop_item_updates.order(created_at: :desc).first
+    shop_item_updates.order(created_at: :desc).first
   end
 
   def second_last_shop_item_update
-    if self.shop_item_updates.count < 2
-      return nil
-    end
-    self.shop_item_updates.order(created_at: :desc).second
+    return nil if shop_item_updates.count < 2
+
+    shop_item_updates.order(created_at: :desc).second
   end
 
   def category_hierarchy
@@ -179,7 +181,7 @@ class ShopItem < ApplicationRecord
       root: breadcrumbs[0]&.title,
       category: breadcrumbs[1]&.title,
       subcategory: breadcrumbs[2]&.title,
-      product: breadcrumbs[3]&.title,
+      product: breadcrumbs[3]&.title
     }
   end
 
@@ -198,7 +200,7 @@ class ShopItem < ApplicationRecord
   end
 
   def no_price_per_unified_unit
-    latest_update = self.shop_item_updates.order(created_at: :desc).first
+    latest_update = shop_item_updates.order(created_at: :desc).first
     latest_update.nil? || latest_update.price_per_unit.nil?
   end
 
@@ -209,20 +211,20 @@ class ShopItem < ApplicationRecord
   end
 
   def clear_shopping_list_item_references
-    ShoppingListItem.with_deleted.where(shop_item_id: self.id).update_all(shop_item_id: nil)
+    ShoppingListItem.with_deleted.where(shop_item_id: id).update_all(shop_item_id: nil)
   end
 
   def category_must_be_product
-    unless category.product?
-      errors.add(:category, "must be a product category")
-    end
+    return if category.product?
+
+    errors.add(:category, 'must be a product category')
   end
 
   def force_valid_unit_value
-    #call UnitParser.normalize_unit to ensure unit is valid
+    # call UnitParser.normalize_unit to ensure unit is valid
     normalized = UnitParser.normalize_unit(unit)
     if normalized.nil?
-      errors.add(:unit, "is not a recognized unit")
+      errors.add(:unit, 'is not a recognized unit')
     else
       self.unit = normalized
     end
@@ -235,6 +237,6 @@ class ShopItem < ApplicationRecord
 
     # Only set if current values are blank
     self.size = parsed_data[:size] if (size.blank? || size == 0) && parsed_data[:size].present?
-    self.unit = parsed_data[:unit] if (unit.blank? || unit == "N/A") && parsed_data[:unit].present?
+    self.unit = parsed_data[:unit] if (unit.blank? || unit == 'N/A') && parsed_data[:unit].present?
   end
 end
