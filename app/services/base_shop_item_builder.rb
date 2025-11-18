@@ -27,12 +27,7 @@ class BaseShopItemBuilder
   def auto_assign_shop_item_category
     return if @shop_item.title.blank?
 
-    best_match = ShopItemShopItemMatcher.new(shop_item: @shop_item, sim: 0.15).find_best_match
-
-    if best_match.nil?
-      # Try to find the best matching category
-      best_match = ShopItemCategoryMatcher.new(shop_item: @shop_item).find_best_match
-    end
+    best_match = FindCategoryForShopItemService.new(shop_item: @shop_item).find
 
     return unless best_match
 

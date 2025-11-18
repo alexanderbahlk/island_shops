@@ -732,12 +732,7 @@ ActiveAdmin.register ShopItem do
   member_action :re_assign_category, method: :post do
     original_category = resource.category
 
-    best_match = ShopItemShopItemMatcher.new(shop_item: resource, sim: 0.15).find_best_match
-
-    if best_match.nil?
-      # Use the category matcher to find the best match
-      best_match = ShopItemCategoryMatcher.new(shop_item: resource).find_best_match
-    end
+    best_match = FindCategoryForShopItemService.new(shop_item: @shop_item).find
 
     if best_match
       resource.update!(category: best_match)
