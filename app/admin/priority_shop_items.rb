@@ -19,7 +19,7 @@ ActiveAdmin.register_page 'Priority Shop Items' do
         priority_shop_items << { product: product, pending_approval_count: pending_approval_count,
                                  approved_count: approved_count, all_count: all_count, to_approve_ratio: to_approve_ratio }
       end
-      priority_shop_items.sort_by! { |item| -item[:pending_approval_count] }
+      priority_shop_items.sort_by! { |item| -item[:to_approve_ratio] }
       ul class: 'priority-shop_item-list' do
         priority_shop_items.each do |item|
           li class: 'priority-shop_item-list-item' do
