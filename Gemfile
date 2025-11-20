@@ -18,8 +18,6 @@ gem 'redis', '~> 5.4', '>= 5.4.1'
 
 gem 'rack-attack'
 
-gem 'informers'
-
 gem 'acts_as_paranoid', '~> 0.10.3'
 
 # Use the Puma web server [https://github.com/puma/puma]

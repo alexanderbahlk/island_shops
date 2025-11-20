@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_14_145218) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_20_134413) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -122,13 +122,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_14_145218) do
     t.string "breadcrumb"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "place_id"
-    t.jsonb "model_embedding"
-    t.boolean "needs_model_embedding_update", default: false, null: false
     t.bigint "user_id"
     t.index ["approved"], name: "index_shop_items_on_approved"
     t.index ["breadcrumb"], name: "index_shop_items_on_breadcrumb"
     t.index ["category_id"], name: "index_shop_items_on_category_id"
-    t.index ["model_embedding"], name: "index_shop_items_on_model_embedding", using: :gin
     t.index ["place_id"], name: "index_shop_items_on_place_id"
     t.index ["url"], name: "index_shop_items_on_url", unique: true
     t.index ["user_id"], name: "index_shop_items_on_user_id"

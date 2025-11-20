@@ -2,36 +2,33 @@
 #
 # Table name: shop_items
 #
-#  id                           :bigint           not null, primary key
-#  approved                     :boolean          default(FALSE)
-#  breadcrumb                   :string
-#  display_title                :string
-#  image_url                    :string
-#  model_embedding              :jsonb
-#  needs_another_review         :boolean          default(FALSE)
-#  needs_model_embedding_update :boolean          default(FALSE), not null
-#  size                         :decimal(10, 2)
-#  title                        :string           not null
-#  unit                         :string
-#  url                          :string           not null
-#  uuid                         :uuid             not null
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
-#  category_id                  :bigint
-#  place_id                     :bigint
-#  product_id                   :string
-#  user_id                      :bigint
+#  id                   :bigint           not null, primary key
+#  approved             :boolean          default(FALSE)
+#  breadcrumb           :string
+#  display_title        :string
+#  image_url            :string
+#  needs_another_review :boolean          default(FALSE)
+#  size                 :decimal(10, 2)
+#  title                :string           not null
+#  unit                 :string
+#  url                  :string           not null
+#  uuid                 :uuid             not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  category_id          :bigint
+#  place_id             :bigint
+#  product_id           :string
+#  user_id              :bigint
 #
 # Indexes
 #
-#  index_shop_items_on_approved         (approved)
-#  index_shop_items_on_breadcrumb       (breadcrumb)
-#  index_shop_items_on_category_id      (category_id)
-#  index_shop_items_on_model_embedding  (model_embedding) USING gin
-#  index_shop_items_on_place_id         (place_id)
-#  index_shop_items_on_url              (url) UNIQUE
-#  index_shop_items_on_user_id          (user_id)
-#  index_shop_items_on_uuid             (uuid) UNIQUE
+#  index_shop_items_on_approved     (approved)
+#  index_shop_items_on_breadcrumb   (breadcrumb)
+#  index_shop_items_on_category_id  (category_id)
+#  index_shop_items_on_place_id     (place_id)
+#  index_shop_items_on_url          (url) UNIQUE
+#  index_shop_items_on_user_id      (user_id)
+#  index_shop_items_on_uuid         (uuid) UNIQUE
 #
 # Foreign Keys
 #
@@ -61,8 +58,6 @@ class ShopItem < ApplicationRecord
   # Parse and set unit from title
   before_validation :parse_and_set_unit_from_title, if: :title_changed?
 
-  # needs_model_embedding_update = true if title or breadcrumb changes
-  before_save :set_needs_model_embedding_update, if: -> { title_changed? || breadcrumb_changed? }
   #
   # Does not run on create, only when unit is changed
   before_validation :force_valid_unit_value, if: :unit_changed?, unless: -> { unit.blank? }
@@ -73,8 +68,6 @@ class ShopItem < ApplicationRecord
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :pending_approval_with_category, -> { where(approved: false).where.not(category_id: nil) }
-  scope :needs_ai_category_match, -> { where(approved: false).where.not(model_embedding: nil) }
-  scope :needs_model_embedding_update, -> { where(needs_model_embedding_update: true).or(where(model_embedding: nil)) }
   scope :needs_review, -> { where(needs_another_review: true) }
   scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
   scope :in_category, ->(category) { where(category: category) }
@@ -205,10 +198,6 @@ class ShopItem < ApplicationRecord
   end
 
   private
-
-  def set_needs_model_embedding_update
-    self.needs_model_embedding_update = true
-  end
 
   def clear_shopping_list_item_references
     ShoppingListItem.with_deleted.where(shop_item_id: id).update_all(shop_item_id: nil)
