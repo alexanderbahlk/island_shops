@@ -8,9 +8,9 @@ ActiveAdmin.register Category do
       if @category.save
         # Redirect to the parent category show page if parent_id is present
         if @category.parent_id.present?
-          redirect_to admin_category_path(@category.parent_id), notice: "Child category created successfully."
+          redirect_to admin_category_path(@category.parent_id), notice: 'Child category created successfully.'
         else
-          redirect_to admin_category_path(@category), notice: "Category created successfully."
+          redirect_to admin_category_path(@category), notice: 'Category created successfully.'
         end
       else
         render :new
@@ -18,7 +18,10 @@ ActiveAdmin.register Category do
     end
 
     def update
-      params[:category][:synonyms] = params[:category][:synonyms].to_s.split(",").map(&:strip) if params[:category][:synonyms]
+      if params[:category][:synonyms]
+        params[:category][:synonyms] =
+          params[:category][:synonyms].to_s.split(',').map(&:strip)
+      end
       super
     end
 
@@ -30,15 +33,16 @@ ActiveAdmin.register Category do
       new_category = Category.create!(
         title: params[:title],
         parent: parent_category,
-        sort_order: (parent_category&.children&.maximum(:sort_order) || 0) + 1,
+        sort_order: (parent_category&.children&.maximum(:sort_order) || 0) + 1
       )
 
       shopping_list_item.update(category: new_category)
 
       if new_category.persisted?
-        redirect_to admin_shopping_list_item_path(params[:shopping_list_item_id]), notice: "Category successfully created."
+        redirect_to admin_shopping_list_item_path(params[:shopping_list_item_id]),
+                    notice: 'Category successfully created.'
       else
-        redirect_to admin_shopping_list_item_path(params[:shopping_list_item_id]), alert: "Failed to create category."
+        redirect_to admin_shopping_list_item_path(params[:shopping_list_item_id]), alert: 'Failed to create category.'
       end
     end
   end
@@ -49,19 +53,19 @@ ActiveAdmin.register Category do
     id_column
     column :title do |category|
       # Indent based on depth to show hierarchy
-      indent = "&nbsp;" * (category.depth * 4)
+      indent = '&nbsp;' * (category.depth * 4)
       raw "#{indent}#{category.title}"
     end
     column :synonyms do |cat|
-      cat.synonyms&.join(", ")
+      cat.synonyms&.join(', ')
     end
     column :category_type do |category|
       status_tag category.category_type, class: case category.category_type
-                                         when "root" then "blue"
-                                         when "category" then "green"
-                                         when "subcategory" then "orange"
-                                         when "product" then "red"
-                                         end
+                                                when 'root' then 'blue'
+                                                when 'category' then 'green'
+                                                when 'subcategory' then 'orange'
+                                                when 'product' then 'red'
+                                                end
     end
     column :parent do |category|
       link_to category.parent.title, admin_category_path(category.parent) if category.parent
@@ -86,14 +90,15 @@ ActiveAdmin.register Category do
 
   # Configure the form
   form do |f|
-    f.inputs "Category Details" do
+    f.inputs 'Category Details' do
       f.input :title
-      f.input :synonyms, as: :string, input_html: { value: f.object.synonyms&.join(", ") }, hint: "Comma-separated synonyms"
+      f.input :synonyms, as: :string, input_html: { value: f.object.synonyms&.join(', ') },
+                         hint: 'Comma-separated synonyms'
       f.input :parent, as: :select,
                        collection: Category.parent_options_for_select,
-                       include_blank: "None (Root Category)",
-                       hint: "Select a parent category. Products cannot have children."
-      f.input :sort_order, hint: "Order within parent category"
+                       include_blank: 'None (Root Category)',
+                       hint: 'Select a parent category. Products cannot have children.'
+      f.input :sort_order, hint: 'Order within parent category'
     end
     f.actions
   end
@@ -105,25 +110,25 @@ ActiveAdmin.register Category do
       row :uuid
       row :title
       row :synonyms do |cat|
-        cat.synonyms&.join(", ")
+        cat.synonyms&.join(', ')
       end
       row :category_type do |category|
         status_tag category.category_type, class: case category.category_type
-                                           when "root" then "blue"
-                                           when "category" then "green"
-                                           when "subcategory" then "orange"
-                                           when "product" then "red"
-                                           end
+                                                  when 'root' then 'blue'
+                                                  when 'category' then 'green'
+                                                  when 'subcategory' then 'orange'
+                                                  when 'product' then 'red'
+                                                  end
       end
       row :parent do |category|
         if category.parent
           link_to category.parent.title, admin_category_path(category.parent)
         else
-          "Root Category"
+          'Root Category'
         end
       end
       row :breadcrumbs do |category|
-        category.breadcrumbs.map(&:title).join(" > ")
+        category.readable_breadcrumb
       end
       row :path
       row :sort_order
@@ -156,25 +161,26 @@ ActiveAdmin.register Category do
       end
     end
 
-    if !category.product?
-      panel "Add New Child Category" do
+    unless category.product?
+      panel 'Add New Child Category' do
         # Use a Rails form with POST to admin_categories_path
-        form action: admin_categories_path, method: :post do |f|
+        form action: admin_categories_path, method: :post do |_f|
           # CSRF token for Rails authenticity
-          input type: "hidden", name: "authenticity_token", value: form_authenticity_token
+          input type: 'hidden', name: 'authenticity_token', value: form_authenticity_token
 
-          div class: "inputs" do
-            input type: "hidden", name: "category[parent_id]", value: category.id
+          div class: 'inputs' do
+            input type: 'hidden', name: 'category[parent_id]', value: category.id
             div do
-              label "Title", for: "category_title"
-              input type: "text", name: "category[title]", id: "category_title", required: true
+              label 'Title', for: 'category_title'
+              input type: 'text', name: 'category[title]', id: 'category_title', required: true
             end
             div do
-              input type: "hidden", name: "category[sort_order]", id: "category_sort_order", value: (category.children.maximum(:sort_order) || 0) + 1
+              input type: 'hidden', name: 'category[sort_order]', id: 'category_sort_order',
+                    value: (category.children.maximum(:sort_order) || 0) + 1
             end
           end
-          div class: "actions" do
-            input type: "submit", value: "Create Child Category", class: "button"
+          div class: 'actions' do
+            input type: 'submit', value: 'Create Child Category', class: 'button'
           end
         end
       end
@@ -184,18 +190,19 @@ ActiveAdmin.register Category do
     if category.product?
       panel "Associated Shop Items (#{category.shop_items.count})" do
         # --- Add this block for the move form ---
-        div style: "margin-bottom: 15px;" do
+        div style: 'margin-bottom: 15px;' do
           form action: move_shop_items_admin_category_path(category), method: :post do
-            input type: "hidden", name: "authenticity_token", value: form_authenticity_token
-            span "Move all to: "
-            select name: "new_category_id" do
+            input type: 'hidden', name: 'authenticity_token', value: form_authenticity_token
+            span 'Move all to: '
+            select name: 'new_category_id' do
               Category.only_products.each do |breadcrumb, id|
                 option value: id, selected: (id == category.id) do
                   text_node breadcrumb
                 end
               end
             end
-            input type: "submit", value: "Move All", class: "button", data: { confirm: "Are you sure you want to move all associated shop items to the selected category?" }
+            input type: 'submit', value: 'Move All', class: 'button',
+                  data: { confirm: 'Are you sure you want to move all associated shop items to the selected category?' }
           end
         end
         # --- End move form block ---
@@ -207,18 +214,18 @@ ActiveAdmin.register Category do
           column :sort_order
           column :created_at
           column :actions do |item|
-            link_to "Remove from Category",
+            link_to 'Remove from Category',
                     remove_shop_item_admin_category_path(category, shop_item_id: item.id),
                     method: :delete,
-                    data: { confirm: "Remove this item from category?" },
-                    class: "button small"
+                    data: { confirm: 'Remove this item from category?' },
+                    class: 'button small'
           end
         end
 
-        div style: "margin-top: 10px;" do
-            link_to "View all #{category.shop_items.count} items",
-                    admin_shop_items_path(q: { category_id_eq: category.id }),
-                    class: "button"
+        div style: 'margin-top: 10px;' do
+          link_to "View all #{category.shop_items.count} items",
+                  admin_shop_items_path(q: { category_id_eq: category.id }),
+                  class: 'button'
         end
       end
     end
@@ -232,47 +239,45 @@ ActiveAdmin.register Category do
   scope :with_shop_items, -> { joins(:shop_items).distinct }
 
   action_item :export_categories_xml, only: :index do
-    link_to "Export Categories XML", categories_export_path(hash: "hello"), class: "button"
+    link_to 'Export Categories XML', categories_export_path(hash: 'hello'), class: 'button'
   end
 
   # Custom collection action to rebuild tree (if needed)
   collection_action :rebuild_tree, method: :post do
     Category.rebuild!
-    redirect_to collection_path, notice: "Category tree has been rebuilt."
+    redirect_to collection_path, notice: 'Category tree has been rebuilt.'
   end
 
   # Add collection action for importing categories
   collection_action :import_categories, method: :post do
-    begin
-      # Path to your XML file - adjust as needed
-      xml_file_path = Rails.root.join("db", "seeds", "shop_item_categories.xml")
+    # Path to your XML file - adjust as needed
+    xml_file_path = Rails.root.join('db', 'seeds', 'shop_item_categories.xml')
 
-      if File.exist?(xml_file_path)
-        # Run async with background job (recommended)
-        CategoryImportJob.perform_later(xml_file_path.to_s)
-        #redirect_to collection_path, notice: "Category import started in background. Check logs for progress."
-      else
-        redirect_to collection_path, alert: "Categories XML file not found at #{xml_file_path}"
-      end
-    rescue => e
-      redirect_to collection_path, alert: "Error starting import: #{e.message}"
+    if File.exist?(xml_file_path)
+      # Run async with background job (recommended)
+      CategoryImportJob.perform_later(xml_file_path.to_s)
+      # redirect_to collection_path, notice: "Category import started in background. Check logs for progress."
+    else
+      redirect_to collection_path, alert: "Categories XML file not found at #{xml_file_path}"
     end
+  rescue StandardError => e
+    redirect_to collection_path, alert: "Error starting import: #{e.message}"
   end
 
   # Add action item for rebuilding tree
   action_item :rebuild_tree, only: :index do
-    link_to "Rebuild Tree", rebuild_tree_admin_categories_path,
+    link_to 'Rebuild Tree', rebuild_tree_admin_categories_path,
             method: :post,
-            data: { confirm: "This will rebuild the category tree structure. Continue?" },
-            class: "button"
+            data: { confirm: 'This will rebuild the category tree structure. Continue?' },
+            class: 'button'
   end
 
   # Add action item for importing categories
   action_item :import_categories, only: :index do
-    link_to "Import Categories", import_categories_admin_categories_path,
+    link_to 'Import Categories', import_categories_admin_categories_path,
             method: :post,
-            data: { confirm: "This will import categories from XML. This may take a while. Continue?" },
-            class: "button"
+            data: { confirm: 'This will import categories from XML. This may take a while. Continue?' },
+            class: 'button'
   end
 
   # Add member action for removing shop items from category
@@ -287,13 +292,13 @@ ActiveAdmin.register Category do
         resource.shop_items.delete(shop_item)
         redirect_to admin_category_path(resource),
                     notice: "Successfully removed '#{shop_item.title}' from category '#{resource.title}'"
-      rescue => e
+      rescue StandardError => e
         redirect_to admin_category_path(resource),
                     alert: "Error removing shop item: #{e.message}"
       end
     else
       redirect_to admin_category_path(resource),
-                  alert: "No shop item specified for removal"
+                  alert: 'No shop item specified for removal'
     end
   end
 
@@ -304,16 +309,16 @@ ActiveAdmin.register Category do
       resource.shop_items.update_all(category_id: new_category.id)
       redirect_to admin_category_path(resource), notice: "All shop items moved to '#{new_category.title}'."
     else
-      redirect_to admin_category_path(resource), alert: "No category selected."
+      redirect_to admin_category_path(resource), alert: 'No category selected.'
     end
   end
 
   # Batch actions
   batch_action :move_to_parent, form: {
-                                  parent_id: proc { [["Root (No Parent)", nil]] + Category.parent_options_for_select },
-                                } do |ids, inputs|
+    parent_id: proc { [['Root (No Parent)', nil]] + Category.parent_options_for_select }
+  } do |ids, _inputs|
     batch_inputs = JSON.parse(params[:batch_action_inputs])
-    parent_id = batch_inputs["parent_id"].presence
+    parent_id = batch_inputs['parent_id'].presence
 
     begin
       categories = Category.where(id: ids)
@@ -323,10 +328,10 @@ ActiveAdmin.register Category do
         category.update!(parent: parent)
       end
 
-      parent_name = parent ? parent.title : "Root"
+      parent_name = parent ? parent.title : 'Root'
       redirect_to collection_path,
                   notice: "#{categories.count} categories moved to #{parent_name}."
-    rescue => e
+    rescue StandardError => e
       redirect_to collection_path,
                   alert: "Error moving categories: #{e.message}"
     end

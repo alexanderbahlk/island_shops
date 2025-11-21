@@ -105,7 +105,7 @@ class Category < ApplicationRecord
 
   def self.only_products
     products.includes(:parent).map do |cat|
-      [cat.breadcrumbs.map(&:title).join(' > '), cat.id]
+      [cat.readable_breadcrumb, cat.id]
     end.sort_by { |breadcrumb, _id| breadcrumb }
   end
 
@@ -122,6 +122,10 @@ class Category < ApplicationRecord
 
     # Get ancestors in correct order (root first)
     ancestors.reorder(:lft) + [self]
+  end
+
+  def readable_breadcrumb
+    breadcrumbs.map(&:title).join(' > ')
   end
 
   def can_have_children?

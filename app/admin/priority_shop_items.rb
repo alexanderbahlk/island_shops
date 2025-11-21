@@ -7,7 +7,7 @@ ActiveAdmin.register_page 'Priority Shop Items' do
       priority_shop_items = []
       products.each do |product|
         pending_approval_count = product.shop_items.pending_approval.count
-        next unless pending_approval_count > 1
+        next unless pending_approval_count > 0
 
         approved_count = product.shop_items.approved.count
         all_count = product.shop_items.all.count
@@ -23,7 +23,7 @@ ActiveAdmin.register_page 'Priority Shop Items' do
       ul class: 'priority-shop_item-list' do
         priority_shop_items.each do |item|
           li class: 'priority-shop_item-list-item' do
-            span "(Id: #{item[:product].id}) #{item[:product].title} - #{item[:pending_approval_count]} from #{item[:all_count]} shop items pending approval (#{(item[:to_approve_ratio] * 100).round(2)}% to approve)"
+            span "(Id: #{item[:product].id}) #{item[:product].readable_breadcrumb} --- #{item[:pending_approval_count]} from #{item[:all_count]} shop items pending approval (#{(item[:to_approve_ratio] * 100).round(2)}% to approve)"
             text_node link_to 'View Shop Items',
                               admin_shop_items_path(q: { category_id_eq: item[:product].id, status_eq: 'pending_approval' }), style: 'margin-left: 10px;'
             text_node ' | '

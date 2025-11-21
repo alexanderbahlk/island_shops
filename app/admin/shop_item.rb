@@ -227,7 +227,7 @@ ActiveAdmin.register ShopItem do
   filter :no_price_per_unified_unit, as: :boolean, label: 'Missing Price per Unified Unit'
   filter :category, as: :select, collection: proc {
     Category.products.includes(:parent).map do |cat|
-      [cat.breadcrumbs.map(&:title).join(' > '), cat.id]
+      [cat.readable_breadcrumb, cat.id]
     end
   }, include_blank: 'Any'
   filter :missing_category
@@ -273,7 +273,7 @@ ActiveAdmin.register ShopItem do
       end
       row :category do |shop_item|
         if shop_item.category.present?
-          breadcrumb = shop_item.category.breadcrumbs.map(&:title).join(' > ')
+          breadcrumb = shop_item.category.readable_breadcrumb
           link_to breadcrumb, admin_category_path(shop_item.category)
         else
           'None'
@@ -333,8 +333,6 @@ ActiveAdmin.register ShopItem do
                       html_attrs: { style: 'cursor: pointer;' },
                       class: 'bip-checkbox-review'
       end
-      row :model_embedding
-      row :needs_model_embedding_update
       row :created_at
       row :updated_at
     end
@@ -458,7 +456,7 @@ ActiveAdmin.register ShopItem do
     {
       category_search: :text,
       category_id: Category.products.includes(:parent).map do |cat|
-        [cat.breadcrumbs.map(&:title).join(' > '), cat.id]
+        [cat.readable_breadcrumb, cat.id]
       end.sort_by { |breadcrumb, _id| breadcrumb }.unshift(['Remove Category', nil])
     }
   } do |ids, _inputs|
@@ -492,7 +490,7 @@ ActiveAdmin.register ShopItem do
     if category_id
       category = Category.find(category_id)
       ShopItem.where(id: ids).update_all(category_id: category_id)
-      category_name = category.breadcrumbs.map(&:title).join(' > ')
+      category_name = category.readable_breadcrumb
       redirect_to_collection_with_filters(:notice, "#{ids.count} shop items assigned to '#{category_name}'.")
     else
       ShopItem.where(id: ids).update_all(category_id: nil)
@@ -647,8 +645,8 @@ ActiveAdmin.register ShopItem do
                            .map do |cat|
         {
           id: cat.id,
-          label: cat.breadcrumbs.map(&:title).join(' > '),
-          value: cat.breadcrumbs.map(&:title).join(' > '),
+          label: cat.readable_breadcrumb,
+          value: cat.readable_breadcrumb,
           path: cat.path
         }
       end
@@ -715,10 +713,10 @@ ActiveAdmin.register ShopItem do
       resource.update!(category: best_match)
 
       # Build success message with breadcrumb
-      category_breadcrumb = best_match.breadcrumbs.map(&:title).join(' > ')
+      category_breadcrumb = best_match.readable_breadcrumb
 
       success_message = if original_category
-                          "Successfully reassigned '#{resource.title}' from '#{original_category.breadcrumbs.map(&:title).join(' > ')}' to '#{category_breadcrumb}'"
+                          "Successfully reassigned '#{resource.title}' from '#{original_category.readable_breadcrumb}' to '#{category_breadcrumb}'"
                         else
                           "Successfully assigned '#{resource.title}' to category '#{category_breadcrumb}'"
                         end
