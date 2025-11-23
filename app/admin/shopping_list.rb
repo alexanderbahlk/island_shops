@@ -12,7 +12,7 @@ ActiveAdmin.register ShoppingList do
     column :display_name
     column :slug
     column :users do |shopping_list|
-      shopping_list.users.map(&:id).join(", ")
+      shopping_list.users.map(&:id).join(', ')
     end
     column :shopping_list_items_count do |shopping_list|
       shopping_list.shopping_list_items.size
@@ -24,7 +24,7 @@ ActiveAdmin.register ShoppingList do
 
   # Customize the form for creating/editing a ShoppingList
   form do |f|
-    f.inputs "Shopping List Details" do
+    f.inputs 'Shopping List Details' do
       f.input :display_name
     end
     f.actions
@@ -37,26 +37,31 @@ ActiveAdmin.register ShoppingList do
       row :display_name
       row :slug
       row :users do |shopping_list|
-        shopping_list.users.map { |user| link_to user.id, admin_user_path(user) }.join(", ").html_safe
+        shopping_list.users.map { |user| link_to user.id, admin_user_path(user) }.join(', ').html_safe
       end
       row :created_at
       row :deleted_at
       row :updated_at
     end
 
-    panel "Shopping List Items" do
+    panel 'Shopping List Items' do
       table_for shopping_list.shopping_list_items do
         column :uuid do |item|
           link_to item.uuid, admin_shopping_list_item_path(item)
         end
         column :title
+        column :shop_item do |item|
+          if item.shop_item
+            link_to item.shop_item.title, admin_shop_item_path(item.shop_item)
+          else
+            'N/A'
+          end
+        end
         column :purchased
         column :priority
         column :quantity
         column :category do |item|
-          if item.category
-            link_to item.category.title, admin_category_path(item.category)
-          end
+          link_to item.category.title, admin_category_path(item.category) if item.category
         end
       end
     end

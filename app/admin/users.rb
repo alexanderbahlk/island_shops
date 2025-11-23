@@ -24,10 +24,10 @@ ActiveAdmin.register User do
 
   # Customize the form for creating/editing a User
   form do |f|
-    f.inputs "User Details" do
+    f.inputs 'User Details' do
       f.input :app_hash
     end
-    f.inputs "Tutorial" do
+    f.inputs 'Tutorial' do
       f.input :tutorial_step
     end
     f.actions
@@ -46,7 +46,7 @@ ActiveAdmin.register User do
       row :updated_at
     end
 
-    panel "Shop Items" do
+    panel 'Shop Items' do
       table_for user.shop_items do
         column :id
         column :title
@@ -54,16 +54,18 @@ ActiveAdmin.register User do
       end
     end
 
-    panel "Shopping Lists" do
+    panel 'Shopping Lists' do
       table_for user.shopping_lists do
         column :id
-        column :display_name
+        column :display_name do |shopping_list|
+          link_to shopping_list.display_name, admin_shopping_list_path(shopping_list)
+        end
         column :slug
         column :created_at
       end
     end
 
-    panel "Shopping List Items" do
+    panel 'Shopping List Items' do
       table_for user.shopping_list_items do
         column :id
         column :title
@@ -73,7 +75,7 @@ ActiveAdmin.register User do
       end
     end
 
-    panel "Feedback" do
+    panel 'Feedback' do
       table_for user.feedbacks do
         column :id
         column :content
