@@ -14,6 +14,6 @@ class Api::V1::SecureAppController < ApplicationController
     @current_user = User.find_by(app_hash: provided_app_user_hash)
     return render json: { error: 'Unauthorized' }, status: :unauthorized if @current_user.nil?
 
-    @current_user.update(last_activity_at: Time.current)
+    @current_user.update!(last_activity_at: Time.current)
   end
 end
