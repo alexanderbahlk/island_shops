@@ -17,7 +17,7 @@ ActiveAdmin.register User do
     column :shopping_list_items_count do |user|
       user.shopping_list_items.size
     end
-    column :created_at
+    column :last_activity_at
     column :updated_at
     actions
   end
@@ -42,6 +42,7 @@ ActiveAdmin.register User do
       row :active_shopping_list
       row :group_shopping_lists_items_by
       row :shop_item_stock_status_filter
+      row :last_activity_at
       row :created_at
       row :updated_at
     end

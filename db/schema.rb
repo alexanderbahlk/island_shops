@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_20_134413) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_124952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -182,7 +182,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_20_134413) do
     t.bigint "active_shopping_list_id"
     t.string "shop_item_stock_status_filter", default: "all", null: false
     t.integer "tutorial_step", default: 0, null: false
+    t.datetime "last_activity_at"
     t.index ["active_shopping_list_id"], name: "index_users_on_active_shopping_list_id"
+    t.index ["last_activity_at"], name: "index_users_on_last_activity_at"
   end
 
   add_foreign_key "categories", "categories", column: "parent_id"

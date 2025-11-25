@@ -35,7 +35,7 @@
 #
 class ShoppingListItem < ApplicationRecord
   acts_as_paranoid
-  #https://github.com/ActsAsParanoid/acts_as_paranoid
+  # https://github.com/ActsAsParanoid/acts_as_paranoid
 
   belongs_to :shop_item, optional: true
   belongs_to :user, optional: true
@@ -58,32 +58,23 @@ class ShoppingListItem < ApplicationRecord
   scope :priority, -> { where(priority: true) }
   scope :non_priority, -> { where(priority: false) }
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["category_id", "created_at", "id", "id_value", "priority", "purchased", "quantity", "shopping_list_id", "title", "updated_at", "user_id", "uuid"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[category_id created_at id id_value priority purchased quantity shopping_list_id title
+       updated_at user_id uuid]
   end
 
-  def self.ransackable_associations(auth_object = nil)
-    ["category", "shopping_list", "user"]
+  def self.ransackable_associations(_auth_object = nil)
+    %w[category shopping_list user]
   end
 
   def title_for_shopping_list_grouping(shopping_list_grouping = nil)
     title_string = title
-    if quantity > 1
-      title_string = "#{title_string} #{quantity}x"
-    end
+    title_string = "#{title_string} #{quantity}x" if quantity > 1
     case shopping_list_grouping
     when nil
-      if shop_item_id
-        if shop_item && shop_item.place.present?
-          title_string += " from #{shop_item.place.title}"
-        end
-      end
+      title_string += " from #{shop_item.place.title}" if shop_item_id && shop_item && shop_item.place.present?
     when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PRIORITY
-      if shop_item_id
-        if shop_item && shop_item.place.present?
-          title_string += " from #{shop_item.place.title}"
-        end
-      end
+      title_string += " from #{shop_item.place.title}" if shop_item_id && shop_item && shop_item.place.present?
     when ShoppingList::SHOPPING_LIST_GROUP_BY_ORDER_PLACE
       title_string
     end
@@ -93,13 +84,13 @@ class ShoppingListItem < ApplicationRecord
   private
 
   def clear_shop_item_references
-    User.where(active_shopping_list_id: self.id).update_all(active_shopping_list_id: nil)
+    User.where(active_shopping_list_id: id).update_all(active_shopping_list_id: nil)
   end
 
   def category_must_be_product
-    unless category.product?
-      errors.add(:category, "must be a product category")
-    end
+    return if category.product?
+
+    errors.add(:category, 'must be a product category')
   end
 
   # Set the title from the category's title if it exists and title is blank

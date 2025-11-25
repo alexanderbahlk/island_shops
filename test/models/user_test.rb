@@ -5,6 +5,7 @@
 #  id                            :bigint           not null, primary key
 #  app_hash                      :string
 #  group_shopping_lists_items_by :string
+#  last_activity_at              :datetime
 #  shop_item_stock_status_filter :string           default("all"), not null
 #  tutorial_step                 :integer          default(0), not null
 #  created_at                    :datetime         not null
@@ -14,6 +15,7 @@
 # Indexes
 #
 #  index_users_on_active_shopping_list_id  (active_shopping_list_id)
+#  index_users_on_last_activity_at         (last_activity_at)
 #
 # Foreign Keys
 #
