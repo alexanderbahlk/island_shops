@@ -17,6 +17,9 @@ ActiveAdmin.register User do
     column :shopping_list_items_count do |user|
       user.shopping_list_items.size
     end
+    column :human_readable_device_data do |user|
+      pre JSON.pretty_generate(user.human_readable_device_data)
+    end
     column :last_activity_at
     column :updated_at
     actions
