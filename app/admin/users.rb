@@ -43,6 +43,12 @@ ActiveAdmin.register User do
       row :group_shopping_lists_items_by
       row :shop_item_stock_status_filter
       row :last_activity_at
+      row :device_data do |user|
+        # device_data may already be a Hash (from jsonb) or a JSON string.
+        data = user.device_data
+        data = JSON.parse(data) if data.is_a?(String)
+        pre JSON.pretty_generate(data || {})
+      end
       row :created_at
       row :updated_at
     end

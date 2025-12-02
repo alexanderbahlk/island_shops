@@ -1,116 +1,116 @@
-require "test_helper"
+require 'test_helper'
 
 class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:user_one) # Assuming you have a fixture for users
     @shopping_list = shopping_lists(:shopping_list_abc) # Assuming you have a fixture for shopping lists
-    @headers = { "X-SECURE-APP-USER-HASH" => "#{@user.app_hash}", "Content-Type" => "application/json" }
+    @headers = { 'X-SECURE-APP-USER-HASH' => "#{@user.app_hash}", 'Content-Type' => 'application/json' }
   end
 
-  test "should create user with valid app_hash" do
+  test 'should create user with valid app_hash' do
     post login_or_create_api_v1_users_path,
-         params: { user: { app_hash: "new_app_hash_123" } }.to_json,
-         headers: { "Content-Type" => "application/json" }  # No auth header for create action
+         params: { user: { app_hash: 'new_app_hash_123' } }.to_json,
+         headers: { 'Content-Type' => 'application/json' }  # No auth header for create action
     assert_response :success
     response_data = JSON.parse(response.body)
-    assert response_data["user_app_hash"] == "new_app_hash_123"
+    assert response_data['user_app_hash'] == 'new_app_hash_123'
   end
 
-  test "should login user with valid app_hash" do
+  test 'should login user with valid app_hash' do
     post login_or_create_api_v1_users_path,
-         params: { user: { app_hash: "45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g" } }.to_json,
-         headers: { "Content-Type" => "application/json" }  # No auth header for create action
+         params: { user: { app_hash: '45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g' } }.to_json,
+         headers: { 'Content-Type' => 'application/json' }  # No auth header for create action
     assert_response :success
     response_data = JSON.parse(response.body)
-    assert response_data["user_app_hash"] == "45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g"
+    assert response_data['user_app_hash'] == '45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g'
   end
 
-  test "should login user quickly" do
+  test 'should login user quickly' do
     # We need to emasure the time in this request
     # If it takes too long, something is wrong
     start_time = Time.now
     post login_or_create_api_v1_users_path,
-         params: { user: { app_hash: "45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g" } }.to_json,
-         headers: { "Content-Type" => "application/json" }  # No auth header for create action
+         params: { user: { app_hash: '45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g' } }.to_json,
+         headers: { 'Content-Type' => 'application/json' }  # No auth header for create action
     assert_response :success
     end_time = Time.now
     duration = end_time - start_time
     assert duration < 1, "Request took too long: #{duration} seconds"
     response_data = JSON.parse(response.body)
-    assert response_data["user_app_hash"] == "45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g"
+    assert response_data['user_app_hash'] == '45ghg5g4g5g4g5g4g5g4g5g4g5g4g5g'
   end
 
-  test "should not create user with missing app_hash" do
+  test 'should not create user with missing app_hash' do
     post login_or_create_api_v1_users_path,
-         params: { user: { app_hash: "" } }.to_json,
-         headers: { "Content-Type" => "application/json" }  # No auth header for create action
+         params: { user: { app_hash: '' } }.to_json,
+         headers: { 'Content-Type' => 'application/json' }  # No auth header for create action
     assert_response :bad_request
     response_data = JSON.parse(response.body)
-    assert_equal "app_hash is required", response_data["error"]
+    assert_equal 'app_hash is required', response_data['error']
   end
 
-  test "should update group_shopping_lists_items_by with valid value" do
+  test 'should update group_shopping_lists_items_by with valid value' do
     patch update_group_shopping_lists_items_by_api_v1_users_path,
-          params: { group_shopping_lists_items_by: "place" }.to_json,
+          params: { group_shopping_lists_items_by: 'place' }.to_json,
           headers: @headers
 
     assert_response :ok
     response_data = JSON.parse(response.body)
-    assert_equal "Group shopping lists items by updated successfully", response_data["message"]
-    assert_equal "place", response_data["user"]["group_shopping_lists_items_by"]
+    assert_equal 'Group shopping lists items by updated successfully', response_data['message']
+    assert_equal 'place', response_data['user']['group_shopping_lists_items_by']
     @user.reload
-    assert_equal "place", @user.group_shopping_lists_items_by
+    assert_equal 'place', @user.group_shopping_lists_items_by
   end
 
-  test "should not update group_shopping_lists_items_by with invalid value" do
+  test 'should not update group_shopping_lists_items_by with invalid value' do
     patch update_group_shopping_lists_items_by_api_v1_users_path,
-          params: { group_shopping_lists_items_by: "invalid_value" }.to_json,
+          params: { group_shopping_lists_items_by: 'invalid_value' }.to_json,
           headers: @headers
 
     assert_response :unprocessable_content
     response_data = JSON.parse(response.body)
-    assert_includes response_data["errors"], "Group shopping lists items by is not included in the list"
+    assert_includes response_data['errors'], 'Group shopping lists items by is not included in the list'
     @user.reload
     assert_nil @user.group_shopping_lists_items_by # Ensure it remains unchanged
   end
 
-  test "should not update group_shopping_lists_items_by if headers misses X-SECURE-APP-USER-HASH" do
+  test 'should not update group_shopping_lists_items_by if headers misses X-SECURE-APP-USER-HASH' do
     patch update_group_shopping_lists_items_by_api_v1_users_path,
-          params: { group_shopping_lists_items_by: "asc" }.to_json,
-          headers: { "Content-Type" => "application/json" }
+          params: { group_shopping_lists_items_by: 'asc' }.to_json,
+          headers: { 'Content-Type' => 'application/json' }
 
     assert_response :bad_request
     response_data = JSON.parse(response.body)
-    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    assert_equal 'Invalid APP-USER-HASH', response_data['error']
   end
 
-  test "should update active shopping list with valid slug" do
+  test 'should update active shopping list with valid slug' do
     patch update_active_shopping_list_api_v1_users_path,
           params: { active_shopping_list_slug: @shopping_list.slug }.to_json,
           headers: @headers
 
     assert_response :ok
     response_data = JSON.parse(response.body)
-    assert_equal "Active shopping list updated successfully", response_data["message"]
-    assert_equal @shopping_list.id, response_data["user"]["active_shopping_list_id"]
+    assert_equal 'Active shopping list updated successfully', response_data['message']
+    assert_equal @shopping_list.id, response_data['user']['active_shopping_list_id']
     @user.reload
     assert_equal @shopping_list.id, @user.active_shopping_list_id
   end
 
-  test "should not update active shopping list with invalid slug" do
+  test 'should not update active shopping list with invalid slug' do
     old_active_shopping_list_id = @user.active_shopping_list_id
     patch update_active_shopping_list_api_v1_users_path,
-          params: { active_shopping_list_slug: "invalid_slug" }.to_json,
+          params: { active_shopping_list_slug: 'invalid_slug' }.to_json,
           headers: @headers
 
     assert_response :not_found
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list not found or user does not have access", response_data["error"]
+    assert_equal 'Shopping list not found or user does not have access', response_data['error']
     @user.reload
     assert_equal @user.active_shopping_list_id, old_active_shopping_list_id
   end
 
-  test "should not update active shopping list with shopping list not belonging to user" do
+  test 'should not update active shopping list with shopping list not belonging to user' do
     old_active_shopping_list_id = @user.active_shopping_list_id
 
     other_shopping_list = shopping_lists(:shopping_list_xyz) # Assuming this is a different list
@@ -120,26 +120,26 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list not found or user does not have access", response_data["error"]
+    assert_equal 'Shopping list not found or user does not have access', response_data['error']
     @user.reload
     assert_equal @user.active_shopping_list_id, old_active_shopping_list_id
   end
 
-  test "should not update active shopping list if headers misses X-SECURE-APP-USER-HASH" do
+  test 'should not update active shopping list if headers misses X-SECURE-APP-USER-HASH' do
     patch update_active_shopping_list_api_v1_users_path,
           params: { active_shopping_list_slug: @shopping_list.slug }.to_json,
-          headers: { "Content-Type" => "application/json" }
+          headers: { 'Content-Type' => 'application/json' }
 
     assert_response :bad_request
     response_data = JSON.parse(response.body)
-    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    assert_equal 'Invalid APP-USER-HASH', response_data['error']
     @user.reload
     assert_not_equal @user.active_shopping_list_id, @shopping_list.id
   end
 
-  test "should add shopping list to user with valid slug" do
+  test 'should add shopping list to user with valid slug' do
     new_shopping_list = shopping_lists(:shopping_list_xyz) # Assuming this is a different list
-    assert_difference("@user.shopping_lists.count", 1) do
+    assert_difference('@user.shopping_lists.count', 1) do
       post add_shopping_list_api_v1_users_path,
            params: { shopping_list_slug: new_shopping_list.slug }.to_json,
            headers: @headers
@@ -148,12 +148,12 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list added to user successfully", response_data["message"]
+    assert_equal 'Shopping list added to user successfully', response_data['message']
     assert_includes @user.reload.shopping_lists, @shopping_list
   end
 
-  test "should not add shopping list to user if already added" do
-    assert_no_difference("@user.shopping_lists.count") do
+  test 'should not add shopping list to user if already added' do
+    assert_no_difference('@user.shopping_lists.count') do
       post add_shopping_list_api_v1_users_path,
            params: { shopping_list_slug: @shopping_list.slug }.to_json,
            headers: @headers
@@ -162,52 +162,52 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list belonged to user already", response_data["message"]
+    assert_equal 'Shopping list belonged to user already', response_data['message']
     assert_includes @user.reload.shopping_lists, @shopping_list
   end
 
-  test "should not add shopping list with invalid slug" do
-    assert_no_difference("@user.shopping_lists.count") do
+  test 'should not add shopping list with invalid slug' do
+    assert_no_difference('@user.shopping_lists.count') do
       post add_shopping_list_api_v1_users_path,
-           params: { shopping_list_slug: "invalid_slug" }.to_json,
+           params: { shopping_list_slug: 'invalid_slug' }.to_json,
            headers: @headers
 
       assert_response :not_found
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list not found", response_data["error"]
+    assert_equal 'Shopping list not found', response_data['error']
   end
 
-  test "should not add shopping list if headers misses X-SECURE-APP-USER-HASH" do
-    assert_no_difference("@user.shopping_lists.count") do
+  test 'should not add shopping list if headers misses X-SECURE-APP-USER-HASH' do
+    assert_no_difference('@user.shopping_lists.count') do
       post add_shopping_list_api_v1_users_path,
            params: { shopping_list_slug: @shopping_list.slug }.to_json,
-           headers: { "Content-Type" => "application/json" }
+           headers: { 'Content-Type' => 'application/json' }
 
       assert_response :bad_request
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    assert_equal 'Invalid APP-USER-HASH', response_data['error']
   end
 
-  test "should not add shopping list if user not found" do
-    assert_no_difference("@user.shopping_lists.count") do
+  test 'should not add shopping list if user not found' do
+    assert_no_difference('@user.shopping_lists.count') do
       post add_shopping_list_api_v1_users_path,
            params: { shopping_list_slug: @shopping_list.slug }.to_json,
-           headers: { "X-SECURE-APP-USER-HASH" => "wrong_hash", "Content-Type" => "application/json" }
+           headers: { 'X-SECURE-APP-USER-HASH' => 'wrong_hash', 'Content-Type' => 'application/json' }
 
       assert_response :unauthorized
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Unauthorized", response_data["error"]
+    assert_equal 'Unauthorized', response_data['error']
   end
 
-  test "should remove shopping list from user with valid slug" do
+  test 'should remove shopping list from user with valid slug' do
     @user.shopping_lists << @shopping_list unless @user.shopping_lists.include?(@shopping_list)
-    assert_difference("@user.shopping_lists.count", -1) do
+    assert_difference('@user.shopping_lists.count', -1) do
       post remove_shopping_list_api_v1_users_path,
            params: { shopping_list_slug: @shopping_list.slug }.to_json,
            headers: @headers
@@ -216,13 +216,13 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list removed from user successfully", response_data["message"]
+    assert_equal 'Shopping list removed from user successfully', response_data['message']
     refute_includes @user.reload.shopping_lists, @shopping_list
   end
 
-  test "should not remove shopping list from user that does not have it" do
+  test 'should not remove shopping list from user that does not have it' do
     not_owned_shopping_list = shopping_lists(:shopping_list_xyz) # Assuming this is a different list
-    assert_no_difference("@user.shopping_lists.count") do
+    assert_no_difference('@user.shopping_lists.count') do
       post remove_shopping_list_api_v1_users_path,
            params: { shopping_list_slug: not_owned_shopping_list.slug }.to_json,
            headers: @headers
@@ -231,119 +231,119 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "User does not have access to this shopping list", response_data["error"]
+    assert_equal 'User does not have access to this shopping list', response_data['error']
   end
 
-  test "should not remove shopping list with invalid slug" do
-    assert_no_difference("@user.shopping_lists.count") do
+  test 'should not remove shopping list with invalid slug' do
+    assert_no_difference('@user.shopping_lists.count') do
       post remove_shopping_list_api_v1_users_path,
-           params: { shopping_list_slug: "invalid_slug" }.to_json,
+           params: { shopping_list_slug: 'invalid_slug' }.to_json,
            headers: @headers
 
       assert_response :not_found
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Shopping list not found", response_data["error"]
+    assert_equal 'Shopping list not found', response_data['error']
   end
 
-  test "should get all shopping list slugs for user" do
+  test 'should get all shopping list slugs for user' do
     get fetch_all_shopping_lists_slugs_api_v1_users_path,
         headers: @headers
 
     assert_response :ok
     response_data = JSON.parse(response.body)
-    assert_includes response_data["shopping_lists"], @shopping_list.slug
-    assert_equal @user.shopping_lists.count, response_data["shopping_lists"].size
-    assert_equal @user.shopping_lists.pluck(:slug).sort, response_data["shopping_lists"].sort
-    assert_not response_data["shopping_lists"].empty?
-    assert_equal response_data["shopping_lists"].size, 2
+    assert_includes response_data['shopping_lists'], @shopping_list.slug
+    assert_equal @user.shopping_lists.count, response_data['shopping_lists'].size
+    assert_equal @user.shopping_lists.pluck(:slug).sort, response_data['shopping_lists'].sort
+    assert_not response_data['shopping_lists'].empty?
+    assert_equal response_data['shopping_lists'].size, 2
   end
 
   # Test for update_tutorial_step
-  test "should update tutorial step with valid value" do
+  test 'should update tutorial step with valid value' do
     patch update_tutorial_step_api_v1_users_path,
           params: { tutorial_step: 3 }.to_json,
           headers: @headers
 
     assert_response :ok
     response_data = JSON.parse(response.body)
-    assert_equal "Tutorial step updated successfully", response_data["message"]
-    assert_equal 3, response_data["tutorial_step"]
+    assert_equal 'Tutorial step updated successfully', response_data['message']
+    assert_equal 3, response_data['tutorial_step']
     @user.reload
     assert_equal 3, @user.tutorial_step
   end
 
-  test "should not update tutorial step if headers miss X-SECURE-APP-USER-HASH" do
+  test 'should not update tutorial step if headers miss X-SECURE-APP-USER-HASH' do
     patch update_tutorial_step_api_v1_users_path,
           params: { tutorial_step: 3 }.to_json,
-          headers: { "Content-Type" => "application/json" }
+          headers: { 'Content-Type' => 'application/json' }
 
     assert_response :bad_request
     response_data = JSON.parse(response.body)
-    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    assert_equal 'Invalid APP-USER-HASH', response_data['error']
     @user.reload
     assert_not_equal 3, @user.tutorial_step
   end
 
-  test "should not update tutorial step with invalid value" do
+  test 'should not update tutorial step with invalid value' do
     patch update_tutorial_step_api_v1_users_path,
-          params: { tutorial_step: "invalid" }.to_json,
+          params: { tutorial_step: 'invalid' }.to_json,
           headers: @headers
 
     assert_response :unprocessable_content
     response_data = JSON.parse(response.body)
-    assert_includes response_data["errors"], "Tutorial step is not a number"
+    assert_includes response_data['errors'], 'Tutorial step is not a number'
     @user.reload
-    assert_not_equal "invalid", @user.tutorial_step
+    assert_not_equal 'invalid', @user.tutorial_step
   end
 
   # Test for show
-  test "should show user details" do
+  test 'should show user details' do
     get api_v1_users_path, headers: @headers
 
     assert_response :ok
     response_data = JSON.parse(response.body)
-    assert_equal @user.app_hash, response_data["app_hash"]
+    assert_equal @user.app_hash, response_data['app_hash']
     assert_nil @user.group_shopping_lists_items_by
-    assert_equal @user.shop_item_stock_status_filter, response_data["shop_item_stock_status_filter"]
-    assert_equal @user.tutorial_step, response_data["tutorial_step"]
-    assert_equal @user.active_shopping_list.slug, response_data["active_shopping_list"]
+    assert_equal @user.shop_item_stock_status_filter, response_data['shop_item_stock_status_filter']
+    assert_equal @user.tutorial_step, response_data['tutorial_step']
+    assert_equal @user.active_shopping_list.slug, response_data['active_shopping_list']
   end
 
-  test "should not show user details if headers miss X-SECURE-APP-USER-HASH" do
-    get api_v1_users_path, headers: { "Content-Type" => "application/json" }
+  test 'should not show user details if headers miss X-SECURE-APP-USER-HASH' do
+    get api_v1_users_path, headers: { 'Content-Type' => 'application/json' }
 
     assert_response :bad_request
     response_data = JSON.parse(response.body)
-    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    assert_equal 'Invalid APP-USER-HASH', response_data['error']
   end
 
   # Test for send_feedback
-  test "should send feedback with valid content and contact details" do
-    assert_difference("Feedback.count", 1) do
+  test 'should send feedback with valid content and contact details' do
+    assert_difference('Feedback.count', 1) do
       post send_feedback_api_v1_users_path,
-           params: { content: "This is a test feedback.", contact_details: "user@example.com" }.to_json,
+           params: { content: 'This is a test feedback.', contact_details: 'user@example.com' }.to_json,
            headers: @headers
 
       assert_response :ok
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Feedback submitted successfully", response_data["message"]
+    assert_equal 'Feedback submitted successfully', response_data['message']
     feedback = Feedback.last
     assert_equal @user.id, feedback.user_id
-    assert_equal "This is a test feedback.", feedback.content
-    assert_equal "user@example.com", feedback.contact_details
+    assert_equal 'This is a test feedback.', feedback.content
+    assert_equal 'user@example.com', feedback.contact_details
   end
 
-  test "should sanitize feedback content and contact details with script tags" do
+  test 'should sanitize feedback content and contact details with script tags' do
     malicious_content = "<script>alert('Hacked!');</script>This is a test feedback."
     malicious_contact_details = "<script>alert('Hacked!');</script>user@example.com"
-    sanitized_content = "This is a test feedback."
-    sanitized_contact_details = "user@example.com"
+    sanitized_content = 'This is a test feedback.'
+    sanitized_contact_details = 'user@example.com'
 
-    assert_difference("Feedback.count", 1) do
+    assert_difference('Feedback.count', 1) do
       post send_feedback_api_v1_users_path,
            params: { content: malicious_content, contact_details: malicious_contact_details }.to_json,
            headers: @headers
@@ -352,53 +352,80 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Feedback submitted successfully", response_data["message"]
+    assert_equal 'Feedback submitted successfully', response_data['message']
     feedback = Feedback.last
     assert_equal @user.id, feedback.user_id
     assert_equal sanitized_content, feedback.content
     assert_equal sanitized_contact_details, feedback.contact_details
   end
 
-  test "should not send feedback with empty content" do
-    assert_no_difference("Feedback.count") do
+  test 'should not send feedback with empty content' do
+    assert_no_difference('Feedback.count') do
       post send_feedback_api_v1_users_path,
-           params: { content: "", contact_details: "user@example.com" }.to_json,
+           params: { content: '', contact_details: 'user@example.com' }.to_json,
            headers: @headers
 
       assert_response :unprocessable_content
     end
 
     response_data = JSON.parse(response.body)
-    assert_includes response_data["errors"], "Content can't be blank"
+    assert_includes response_data['errors'], "Content can't be blank"
   end
 
-  test "should not send feedback if headers miss X-SECURE-APP-USER-HASH" do
-    assert_no_difference("Feedback.count") do
+  test 'saves device_data on create and updates on subsequent login' do
+    app_hash = "device_test_hash_#{SecureRandom.hex(4)}"
+
+    # Create user with device_data
+    post login_or_create_api_v1_users_path,
+         params: { user: { app_hash: app_hash, device_data: { platform: 'iOS', version: '1.0' } } }.to_json,
+         headers: { 'Content-Type' => 'application/json' }
+
+    assert_response :success
+    response_data = JSON.parse(response.body)
+    assert_equal app_hash, response_data['user_app_hash']
+
+    user = User.find_by(app_hash: app_hash)
+    assert_not_nil user
+    assert_equal 'iOS', user.device_data['platform']
+    assert_equal '1.0', user.device_data['version']
+
+    # Subsequent login should update device_data when changed
+    post login_or_create_api_v1_users_path,
+         params: { user: { app_hash: app_hash, device_data: { platform: 'iOS', version: '1.1' } } }.to_json,
+         headers: { 'Content-Type' => 'application/json' }
+
+    assert_response :success
+    user.reload
+    assert_equal '1.1', user.device_data['version']
+  end
+
+  test 'should not send feedback if headers miss X-SECURE-APP-USER-HASH' do
+    assert_no_difference('Feedback.count') do
       post send_feedback_api_v1_users_path,
-           params: { content: "This is a test feedback.", contact_details: "user@example.com" }.to_json,
-           headers: { "Content-Type" => "application/json" }
+           params: { content: 'This is a test feedback.', contact_details: 'user@example.com' }.to_json,
+           headers: { 'Content-Type' => 'application/json' }
 
       assert_response :bad_request
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Invalid APP-USER-HASH", response_data["error"]
+    assert_equal 'Invalid APP-USER-HASH', response_data['error']
   end
 
-  test "should send feedback with only content and no contact details" do
-    assert_difference("Feedback.count", 1) do
+  test 'should send feedback with only content and no contact details' do
+    assert_difference('Feedback.count', 1) do
       post send_feedback_api_v1_users_path,
-           params: { content: "This is a test feedback." }.to_json,
+           params: { content: 'This is a test feedback.' }.to_json,
            headers: @headers
 
       assert_response :ok
     end
 
     response_data = JSON.parse(response.body)
-    assert_equal "Feedback submitted successfully", response_data["message"]
+    assert_equal 'Feedback submitted successfully', response_data['message']
     feedback = Feedback.last
     assert_equal @user.id, feedback.user_id
-    assert_equal "This is a test feedback.", feedback.content
+    assert_equal 'This is a test feedback.', feedback.content
     assert_nil feedback.contact_details
   end
 end

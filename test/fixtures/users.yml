@@ -4,6 +4,7 @@
 #
 #  id                            :bigint           not null, primary key
 #  app_hash                      :string
+#  device_data                   :jsonb
 #  group_shopping_lists_items_by :string
 #  last_activity_at              :datetime
 #  shop_item_stock_status_filter :string           default("all"), not null
