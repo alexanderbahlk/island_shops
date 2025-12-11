@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       # Routes for ShopItemsController
       resources :shop_items, only: [:create] do
         post "create", on: :collection # Explicit route for ShopItemsController#create
+        get "lookup", on: :collection # Explicit route for ShopItemsController#lookup
       end
 
       # Routes for ScrapedShopItemsController
